@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doctor Animal Auto</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --red:#C0392B;--dark:#0D0D0D;--cream:#F5F0E8;--steel:#1A1A2E;
+  --orange:#E67E22;--green:#27AE60;--gray:#888;--light-gray:#F8F8F5;
+  --white:#FFFFFF;--border:#E0DDD6;--yellow:#F39C12;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--cream);min-height:100vh;overflow-x:hidden}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(13,13,13,.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(192,57,43,.3);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--red);letter-spacing:2px;cursor:pointer}
+.nav-logo span{color:var(--cream)}
+.nav-links{display:flex;gap:.25rem;align-items:center}
+.nav-links button{background:none;border:none;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:.85rem;padding:.5rem .75rem;cursor:pointer;border-radius:4px;transition:all .2s;opacity:.8}
+.nav-links button:hover,nav button.active{opacity:1;color:var(--red)}
+.nav-cta{background:var(--red)!important;color:#fff!important;padding:.5rem 1.2rem!important;border-radius:4px!important;opacity:1!important;font-size:.85rem;border:none;cursor:pointer;font-family:'DM Sans',sans-serif}
+.nav-cta:hover{background:#a93226!important}
+.nav-user{display:flex;align-items:center;gap:.5rem;font-size:.85rem;color:var(--green)}
+.nav-user button{background:none;border:1px solid rgba(255,255,255,.2);color:var(--cream);font-family:'DM Sans',sans-serif;font-size:.8rem;padding:.35rem .75rem;border-radius:4px;cursor:pointer}
+.nav-user button:hover{border-color:var(--red);color:var(--red)}
+
+/* PAGES */
+.page{display:none;padding-top:64px;min-height:100vh}
+.page.active{display:block}
+
+/* HERO */
+.hero{min-height:calc(100vh - 64px);position:relative;display:flex;align-items:center;overflow:hidden;background:var(--dark)}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0D0D0D 0%,#1A0A08 50%,#0D0D0D 100%)}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(192,57,43,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(192,57,43,.06) 1px,transparent 1px);background-size:60px 60px}
+.hero-accent{position:absolute;right:-10%;top:50%;transform:translateY(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(192,57,43,.15) 0%,transparent 70%)}
+.hero-content{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:4rem 2rem}
+.hero-tag{font-family:'Space Mono',monospace;font-size:.7rem;letter-spacing:4px;color:var(--red);text-transform:uppercase;margin-bottom:1.5rem;display:flex;align-items:center;gap:.75rem}
+.hero-tag::before{content:'';display:inline-block;width:40px;height:1px;background:var(--red)}
+.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(4rem,10vw,9rem);line-height:.9;color:var(--cream);letter-spacing:2px;margin-bottom:1.5rem}
+.hero h1 span{color:var(--red);display:block}
+.hero-sub{font-size:1.1rem;color:rgba(245,240,232,.6);max-width:500px;line-height:1.7;margin-bottom:2.5rem}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap}
+.btn-primary{background:var(--red);color:#fff;border:none;padding:.9rem 2rem;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;border-radius:4px;cursor:pointer;transition:all .2s;letter-spacing:.5px}
+.btn-primary:hover{background:#a93226;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--cream);border:1px solid rgba(245,240,232,.3);padding:.9rem 2rem;font-family:'DM Sans',sans-serif;font-size:.95rem;border-radius:4px;cursor:pointer;transition:all .2s}
+.btn-outline:hover{border-color:var(--red);color:var(--red)}
+.hero-stats{display:flex;gap:3rem;margin-top:3rem;padding-top:3rem;border-top:1px solid rgba(255,255,255,.08)}
+.hero-stat h3{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--red)}
+.hero-stat p{font-size:.8rem;color:rgba(245,240,232,.5);letter-spacing:1px;text-transform:uppercase}
+.scroll-indicator{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;color:rgba(245,240,232,.3);font-size:.7rem;letter-spacing:2px;text-transform:uppercase}
+.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--red),transparent)}
+
+/* SECTIONS */
+.section{padding:5rem 2rem;max-width:1200px;margin:0 auto}
+.section-label{font-family:'Space Mono',monospace;font-size:.7rem;letter-spacing:4px;color:var(--red);text-transform:uppercase;margin-bottom:1rem}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,5vw,4rem);color:var(--cream);letter-spacing:1px;line-height:1;margin-bottom:1rem}
+.section-sub{color:rgba(245,240,232,.5);font-size:1rem;line-height:1.7;max-width:600px;margin-bottom:3rem}
+.section-divider{height:1px;background:linear-gradient(to right,var(--red),transparent);margin-bottom:3rem}
+
+/* CARDS */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
+.card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:1.75rem;transition:all .3s;cursor:default}
+.card:hover{background:rgba(192,57,43,.05);border-color:rgba(192,57,43,.3);transform:translateY(-3px)}
+.card-icon{width:48px;height:48px;background:rgba(192,57,43,.1);border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;font-size:1.4rem}
+.card h3{font-family:'DM Sans',sans-serif;font-size:1.05rem;font-weight:600;color:var(--cream);margin-bottom:.5rem}
+.card p{font-size:.875rem;color:rgba(245,240,232,.5);line-height:1.6}
+.card-price{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--red);margin-top:1rem}
+
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.about-img{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;height:400px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.about-img-bg{position:absolute;inset:0;background:radial-gradient(circle at center,rgba(192,57,43,.1),transparent);display:flex;align-items:center;justify-content:center}
+.about-img-icon{font-size:6rem;opacity:.3}
+.about-points{display:flex;flex-direction:column;gap:1.25rem;margin-top:2rem}
+.about-point{display:flex;gap:1rem;align-items:flex-start}
+.about-point-dot{width:8px;height:8px;background:var(--red);border-radius:50%;margin-top:.4rem;flex-shrink:0}
+.about-point p{font-size:.9rem;color:rgba(245,240,232,.6);line-height:1.6}
+
+/* SERVICES */
+.services-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.5rem}
+.service-item{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:1.75rem;transition:all .2s}
+.service-item:hover{border-color:rgba(192,57,43,.4)}
+.service-num{font-family:'Bebas Neue',sans-serif;font-size:3rem;color:rgba(192,57,43,.2);line-height:1;margin-bottom:.5rem}
+.service-item h3{font-size:1rem;font-weight:600;color:var(--cream);margin-bottom:.5rem}
+.service-item p{font-size:.85rem;color:rgba(245,240,232,.45);line-height:1.6}
+.service-price{margin-top:1rem;font-size:.85rem;color:var(--orange);font-weight:500}
+.btn-book{margin-top:1rem;background:var(--red);color:#fff;border:none;padding:.5rem 1rem;border-radius:4px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.8rem;transition:all .2s}
+.btn-book:hover{background:#a93226}
+
+/* PRODUCTS */
+.products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem}
+.product-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:8px;overflow:hidden;transition:all .3s}
+.product-card:hover{border-color:rgba(192,57,43,.3);transform:translateY(-3px)}
+.product-img{height:160px;background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;font-size:3rem;border-bottom:1px solid rgba(255,255,255,.05)}
+.product-info{padding:1.25rem}
+.product-info h4{font-size:.95rem;font-weight:600;color:var(--cream);margin-bottom:.3rem}
+.product-info p{font-size:.8rem;color:rgba(245,240,232,.4);margin-bottom:.75rem}
+.product-footer{display:flex;align-items:center;justify-content:space-between}
+.product-price{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--red)}
+.cart-btn{background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.3);color:var(--red);padding:.4rem .8rem;border-radius:4px;cursor:pointer;font-size:.8rem;transition:all .2s}
+.cart-btn:hover{background:var(--red);color:#fff}
+.cart-badge{position:fixed;bottom:2rem;right:2rem;background:var(--red);color:#fff;padding:1rem 1.5rem;border-radius:8px;font-size:.9rem;font-weight:600;z-index:500;cursor:pointer;box-shadow:0 4px 20px rgba(192,57,43,.4);display:none}
+
+/* GALLERY */
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
+.gallery-item{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:8px;overflow:hidden;transition:all .3s}
+.gallery-item:hover{transform:scale(1.02);border-color:rgba(192,57,43,.3)}
+.gallery-img{height:200px;display:flex;align-items:center;justify-content:center;font-size:4rem;background:linear-gradient(135deg,rgba(192,57,43,.08),rgba(26,26,46,.5))}
+.gallery-desc{padding:1rem}
+.gallery-desc h4{font-size:.9rem;font-weight:600;color:var(--cream);margin-bottom:.25rem}
+.gallery-desc p{font-size:.8rem;color:rgba(245,240,232,.4)}
+
+/* BOOK */
+.book-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;font-size:.8rem;color:rgba(245,240,232,.5);margin-bottom:.4rem;letter-spacing:.5px;text-transform:uppercase}
+.form-group input,.form-group select,.form-group textarea{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:.75rem 1rem;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:.9rem;transition:border-color .2s;outline:none}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--red)}
+.form-group select option{background:var(--dark);color:var(--cream)}
+.form-group textarea{resize:vertical;min-height:100px}
+.book-info{display:flex;flex-direction:column;gap:1.25rem}
+.book-info-item{display:flex;gap:1rem;align-items:flex-start;padding:1.25rem;background:rgba(255,255,255,.03);border-radius:8px;border:1px solid rgba(255,255,255,.06)}
+.book-info-icon{font-size:1.2rem;margin-top:.1rem}
+.book-info-text h4{font-size:.9rem;font-weight:600;color:var(--cream);margin-bottom:.2rem}
+.book-info-text p{font-size:.8rem;color:rgba(245,240,232,.4)}
+
+/* CONTACT */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem}
+.contact-detail{display:flex;gap:1rem;align-items:flex-start;margin-bottom:1.5rem}
+.contact-detail-icon{font-size:1.5rem}
+.contact-detail h4{font-size:.95rem;font-weight:600;color:var(--cream);margin-bottom:.2rem}
+.contact-detail p{font-size:.85rem;color:rgba(245,240,232,.5)}
+.map-placeholder{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:8px;height:300px;display:flex;align-items:center;justify-content:center;font-size:3rem;margin-top:1.5rem}
+
+/* FEEDBACK */
+.feedback-container{max-width:700px;margin:0 auto}
+.feedback-type-btns{display:flex;gap:.75rem;margin-bottom:2rem}
+.type-btn{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:rgba(245,240,232,.6);padding:.6rem 1.2rem;border-radius:4px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.85rem;transition:all .2s}
+.type-btn.active,.type-btn:hover{background:rgba(192,57,43,.1);border-color:var(--red);color:var(--cream)}
+.stars{display:flex;gap:.5rem;margin-bottom:.5rem}
+.star{font-size:1.5rem;cursor:pointer;color:rgba(255,255,255,.2);transition:color .2s}
+.star.active,.star:hover{color:var(--yellow)}
+
+/* LOGIN / AUTH */
+.auth-container{max-width:440px;margin:4rem auto;padding:0 1.5rem}
+.auth-box{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:2.5rem}
+.auth-logo{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--red);text-align:center;margin-bottom:.5rem;letter-spacing:2px}
+.auth-subtitle{text-align:center;color:rgba(245,240,232,.4);font-size:.85rem;margin-bottom:2rem}
+.auth-switch{text-align:center;margin-top:1.5rem;font-size:.85rem;color:rgba(245,240,232,.4)}
+.auth-switch button{background:none;border:none;color:var(--red);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.85rem}
+.auth-tabs{display:flex;margin-bottom:2rem;border-bottom:1px solid rgba(255,255,255,.08)}
+.auth-tab{flex:1;background:none;border:none;color:rgba(245,240,232,.4);padding:.75rem;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.85rem;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s}
+.auth-tab.active{color:var(--red);border-bottom-color:var(--red)}
+
+/* CLIENT PORTAL */
+.portal-layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 64px)}
+.portal-sidebar{background:rgba(255,255,255,.03);border-right:1px solid rgba(255,255,255,.08);padding:2rem 0}
+.portal-nav-item{display:flex;align-items:center;gap:.75rem;padding:.75rem 1.5rem;cursor:pointer;font-size:.9rem;color:rgba(245,240,232,.5);transition:all .2s;border-left:3px solid transparent}
+.portal-nav-item:hover{color:var(--cream);background:rgba(255,255,255,.04)}
+.portal-nav-item.active{color:var(--red);border-left-color:var(--red);background:rgba(192,57,43,.06)}
+.portal-nav-icon{font-size:1rem}
+.portal-content{padding:2.5rem}
+.portal-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--cream);letter-spacing:1px;margin-bottom:1.75rem}
+.status-badge{display:inline-block;padding:.25rem .75rem;border-radius:20px;font-size:.75rem;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+.status-pending{background:rgba(243,156,18,.15);color:var(--yellow)}
+.status-progress{background:rgba(41,182,246,.15);color:#29b6f6}
+.status-complete{background:rgba(39,174,96,.15);color:var(--green)}
+.status-waiting{background:rgba(255,255,255,.1);color:rgba(245,240,232,.5)}
+.timeline{display:flex;flex-direction:column;gap:0}
+.timeline-item{display:flex;gap:1.5rem;padding-bottom:2rem;position:relative}
+.timeline-item::before{content:'';position:absolute;left:16px;top:32px;bottom:0;width:1px;background:rgba(255,255,255,.08)}
+.timeline-item:last-child::before{display:none}
+.timeline-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.8rem;border:2px solid}
+.timeline-dot.done{background:rgba(39,174,96,.15);border-color:var(--green);color:var(--green)}
+.timeline-dot.current{background:rgba(243,156,18,.15);border-color:var(--yellow);color:var(--yellow)}
+.timeline-dot.pending{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.15);color:rgba(245,240,232,.3)}
+.timeline-body{flex:1;padding-top:.35rem}
+.timeline-body h4{font-size:.9rem;font-weight:600;color:var(--cream);margin-bottom:.2rem}
+.timeline-body p{font-size:.8rem;color:rgba(245,240,232,.4)}
+.timeline-date{font-size:.75rem;color:rgba(245,240,232,.3);margin-top:.25rem;font-family:'Space Mono',monospace}
+.invoice-table{width:100%;border-collapse:collapse;margin:1.5rem 0}
+.invoice-table th{text-align:left;padding:.75rem;font-size:.75rem;letter-spacing:.5px;color:rgba(245,240,232,.4);border-bottom:1px solid rgba(255,255,255,.08);text-transform:uppercase}
+.invoice-table td{padding:.75rem;font-size:.85rem;border-bottom:1px solid rgba(255,255,255,.05)}
+.invoice-total{display:flex;justify-content:flex-end;gap:2rem;padding:1rem;background:rgba(192,57,43,.08);border-radius:6px;border:1px solid rgba(192,57,43,.2)}
+.invoice-total .total-label{color:rgba(245,240,232,.5);font-size:.9rem}
+.invoice-total .total-amount{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--red)}
+.info-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:1.5rem;margin-bottom:1.25rem}
+.info-row{display:flex;justify-content:space-between;padding:.6rem 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.875rem}
+.info-row:last-child{border-bottom:none}
+.info-row .label{color:rgba(245,240,232,.4)}
+.info-row .value{color:var(--cream);font-weight:500}
+
+/* ADMIN */
+.admin-layout{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 64px)}
+.admin-sidebar{background:rgba(10,10,10,.9);border-right:1px solid rgba(255,255,255,.07);padding:1.5rem 0}
+.admin-logo{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--red);padding:0 1.5rem 1.5rem;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:.75rem;letter-spacing:2px}
+.admin-nav-item{display:flex;align-items:center;gap:.75rem;padding:.65rem 1.5rem;cursor:pointer;font-size:.85rem;color:rgba(245,240,232,.45);transition:all .2s;border-left:3px solid transparent}
+.admin-nav-item:hover{color:var(--cream);background:rgba(255,255,255,.04)}
+.admin-nav-item.active{color:var(--red);border-left-color:var(--red);background:rgba(192,57,43,.06)}
+.admin-section{display:none}
+.admin-section.active{display:block}
+.admin-content{padding:2rem;background:rgba(15,15,15,.5)}
+.admin-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem}
+.admin-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--cream);letter-spacing:1px}
+.metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
+.metric-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:1.25rem}
+.metric-card .metric-val{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--cream);margin-bottom:.25rem}
+.metric-card .metric-label{font-size:.75rem;color:rgba(245,240,232,.4);letter-spacing:.5px;text-transform:uppercase}
+.metric-card .metric-change{font-size:.75rem;color:var(--green);margin-top:.5rem}
+.admin-table{width:100%;border-collapse:collapse}
+.admin-table th{text-align:left;padding:.75rem 1rem;font-size:.75rem;letter-spacing:.5px;color:rgba(245,240,232,.35);border-bottom:1px solid rgba(255,255,255,.07);text-transform:uppercase;white-space:nowrap}
+.admin-table td{padding:.75rem 1rem;font-size:.85rem;border-bottom:1px solid rgba(255,255,255,.04);color:var(--cream)}
+.admin-table tr:hover td{background:rgba(255,255,255,.02)}
+.admin-table-wrap{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:8px;overflow:hidden;overflow-x:auto}
+.action-btn{background:none;border:1px solid rgba(255,255,255,.15);color:rgba(245,240,232,.6);padding:.3rem .7rem;border-radius:4px;cursor:pointer;font-size:.75rem;font-family:'DM Sans',sans-serif;transition:all .2s;margin-right:.3rem}
+.action-btn:hover{border-color:var(--red);color:var(--red)}
+.action-btn.danger{border-color:rgba(192,57,43,.3);color:rgba(192,57,43,.7)}
+.action-btn.danger:hover{border-color:var(--red);color:var(--red)}
+.action-btn.success{border-color:rgba(39,174,96,.3);color:rgba(39,174,96,.7)}
+.action-btn.success:hover{border-color:var(--green);color:var(--green)}
+.admin-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:2000;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:rgba(20,20,20,.98);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:2rem;width:90%;max-width:600px;max-height:85vh;overflow-y:auto}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--cream);letter-spacing:1px}
+.modal-close{background:none;border:none;color:rgba(245,240,232,.4);font-size:1.5rem;cursor:pointer;transition:color .2s}
+.modal-close:hover{color:var(--cream)}
+.crm-tabs{display:flex;gap:.5rem;margin-bottom:2rem;border-bottom:1px solid rgba(255,255,255,.07);padding-bottom:0}
+.crm-tab{background:none;border:none;color:rgba(245,240,232,.4);padding:.6rem 1rem;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.85rem;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s}
+.crm-tab.active{color:var(--red);border-bottom-color:var(--red)}
+.crm-section{display:none}
+.crm-section.active{display:block}
+.alert-success{background:rgba(39,174,96,.1);border:1px solid rgba(39,174,96,.3);color:var(--green);padding:.75rem 1rem;border-radius:6px;font-size:.85rem;margin-bottom:1rem;display:none}
+.alert-success.show{display:block}
+.select-status{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:4px;padding:.35rem .5rem;color:var(--cream);font-size:.8rem;font-family:'DM Sans',sans-serif;cursor:pointer;outline:none}
+.select-status option{background:var(--dark)}
+.progress-bar{height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;margin:1rem 0}
+.progress-fill{height:100%;background:var(--red);border-radius:3px;transition:width .3s}
+.tag{display:inline-block;padding:.15rem .5rem;border-radius:3px;font-size:.7rem;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+.tag-red{background:rgba(192,57,43,.15);color:var(--red)}
+.tag-green{background:rgba(39,174,96,.15);color:var(--green)}
+.tag-yellow{background:rgba(243,156,18,.15);color:var(--yellow)}
+.tag-blue{background:rgba(41,182,246,.15);color:#29b6f6}
+.footer-section{background:rgba(0,0,0,.5);border-top:1px solid rgba(255,255,255,.06);padding:4rem 2rem 2rem}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;max-width:1200px;margin:0 auto}
+.footer-brand h3{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--red);letter-spacing:2px;margin-bottom:.75rem}
+.footer-brand p{font-size:.85rem;color:rgba(245,240,232,.4);line-height:1.7}
+.footer-col h4{font-size:.8rem;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,232,.4);margin-bottom:1rem}
+.footer-col a{display:block;font-size:.85rem;color:rgba(245,240,232,.5);margin-bottom:.5rem;text-decoration:none;cursor:pointer;transition:color .2s}
+.footer-col a:hover{color:var(--red)}
+.footer-bottom{max-width:1200px;margin:3rem auto 0;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;align-items:center;font-size:.8rem;color:rgba(245,240,232,.3)}
+.client-register-form{max-width:700px}
+
+/* Notification */
+.notif{position:fixed;top:80px;right:2rem;background:rgba(20,20,20,.98);border:1px solid var(--green);border-radius:8px;padding:1rem 1.5rem;z-index:3000;font-size:.85rem;color:var(--green);box-shadow:0 4px 20px rgba(0,0,0,.5);transform:translateX(200%);transition:transform .3s}
+.notif.show{transform:translateX(0)}
+.notif.error{border-color:var(--red);color:var(--red)}
+
+@media(max-width:768px){
+  .about-grid,.book-grid,.contact-grid,.admin-form-grid{grid-template-columns:1fr}
+  .portal-layout,.admin-layout{grid-template-columns:1fr}
+  .portal-sidebar,.admin-sidebar{display:none}
+  .hero-stats{flex-wrap:wrap;gap:1.5rem}
+  .metric-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NOTIFICATION -->
+<div class="notif" id="notif"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" onclick="showPage('home')">🐾 DOCTOR<span>ANIMAL</span> AUTO</div>
+  <div class="nav-links" id="nav-public">
+    <button onclick="showPage('home')">Home</button>
+    <button onclick="showPage('about')">About</button>
+    <button onclick="showPage('services')">Services</button>
+    <button onclick="showPage('products')">Products</button>
+    <button onclick="showPage('gallery')">Gallery</button>
+    <button onclick="showPage('booking')">Book Now</button>
+    <button onclick="showPage('feedback')">Feedback</button>
+    <button onclick="showPage('contact')">Contact</button>
+    <button class="nav-cta" onclick="showPage('login')">Login / Register</button>
+  </div>
+  <div class="nav-links" id="nav-client" style="display:none">
+    <button onclick="showPortal('dashboard')">My Portal</button>
+    <div class="nav-user">
+      <span id="client-name-nav">👤 Client</span>
+      <button onclick="logout()">Logout</button>
+    </div>
+  </div>
+  <div class="nav-links" id="nav-admin" style="display:none">
+    <button onclick="showPage('admin')">Admin Dashboard</button>
+    <div class="nav-user" style="color:var(--red)">
+      <span>👑 Admin</span>
+      <button onclick="logout()">Logout</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HOME PAGE ===== -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-accent"></div>
+    <div class="hero-content">
+      <div class="hero-tag">Est. 2010 — Githunguri, Kenya</div>
+      <h1>We Fix<span>Every Beast</span>On The Road</h1>
+      <p class="hero-sub">Doctor Animal Auto is your trusted partner for precision car repair, diagnostics, maintenance, and genuine spare parts. We treat every vehicle like our own.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="showPage('booking')">Book a Service</button>
+        <button class="btn-outline" onclick="showPage('services')">Explore Services</button>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><h3>2,400+</h3><p>Vehicles Serviced</p></div>
+        <div class="hero-stat"><h3>14+</h3><p>Years Experience</p></div>
+        <div class="hero-stat"><h3>98%</h3><p>Client Satisfaction</p></div>
+        <div class="hero-stat"><h3>30+</h3><p>Expert Mechanics</p></div>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <div class="scroll-line"></div>
+      <span>scroll</span>
+    </div>
+  </div>
+
+  <!-- Mini sections on home -->
+  <section style="background:rgba(255,255,255,.02);border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);padding:3rem 2rem">
+    <div style="max-width:1200px;margin:0 auto">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2rem;text-align:center">
+        <div><div style="font-size:2rem;margin-bottom:.5rem">🔧</div><h4 style="font-size:.9rem;color:var(--cream);margin-bottom:.3rem">Engine Repair</h4><p style="font-size:.8rem;color:rgba(245,240,232,.4)">Full diagnostics & rebuild</p></div>
+        <div><div style="font-size:2rem;margin-bottom:.5rem">🛞</div><h4 style="font-size:.9rem;color:var(--cream);margin-bottom:.3rem">Tyre Services</h4><p style="font-size:.8rem;color:rgba(245,240,232,.4)">Balancing & alignment</p></div>
+        <div><div style="font-size:2rem;margin-bottom:.5rem">🔋</div><h4 style="font-size:.9rem;color:var(--cream);margin-bottom:.3rem">Electrical</h4><p style="font-size:.8rem;color:rgba(245,240,232,.4)">Full wiring & battery</p></div>
+        <div><div style="font-size:2rem;margin-bottom:.5rem">❄️</div><h4 style="font-size:.9rem;color:var(--cream);margin-bottom:.3rem">AC Service</h4><p style="font-size:.8rem;color:rgba(245,240,232,.4)">Recharge & repair</p></div>
+        <div><div style="font-size:2rem;margin-bottom:.5rem">🖥️</div><h4 style="font-size:.9rem;color:var(--cream);margin-bottom:.3rem">OBD Diagnostics</h4><p style="font-size:.8rem;color:rgba(245,240,232,.4)">Computer scan & report</p></div>
+        <div><div style="font-size:2rem;margin-bottom:.5rem">🚿</div><h4 style="font-size:.9rem;color:var(--cream);margin-bottom:.3rem">Car Wash & Polish</h4><p style="font-size:.8rem;color:rgba(245,240,232,.4)">Detail & ceramic coat</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section">
+    <div class="section-label">Why Choose Us</div>
+    <div class="section-title">The Doctor<br>Difference</div>
+    <div class="cards-grid" style="margin-top:2rem">
+      <div class="card"><div class="card-icon">🏥</div><h3>Expert Diagnostics</h3><p>State-of-the-art OBD systems. We diagnose the root cause, not just symptoms, saving you time and money.</p></div>
+      <div class="card"><div class="card-icon">🔩</div><h3>Genuine Parts Only</h3><p>We source authentic manufacturer-approved parts. No counterfeits — your safety is non-negotiable.</p></div>
+      <div class="card"><div class="card-icon">📱</div><h3>Real-Time Updates</h3><p>Track your vehicle's repair progress online through your personal client portal. Total transparency.</p></div>
+      <div class="card"><div class="card-icon">💳</div><h3>Clear Pricing</h3><p>No hidden charges. You receive a detailed invoice before work begins. What we quote is what you pay.</p></div>
+      <div class="card"><div class="card-icon">🛡️</div><h3>Warranty Backed</h3><p>All our repair work is backed by a 6-month warranty. We stand behind every job we do.</p></div>
+      <div class="card"><div class="card-icon">⚡</div><h3>Fast Turnaround</h3><p>Most repairs completed within 24–48 hours. Emergency slots available for urgent cases.</p></div>
+    </div>
+    <div style="text-align:center;margin-top:3rem">
+      <button class="btn-primary" onclick="showPage('about')">Learn More About Us</button>
+    </div>
+  </div>
+
+  <!-- CTA strip -->
+  <div style="background:rgba(192,57,43,.08);border-top:1px solid rgba(192,57,43,.2);border-bottom:1px solid rgba(192,57,43,.2);padding:3rem 2rem;text-align:center">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--cream);letter-spacing:1px;margin-bottom:.75rem">Ready to Book Your Service?</div>
+    <p style="color:rgba(245,240,232,.5);margin-bottom:1.5rem;font-size:.95rem">Join 2,400+ satisfied customers. Book online in under 2 minutes.</p>
+    <button class="btn-primary" onclick="showPage('login')">Create Account & Book</button>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer-section">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h3>🐾 DOCTOR ANIMAL AUTO</h3>
+        <p>Your trusted car care partner since 2010. Expert mechanics, genuine parts, and transparent pricing — all under one roof.</p>
+        <p style="margin-top:1rem;font-size:.8rem;color:rgba(245,240,232,.3)">📍 Githunguri, Machakos County, Kenya</p>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <a onclick="showPage('services')">Engine Repair</a>
+        <a onclick="showPage('services')">Diagnostics</a>
+        <a onclick="showPage('services')">Electrical</a>
+        <a onclick="showPage('services')">AC Service</a>
+        <a onclick="showPage('services')">Tyre & Wheel</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a onclick="showPage('about')">About Us</a>
+        <a onclick="showPage('gallery')">Gallery</a>
+        <a onclick="showPage('feedback')">Feedback</a>
+        <a onclick="showPage('contact')">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Client</h4>
+        <a onclick="showPage('login')">Login</a>
+        <a onclick="showPage('booking')">Book Service</a>
+        <a onclick="showPage('products')">Spare Parts</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Doctor Animal Auto. All rights reserved.</span>
+      <span style="color:rgba(192,57,43,.5)">Built with care in Kenya 🇰🇪</span>
+    </div>
+  </footer>
+</div>
+
+<!-- ===== ABOUT PAGE ===== -->
+<div class="page" id="page-about">
+  <div class="section">
+    <div class="section-label">Our Story</div>
+    <div class="section-title">About Doctor<br>Animal Auto</div>
+    <div class="about-grid">
+      <div>
+        <p style="color:rgba(245,240,232,.65);line-height:1.8;font-size:1rem;margin-bottom:1.25rem">Founded in 2010 in Githunguri, Doctor Animal Auto started as a small two-bay workshop with one mechanic and a dream: to give every Kenyan driver access to honest, expert automotive care.</p>
+        <p style="color:rgba(245,240,232,.5);line-height:1.8;font-size:.9rem;margin-bottom:1.25rem">Today, we operate a 20-bay facility with over 30 certified technicians, modern OBD diagnostic equipment, and a digital client management system that keeps you informed at every step.</p>
+        <p style="color:rgba(245,240,232,.5);line-height:1.8;font-size:.9rem">We believe your car is more than a machine — it's your livelihood, your freedom, your family's safety. That's why we treat every vehicle with surgical precision and genuine care.</p>
+        <div class="about-points">
+          <div class="about-point"><div class="about-point-dot"></div><p>Certified by Kenya Motor Industry Association</p></div>
+          <div class="about-point"><div class="about-point-dot"></div><p>Authorized dealer for Toyota, Nissan & Mitsubishi parts</p></div>
+          <div class="about-point"><div class="about-point-dot"></div><p>6-month labour warranty on all repairs</p></div>
+          <div class="about-point"><div class="about-point-dot"></div><p>24-hour emergency breakdown support</p></div>
+          <div class="about-point"><div class="about-point-dot"></div><p>Digital repair tracking for full transparency</p></div>
+        </div>
+        <button class="btn-primary" style="margin-top:2rem" onclick="showPage('contact')">Get In Touch</button>
+      </div>
+      <div class="about-img">
+        <div class="about-img-bg"><div class="about-img-icon">🔧</div></div>
+        <div style="position:absolute;bottom:1.5rem;left:1.5rem;right:1.5rem;background:rgba(13,13,13,.85);border-radius:8px;padding:1.25rem;border:1px solid rgba(255,255,255,.08)">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+            <div style="text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--red)">30+</div><div style="font-size:.7rem;color:rgba(245,240,232,.4);letter-spacing:1px;text-transform:uppercase">Mechanics</div></div>
+            <div style="text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--red)">20</div><div style="font-size:.7rem;color:rgba(245,240,232,.4);letter-spacing:1px;text-transform:uppercase">Service Bays</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Team -->
+  <div class="section" style="padding-top:0">
+    <div class="section-label">The Team</div>
+    <div class="section-title">Meet Our Experts</div>
+    <div class="cards-grid" style="margin-top:2rem">
+      <div class="card" style="text-align:center">
+        <div style="width:64px;height:64px;border-radius:50%;background:rgba(192,57,43,.15);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 1rem">👨‍🔧</div>
+        <h3>James Mwangi</h3><p style="color:var(--red);font-size:.8rem;margin:.3rem 0 .75rem">Lead Engine Specialist</p><p>20 years exp. | Toyota & Nissan certified expert</p></div>
+      <div class="card" style="text-align:center">
+        <div style="width:64px;height:64px;border-radius:50%;background:rgba(192,57,43,.15);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 1rem">👩‍🔧</div>
+        <h3>Grace Achieng</h3><p style="color:var(--red);font-size:.8rem;margin:.3rem 0 .75rem">Diagnostic Technician</p><p>OBD specialist, electrical systems & ECU reprogramming</p></div>
+      <div class="card" style="text-align:center">
+        <div style="width:64px;height:64px;border-radius:50%;background:rgba(192,57,43,.15);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 1rem">👨‍🔬</div>
+        <h3>Peter Otieno</h3><p style="color:var(--red);font-size:.8rem;margin:.3rem 0 .75rem">Suspension & Brakes</p><p>15 years specialized in chassis and safety systems</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SERVICES PAGE ===== -->
+<div class="page" id="page-services">
+  <div class="section">
+    <div class="section-label">What We Do</div>
+    <div class="section-title">Our Services</div>
+    <p class="section-sub">Professional automotive care across all makes and models. Every service comes with a detailed report and 6-month labour warranty.</p>
+    <div class="services-list">
+      <div class="service-item"><div class="service-num">01</div><h3>Engine Diagnostics & Repair</h3><p>Full OBD scan, error code clearing, engine rebuild, head gasket, timing belt & more.</p><p class="service-price">From KES 3,500</p><button class="btn-book" onclick="showPage('booking')">Book Now</button></div>
+      <div class="service-item"><div class="service-num">02</div><h3>Electrical Systems</h3><p>Battery testing, alternator, starter motor, full wiring diagnosis and repair.</p><p class="service-price">From KES 2,000</p><button class="btn-book" onclick="showPage('booking')">Book Now</button></div>
+      <div class="service-item"><div class="service-num">03</div><h3>Brakes & Suspension</h3><p>Brake pad/disc replacement, shock absorbers, ball joints, steering rack repair.</p><p class="service-price">From KES 4,500</p><button class="btn-book" onclick="showPage('booking')">Book Now</button></div>
+      <div class="service-item"><div class="service-num">04</div><h3>AC Service & Repair</h3><p>Gas recharge, compressor, condenser, fan motor, full system diagnosis.</p><p class="service-price">From KES 5,000</p><button class="btn-book" onclick="showPage('booking')">Book Now</button></div>
+      <div class="service-item"><div class="service-num">05</div><h3>Oil & Filter Service</h3><p>Engine oil change, oil filter, air filter, fuel filter — all grades available.</p><p class="service-price">From KES 1,800</p><button class="btn-book" onclick="showPage('booking')">Book Now</button></div>
+      <div class="service-item"><div class="service-num">06</div><h3>Tyre & Wheel Alignment</h3><p>Computerized wheel alignment, balancing, rotation & tyre fitting.</p><p class="service-price">From KES 2,500</p><button class="btn-book" onclick="showPage('booking')">Book Now</button></div>
+      <div class="service-item"><div class="service-num">07</div><h3>Transmission Service</h3><p>Gearbox service, clutch replacement, automatic transmission fluid change & repair.</p><p class="service-price">From KES 8,000</p><button class="btn-book" onclick="showPage('booking')">Book Now</button></div>
+      <div class="service-item"><div class="service-num">08</div><h3>Body & Paint Work</h3><p>Panel beating, dent removal, spray painting, rust treatment & underbody coating.</p><p class="service-price">From KES 6,000</p><button class="btn-book" onclick="showPage('booking')">Book Now</button></div>
+      <div class="service-item"><div class="service-num">09</div><h3>Car Wash & Detailing</h3><p>Full wash, engine degreasing, interior vacuum, polish, ceramic coating.</p><p class="service-price">From KES 800</p><button class="btn-book" onclick="showPage('booking')">Book Now</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PRODUCTS PAGE ===== -->
+<div class="page" id="page-products">
+  <div class="section">
+    <div class="section-label">Spare Parts Store</div>
+    <div class="section-title">Genuine Auto Parts</div>
+    <p class="section-sub">All parts are OEM-grade or better. We carry Toyota, Nissan, Mitsubishi, Subaru, and more.</p>
+    <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:2rem">
+      <button class="type-btn active" onclick="filterProducts('all',this)">All Parts</button>
+      <button class="type-btn" onclick="filterProducts('engine',this)">Engine</button>
+      <button class="type-btn" onclick="filterProducts('brakes',this)">Brakes</button>
+      <button class="type-btn" onclick="filterProducts('electrical',this)">Electrical</button>
+      <button class="type-btn" onclick="filterProducts('filters',this)">Filters</button>
+    </div>
+    <div class="products-grid" id="products-grid"></div>
+  </div>
+  <div class="cart-badge" id="cart-badge" onclick="showCart()">🛒 Cart (<span id="cart-count">0</span>)</div>
+</div>
+
+<!-- ===== GALLERY PAGE ===== -->
+<div class="page" id="page-gallery">
+  <div class="section">
+    <div class="section-label">Our Work</div>
+    <div class="section-title">Gallery</div>
+    <p class="section-sub">Real vehicles, real results. A glimpse into our workshop and the quality of work we deliver every day.</p>
+    <div class="gallery-grid">
+      <div class="gallery-item"><div class="gallery-img">🔧</div><div class="gallery-desc"><h4>Engine Overhaul — Toyota Hilux</h4><p>Full engine rebuild including valve job and timing chain replacement. Zero oil leaks post-service.</p></div></div>
+      <div class="gallery-item"><div class="gallery-img">🚗</div><div class="gallery-desc"><h4>Nissan X-Trail Suspension Rebuild</h4><p>Complete lower arm, shock absorbers and wheel bearing replacement. Rides like new.</p></div></div>
+      <div class="gallery-item"><div class="gallery-img">🛞</div><div class="gallery-desc"><h4>Wheel Alignment — Subaru Forester</h4><p>Computerized 4-wheel alignment after accident repair. Tracking perfect.</p></div></div>
+      <div class="gallery-item"><div class="gallery-img">🔋</div><div class="gallery-desc"><h4>Electrical Diagnosis — Mercedes C200</h4><p>Traced intermittent starting fault to faulty crank sensor. Diagnosed and replaced in 3 hours.</p></div></div>
+      <div class="gallery-item"><div class="gallery-img">❄️</div><div class="gallery-desc"><h4>AC System Overhaul — Isuzu D-Max</h4><p>New compressor, condenser and full gas recharge. Cool cabin in under a day.</p></div></div>
+      <div class="gallery-item"><div class="gallery-img">🎨</div><div class="gallery-desc"><h4>Paintwork — Toyota Prado</h4><p>Full respray in original pearl white. Panel beating on the driver side after minor accident.</p></div></div>
+      <div class="gallery-item"><div class="gallery-img">🔩</div><div class="gallery-desc"><h4>Gearbox Rebuild — Mitsubishi Canter</h4><p>Full commercial truck gearbox disassembly, bearing and synchro replacement.</p></div></div>
+      <div class="gallery-item"><div class="gallery-img">🚿</div><div class="gallery-desc"><h4>Detailing & Ceramic Coat — VW Tiguan</h4><p>Clay bar treatment, machine polish and 5-year ceramic coating applied by hand.</p></div></div>
+      <div class="gallery-item"><div class="gallery-img">🛡️</div><div class="gallery-desc"><h4>Brake System — Toyota Landcruiser</h4><p>4-wheel disc brake upgrade with high-performance pads and new callipers all round.</p></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== BOOKING PAGE ===== -->
+<div class="page" id="page-booking">
+  <div class="section">
+    <div class="section-label">Schedule a Visit</div>
+    <div class="section-title">Book a Service</div>
+    <p class="section-sub">Fill in your details below and our team will confirm your booking within 2 hours.</p>
+    <div class="book-grid">
+      <form id="booking-form">
+        <div class="form-group"><label>Full Name</label><input type="text" placeholder="John Kamau" id="book-name"></div>
+        <div class="form-group"><label>Phone Number</label><input type="tel" placeholder="+254 712 345 678" id="book-phone"></div>
+        <div class="form-group"><label>Email Address</label><input type="email" placeholder="john@email.com" id="book-email"></div>
+        <div class="form-group"><label>Vehicle Make & Model</label><input type="text" placeholder="Toyota Hilux 2018" id="book-vehicle"></div>
+        <div class="form-group"><label>Registration Number</label><input type="text" placeholder="KCA 123B" id="book-reg"></div>
+        <div class="form-group"><label>Service Required</label>
+          <select id="book-service">
+            <option value="">Select service...</option>
+            <option>Engine Diagnostics & Repair</option>
+            <option>Electrical Systems</option>
+            <option>Brakes & Suspension</option>
+            <option>AC Service & Repair</option>
+            <option>Oil & Filter Service</option>
+            <option>Tyre & Wheel Alignment</option>
+            <option>Transmission Service</option>
+            <option>Body & Paint Work</option>
+            <option>Car Wash & Detailing</option>
+            <option>General Maintenance</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Preferred Date</label><input type="date" id="book-date"></div>
+        <div class="form-group"><label>Additional Notes</label><textarea placeholder="Describe the problem or any other details..." id="book-notes"></textarea></div>
+        <button type="button" class="btn-primary" onclick="submitBooking()" style="width:100%">Submit Booking Request</button>
+      </form>
+      <div class="book-info">
+        <div class="book-info-item"><div class="book-info-icon">⏰</div><div class="book-info-text"><h4>Opening Hours</h4><p>Mon–Fri: 7:30 AM – 6:00 PM<br>Saturday: 8:00 AM – 4:00 PM<br>Sunday: Emergency only</p></div></div>
+        <div class="book-info-item"><div class="book-info-icon">📞</div><div class="book-info-text"><h4>Call Us</h4><p>+254 712 000 111<br>+254 733 000 222</p></div></div>
+        <div class="book-info-item"><div class="book-info-icon">📍</div><div class="book-info-text"><h4>Location</h4><p>Doctor Animal Auto Garage<br>Githunguri Road, Machakos County<br>Nairobi, Kenya</p></div></div>
+        <div class="book-info-item"><div class="book-info-icon">ℹ️</div><div class="book-info-text"><h4>What Happens Next</h4><p>1. You'll get a confirmation SMS/email<br>2. Bring the vehicle on your date<br>3. We diagnose & quote before starting<br>4. Track progress via your client portal</p></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FEEDBACK PAGE ===== -->
+<div class="page" id="page-feedback">
+  <div class="section">
+    <div class="section-label">Your Voice</div>
+    <div class="section-title">Share Feedback</div>
+    <div class="feedback-container">
+      <div class="feedback-type-btns">
+        <button class="type-btn active" onclick="selectFeedbackType('compliment',this)">😊 Compliment</button>
+        <button class="type-btn" onclick="selectFeedbackType('complaint',this)">😤 Complaint</button>
+        <button class="type-btn" onclick="selectFeedbackType('suggestion',this)">💡 Suggestion</button>
+        <button class="type-btn" onclick="selectFeedbackType('general',this)">💬 General</button>
+      </div>
+      <input type="hidden" id="feedback-type" value="compliment">
+      <div class="form-group"><label>Your Name (Optional)</label><input type="text" id="fb-name" placeholder="Remains anonymous if left blank"></div>
+      <div class="form-group"><label>Email (Optional)</label><input type="email" id="fb-email" placeholder="For us to follow up if needed"></div>
+      <div class="form-group">
+        <label>Rate Your Experience</label>
+        <div class="stars" id="stars">
+          <span class="star" onclick="setRating(1)">★</span>
+          <span class="star" onclick="setRating(2)">★</span>
+          <span class="star" onclick="setRating(3)">★</span>
+          <span class="star" onclick="setRating(4)">★</span>
+          <span class="star" onclick="setRating(5)">★</span>
+        </div>
+      </div>
+      <div class="form-group"><label>Your Message</label><textarea id="fb-message" placeholder="Tell us about your experience, suggestion or concern..." style="min-height:150px"></textarea></div>
+      <button class="btn-primary" onclick="submitFeedback()" style="width:100%">Submit Feedback</button>
+      <div class="alert-success" id="fb-success">✅ Thank you! Your feedback has been received.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CONTACT PAGE ===== -->
+<div class="page" id="page-contact">
+  <div class="section">
+    <div class="section-label">Get In Touch</div>
+    <div class="section-title">Contact Us</div>
+    <div class="contact-grid">
+      <div>
+        <div class="contact-detail"><div class="contact-detail-icon">📍</div><div><h4>Workshop Address</h4><p>Doctor Animal Auto Garage<br>Githunguri Road, Machakos County<br>Nairobi, Kenya</p></div></div>
+        <div class="contact-detail"><div class="contact-detail-icon">📞</div><div><h4>Phone Numbers</h4><p>+254 712 000 111 (Main Line)<br>+254 733 000 222 (Emergency)</p></div></div>
+        <div class="contact-detail"><div class="contact-detail-icon">✉️</div><div><h4>Email</h4><p>info@doctoranimal.co.ke<br>support@doctoranimal.co.ke</p></div></div>
+        <div class="contact-detail"><div class="contact-detail-icon">⏰</div><div><h4>Working Hours</h4><p>Monday–Friday: 7:30 AM – 6:00 PM<br>Saturday: 8:00 AM – 4:00 PM<br>Sunday: Emergency only</p></div></div>
+        <div class="map-placeholder">🗺️</div>
+      </div>
+      <div>
+        <div class="form-group"><label>Your Name</label><input type="text" id="ct-name" placeholder="Full name"></div>
+        <div class="form-group"><label>Email</label><input type="email" id="ct-email" placeholder="email@example.com"></div>
+        <div class="form-group"><label>Subject</label><input type="text" id="ct-subject" placeholder="What's this about?"></div>
+        <div class="form-group"><label>Message</label><textarea id="ct-message" style="min-height:150px" placeholder="Your message..."></textarea></div>
+        <button class="btn-primary" onclick="submitContact()" style="width:100%">Send Message</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LOGIN PAGE ===== -->
+<div class="page" id="page-login">
+  <div class="auth-container">
+    <div class="auth-box">
+      <div class="auth-logo">🐾 Doctor Animal Auto</div>
+      <p class="auth-subtitle">Client & Admin Portal</p>
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchAuthTab('login')">Sign In</button>
+        <button class="auth-tab" onclick="switchAuthTab('register')">Create Account</button>
+      </div>
+      <!-- Login -->
+      <div id="auth-login">
+        <div class="form-group"><label>Email Address</label><input type="email" id="login-email" placeholder="your@email.com" value="admin@doctoranimal.co.ke"></div>
+        <div class="form-group"><label>Password</label><input type="password" id="login-password" placeholder="••••••••" value="admin123"></div>
+        <button class="btn-primary" onclick="doLogin()" style="width:100%;margin-top:.5rem">Sign In</button>
+        <p style="text-align:center;margin-top:1rem;font-size:.8rem;color:rgba(245,240,232,.35)">Demo: admin@doctoranimal.co.ke / admin123<br>or client@test.com / client123</p>
+      </div>
+      <!-- Register -->
+      <div id="auth-register" style="display:none">
+        <div class="form-group"><label>Full Name</label><input type="text" id="reg-name" placeholder="John Kamau"></div>
+        <div class="form-group"><label>Email Address</label><input type="email" id="reg-email" placeholder="john@email.com"></div>
+        <div class="form-group"><label>Phone Number</label><input type="tel" id="reg-phone" placeholder="+254 712 345 678"></div>
+        <div class="form-group"><label>Password</label><input type="password" id="reg-password" placeholder="Create a password"></div>
+        <button class="btn-primary" onclick="doRegister()" style="width:100%;margin-top:.5rem">Create Account</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CLIENT PORTAL ===== -->
+<div class="page" id="page-portal">
+  <div class="portal-layout">
+    <div class="portal-sidebar">
+      <div style="padding:1.25rem 1.5rem 1.5rem;border-bottom:1px solid rgba(255,255,255,.07)">
+        <div style="font-size:.8rem;color:rgba(245,240,232,.4);margin-bottom:.25rem">Logged in as</div>
+        <div style="font-weight:600;color:var(--cream)" id="portal-username">Client Name</div>
+        <div style="font-size:.75rem;color:var(--green);margin-top:.25rem">● Active Account</div>
+      </div>
+      <div style="margin-top:.75rem">
+        <div class="portal-nav-item active" onclick="showPortal('dashboard')"><span class="portal-nav-icon">🏠</span>Dashboard</div>
+        <div class="portal-nav-item" onclick="showPortal('register-service')"><span class="portal-nav-icon">📋</span>Register Vehicle</div>
+        <div class="portal-nav-item" onclick="showPortal('status')"><span class="portal-nav-icon">🔍</span>Track Status</div>
+        <div class="portal-nav-item" onclick="showPortal('invoice')"><span class="portal-nav-icon">💰</span>My Invoice</div>
+        <div class="portal-nav-item" onclick="showPortal('settings')"><span class="portal-nav-icon">⚙️</span>Settings</div>
+      </div>
+    </div>
+    <div class="portal-content">
+      <!-- Dashboard -->
+      <div id="portal-dashboard">
+        <div class="portal-title">My Dashboard</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem">
+          <div class="info-card" style="text-align:center"><div style="font-size:1.8rem;margin-bottom:.5rem">🚗</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--red)">1</div><div style="font-size:.75rem;color:rgba(245,240,232,.4);text-transform:uppercase;letter-spacing:.5px">Vehicle Registered</div></div>
+          <div class="info-card" style="text-align:center"><div style="font-size:1.8rem;margin-bottom:.5rem">🔧</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--yellow)">In Progress</div><div style="font-size:.75rem;color:rgba(245,240,232,.4);text-transform:uppercase;letter-spacing:.5px">Current Status</div></div>
+          <div class="info-card" style="text-align:center"><div style="font-size:1.8rem;margin-bottom:.5rem">💳</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--green)">KES 12,500</div><div style="font-size:.75rem;color:rgba(245,240,232,.4);text-transform:uppercase;letter-spacing:.5px">Pending Invoice</div></div>
+        </div>
+        <div class="info-card">
+          <div style="font-weight:600;color:var(--cream);margin-bottom:1rem;font-size:.95rem">Current Vehicle</div>
+          <div class="info-row"><span class="label">Vehicle</span><span class="value">Toyota Hilux 2018</span></div>
+          <div class="info-row"><span class="label">Registration</span><span class="value">KCA 456X</span></div>
+          <div class="info-row"><span class="label">Service</span><span class="value">Engine Diagnostics & Repair</span></div>
+          <div class="info-row"><span class="label">Date Brought In</span><span class="value">2 May 2025</span></div>
+          <div class="info-row"><span class="label">Status</span><span class="value"><span class="status-badge status-progress">In Progress</span></span></div>
+        </div>
+        <div style="margin-top:1rem">
+          <button class="btn-primary" onclick="showPortal('status')">Track Repair Progress →</button>
+          <button class="btn-outline" style="margin-left:1rem" onclick="showPortal('invoice')">View Invoice →</button>
+        </div>
+      </div>
+
+      <!-- Register Service -->
+      <div id="portal-register-service" style="display:none">
+        <div class="portal-title">Register a Vehicle</div>
+        <div class="client-register-form">
+          <div class="form-group"><label>Full Name</label><input type="text" id="prt-name" placeholder="Your full name"></div>
+          <div class="form-group"><label>Email</label><input type="email" id="prt-email" placeholder="your@email.com"></div>
+          <div class="form-group"><label>Contact Number</label><input type="tel" id="prt-phone" placeholder="+254 ..."></div>
+          <div style="height:1px;background:rgba(255,255,255,.07);margin:1.5rem 0"></div>
+          <div style="font-size:.85rem;letter-spacing:1px;text-transform:uppercase;color:rgba(245,240,232,.4);margin-bottom:1rem">Vehicle & Service Details</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+            <div class="form-group"><label>Vehicle Make</label><input type="text" id="prt-make" placeholder="Toyota"></div>
+            <div class="form-group"><label>Vehicle Model</label><input type="text" id="prt-model" placeholder="Hilux"></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+            <div class="form-group"><label>Year</label><input type="text" id="prt-year" placeholder="2018"></div>
+            <div class="form-group"><label>Reg. Number</label><input type="text" id="prt-reg" placeholder="KCA 123B"></div>
+          </div>
+          <div class="form-group"><label>Colour</label><input type="text" id="prt-colour" placeholder="White"></div>
+          <div class="form-group"><label>Service Requested</label>
+            <select id="prt-service">
+              <option>Engine Diagnostics & Repair</option>
+              <option>Electrical Systems</option>
+              <option>Brakes & Suspension</option>
+              <option>AC Service & Repair</option>
+              <option>Oil & Filter Service</option>
+              <option>Tyre & Wheel Alignment</option>
+              <option>Transmission Service</option>
+              <option>General Maintenance</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Date Brought In</label><input type="date" id="prt-date"></div>
+          <div class="form-group"><label>Mileage (km)</label><input type="number" id="prt-mileage" placeholder="95000"></div>
+          <div class="form-group"><label>Problem Description</label><textarea id="prt-problem" placeholder="Describe what you have noticed — sounds, smells, warning lights etc."></textarea></div>
+          <button class="btn-primary" onclick="submitVehicleReg()" style="width:100%">Submit Vehicle Registration</button>
+        </div>
+      </div>
+
+      <!-- Track Status -->
+      <div id="portal-status" style="display:none">
+        <div class="portal-title">Repair Progress</div>
+        <div class="info-card" style="margin-bottom:2rem">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+            <div><div style="font-size:.75rem;color:rgba(245,240,232,.4);margin-bottom:.2rem">CURRENT JOB</div><div style="font-weight:600;color:var(--cream)">Toyota Hilux 2018 — Engine Diagnostics</div></div>
+            <span class="status-badge status-progress">In Progress</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:65%"></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:.75rem;color:rgba(245,240,232,.3)"><span>0%</span><span>65% Complete</span><span>100%</span></div>
+        </div>
+        <div class="portal-title" style="font-size:1.4rem;margin-bottom:1.25rem">Mechanic Updates</div>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-dot done">✓</div>
+            <div class="timeline-body">
+              <h4>Vehicle Received & Checked In</h4>
+              <p>Vehicle received, initial visual inspection done. Mileage recorded at 94,820 km. Client briefed on expected process.</p>
+              <div class="timeline-date">2 May 2025, 09:15 AM — James M.</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot done">✓</div>
+            <div class="timeline-body">
+              <h4>OBD Diagnostic Scan Complete</h4>
+              <p>Scan revealed P0301 (Cylinder 1 misfire) and P0171 (System too lean). Likely culprit: faulty injector on cylinder 1 and possible vacuum leak. Parts being sourced.</p>
+              <div class="timeline-date">2 May 2025, 11:40 AM — Grace A.</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot current">⟳</div>
+            <div class="timeline-body">
+              <h4>Parts Replacement Underway</h4>
+              <p>Injector on cylinder 1 replaced. Vacuum leak traced to intake manifold gasket — replacement in progress. Engine oil and filter also being replaced as recommended.</p>
+              <div class="timeline-date">3 May 2025, 10:00 AM — James M.</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot pending">○</div>
+            <div class="timeline-body">
+              <h4>Test Drive & Quality Check</h4>
+              <p>Pending — will follow upon completion of parts replacement.</p>
+              <div class="timeline-date">Estimated: 4 May 2025</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot pending">○</div>
+            <div class="timeline-body">
+              <h4>Vehicle Ready for Collection</h4>
+              <p>Pending — client to be notified via SMS and email once complete.</p>
+              <div class="timeline-date">Estimated: 5 May 2025</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Invoice -->
+      <div id="portal-invoice" style="display:none">
+        <div class="portal-title">My Invoice</div>
+        <div class="info-card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem">
+            <div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--red);letter-spacing:1px">INVOICE #DA-2025-0047</div>
+              <div style="font-size:.8rem;color:rgba(245,240,232,.4);margin-top:.25rem">Date: 2 May 2025 | Est. Completion: 5 May 2025</div>
+            </div>
+            <span class="status-badge status-progress">In Progress</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;font-size:.85rem">
+            <div><div style="color:rgba(245,240,232,.4);font-size:.75rem;margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.5px">Client</div>
+            <div style="color:var(--cream)">John Kamau<br>+254 712 345 678<br>john@email.com</div></div>
+            <div><div style="color:rgba(245,240,232,.4);font-size:.75rem;margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.5px">Vehicle</div>
+            <div style="color:var(--cream)">Toyota Hilux 2018<br>KCA 456X | White<br>Mileage: 94,820 km</div></div>
+          </div>
+          <table class="invoice-table">
+            <thead><tr><th>Description</th><th>Qty</th><th style="text-align:right">Unit Price</th><th style="text-align:right">Total</th></tr></thead>
+            <tbody>
+              <tr><td>OBD Diagnostic Scan</td><td>1</td><td style="text-align:right">KES 2,500</td><td style="text-align:right">KES 2,500</td></tr>
+              <tr><td>Fuel Injector (Cylinder 1) — OEM</td><td>1</td><td style="text-align:right">KES 4,800</td><td style="text-align:right">KES 4,800</td></tr>
+              <tr><td>Intake Manifold Gasket Set</td><td>1</td><td style="text-align:right">KES 1,200</td><td style="text-align:right">KES 1,200</td></tr>
+              <tr><td>Engine Oil (5W-30, 5L)</td><td>1</td><td style="text-align:right">KES 2,400</td><td style="text-align:right">KES 2,400</td></tr>
+              <tr><td>Oil Filter</td><td>1</td><td style="text-align:right">KES 450</td><td style="text-align:right">KES 450</td></tr>
+              <tr><td>Labour — Engine & Injector</td><td>1</td><td style="text-align:right">KES 1,500</td><td style="text-align:right">KES 1,500</td></tr>
+            </tbody>
+          </table>
+          <div class="invoice-total">
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.25rem">
+              <div style="font-size:.8rem;color:rgba(245,240,232,.4)">Subtotal: KES 12,850</div>
+              <div style="font-size:.8rem;color:rgba(245,240,232,.4)">VAT (16%): KES 2,056</div>
+              <div style="display:flex;gap:1rem;align-items:baseline;margin-top:.5rem">
+                <span class="total-label">TOTAL DUE</span>
+                <span class="total-amount">KES 14,906</span>
+              </div>
+            </div>
+          </div>
+          <p style="font-size:.75rem;color:rgba(245,240,232,.3);margin-top:1rem">⚠️ Invoice is a draft — final amount may vary slightly based on additional parts discovered during repair. Final invoice issued upon completion.</p>
+        </div>
+      </div>
+
+      <!-- Settings -->
+      <div id="portal-settings" style="display:none">
+        <div class="portal-title">Account Settings</div>
+        <div class="info-card" style="max-width:500px">
+          <div style="font-weight:600;color:var(--cream);margin-bottom:1.25rem">Personal Information</div>
+          <div class="form-group"><label>Full Name</label><input type="text" value="John Kamau" id="set-name"></div>
+          <div class="form-group"><label>Email</label><input type="email" value="john@email.com" id="set-email"></div>
+          <div class="form-group"><label>Phone</label><input type="tel" value="+254 712 345 678" id="set-phone"></div>
+          <div class="form-group"><label>New Password (leave blank to keep current)</label><input type="password" placeholder="••••••••"></div>
+          <button class="btn-primary" onclick="showNotif('Profile updated successfully!','success')">Save Changes</button>
+        </div>
+        <div class="info-card" style="max-width:500px;margin-top:1.25rem;border-color:rgba(192,57,43,.2)">
+          <div style="font-weight:600;color:var(--red);margin-bottom:.75rem">Danger Zone</div>
+          <p style="font-size:.85rem;color:rgba(245,240,232,.4);margin-bottom:1rem">Permanently delete your account and all associated data. This action cannot be undone.</p>
+          <button style="background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.3);color:var(--red);padding:.6rem 1.25rem;border-radius:4px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.85rem" onclick="deleteAccount()">Delete My Account</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADMIN PAGE ===== -->
+<div class="page" id="page-admin">
+  <div class="admin-layout">
+    <div class="admin-sidebar">
+      <div class="admin-logo">🛡️ ADMIN PANEL</div>
+      <div class="admin-nav-item active" onclick="showAdmin('overview')"><span>📊</span> Overview</div>
+      <div class="admin-nav-item" onclick="showAdmin('crm')"><span>👥</span> CRM — Clients</div>
+      <div class="admin-nav-item" onclick="showAdmin('jobs')"><span>🔧</span> Active Jobs</div>
+      <div class="admin-nav-item" onclick="showAdmin('invoices')"><span>💰</span> Invoices</div>
+      <div class="admin-nav-item" onclick="showAdmin('products-admin')"><span>📦</span> Products</div>
+      <div class="admin-nav-item" onclick="showAdmin('gallery-admin')"><span>🖼️</span> Gallery</div>
+      <div class="admin-nav-item" onclick="showAdmin('bookings')"><span>📅</span> Bookings</div>
+      <div class="admin-nav-item" onclick="showAdmin('feedback-admin')"><span>💬</span> Feedback</div>
+      <div class="admin-nav-item" onclick="showAdmin('services-admin')"><span>⚙️</span> Services</div>
+      <div style="padding:1.5rem;border-top:1px solid rgba(255,255,255,.06);margin-top:1rem">
+        <button onclick="logout()" style="background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.2);color:var(--red);padding:.5rem 1rem;border-radius:4px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.8rem;width:100%">Logout</button>
+      </div>
+    </div>
+    <div class="admin-content">
+
+      <!-- Overview -->
+      <div class="admin-section active" id="admin-overview">
+        <div class="admin-header"><div class="admin-title">Dashboard Overview</div><div style="font-size:.8rem;color:rgba(245,240,232,.3);font-family:'Space Mono',monospace">May 2025</div></div>
+        <div class="metric-grid">
+          <div class="metric-card"><div class="metric-val">47</div><div class="metric-label">Active Jobs</div><div class="metric-change">↑ 12 this week</div></div>
+          <div class="metric-card"><div class="metric-val">284</div><div class="metric-label">Total Clients</div><div class="metric-change">↑ 8 this month</div></div>
+          <div class="metric-card"><div class="metric-val" style="color:var(--green)">KES 389K</div><div class="metric-label">Revenue MTD</div><div class="metric-change">↑ 18% vs April</div></div>
+          <div class="metric-card"><div class="metric-val" style="color:var(--yellow)">13</div><div class="metric-label">Pending Invoices</div><div class="metric-change">KES 142K unpaid</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1.5rem">
+          <div>
+            <div style="font-size:.8rem;letter-spacing:1px;text-transform:uppercase;color:rgba(245,240,232,.35);margin-bottom:1rem">Recent Activity</div>
+            <div class="admin-table-wrap">
+              <table class="admin-table">
+                <thead><tr><th>Client</th><th>Job</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr><td>John Kamau</td><td>Engine Repair</td><td><span class="status-badge status-progress">In Progress</span></td></tr>
+                  <tr><td>Mary Wanjiku</td><td>Oil Change</td><td><span class="status-badge status-complete">Done</span></td></tr>
+                  <tr><td>Peter Otieno</td><td>AC Service</td><td><span class="status-badge status-pending">Pending</span></td></tr>
+                  <tr><td>Agnes Muthoni</td><td>Brakes</td><td><span class="status-badge status-progress">In Progress</span></td></tr>
+                  <tr><td>David Njoroge</td><td>Diagnostics</td><td><span class="status-badge status-pending">Pending</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:.8rem;letter-spacing:1px;text-transform:uppercase;color:rgba(245,240,232,.35);margin-bottom:1rem">Service Breakdown</div>
+            <div class="info-card">
+              <div style="display:flex;flex-direction:column;gap:.75rem">
+                <div><div style="display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:.3rem"><span style="color:var(--cream)">Engine Repair</span><span style="color:rgba(245,240,232,.4)">38%</span></div><div class="progress-bar" style="margin:0"><div class="progress-fill" style="width:38%"></div></div></div>
+                <div><div style="display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:.3rem"><span style="color:var(--cream)">Oil & Filter</span><span style="color:rgba(245,240,232,.4)">24%</span></div><div class="progress-bar" style="margin:0"><div class="progress-fill" style="width:24%;background:var(--orange)"></div></div></div>
+                <div><div style="display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:.3rem"><span style="color:var(--cream)">Electrical</span><span style="color:rgba(245,240,232,.4)">18%</span></div><div class="progress-bar" style="margin:0"><div class="progress-fill" style="width:18%;background:var(--yellow)"></div></div></div>
+                <div><div style="display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:.3rem"><span style="color:var(--cream)">Brakes</span><span style="color:rgba(245,240,232,.4)">12%</span></div><div class="progress-bar" style="margin:0"><div class="progress-fill" style="width:12%;background:var(--green)"></div></div></div>
+                <div><div style="display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:.3rem"><span style="color:var(--cream)">Other</span><span style="color:rgba(245,240,232,.4)">8%</span></div><div class="progress-bar" style="margin:0"><div class="progress-fill" style="width:8%;background:#888"></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CRM -->
+      <div class="admin-section" id="admin-crm">
+        <div class="admin-header">
+          <div class="admin-title">Client CRM</div>
+          <button class="btn-primary" style="font-size:.8rem;padding:.5rem 1rem" onclick="openModal('modal-add-client')">+ Add Client</button>
+        </div>
+        <div class="crm-tabs">
+          <button class="crm-tab active" onclick="switchCrmTab('all-clients')">All Clients</button>
+          <button class="crm-tab" onclick="switchCrmTab('active-jobs')">With Active Jobs</button>
+          <button class="crm-tab" onclick="switchCrmTab('completed')">Completed</button>
+        </div>
+        <div class="crm-section active" id="crm-all-clients">
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead><tr><th>Name</th><th>Phone</th><th>Email</th><th>Vehicle</th><th>Last Visit</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="crm-clients-table">
+                <tr><td>John Kamau</td><td>+254 712 345 678</td><td>john@email.com</td><td>Toyota Hilux 2018</td><td>2 May 2025</td><td><span class="status-badge status-progress">Active</span></td><td><button class="action-btn" onclick="openModal('modal-view-client')">View</button><button class="action-btn success" onclick="openModal('modal-update-job')">Update</button></td></tr>
+                <tr><td>Mary Wanjiku</td><td>+254 722 111 222</td><td>mary@email.com</td><td>Nissan Note 2016</td><td>29 Apr 2025</td><td><span class="status-badge status-complete">Complete</span></td><td><button class="action-btn" onclick="openModal('modal-view-client')">View</button></td></tr>
+                <tr><td>Peter Otieno</td><td>+254 711 333 444</td><td>peter@email.com</td><td>Subaru Forester 2020</td><td>1 May 2025</td><td><span class="status-badge status-pending">Pending</span></td><td><button class="action-btn" onclick="openModal('modal-view-client')">View</button><button class="action-btn success" onclick="openModal('modal-update-job')">Update</button></td></tr>
+                <tr><td>Agnes Muthoni</td><td>+254 723 555 666</td><td>agnes@email.com</td><td>Toyota Prado 2019</td><td>3 May 2025</td><td><span class="status-badge status-progress">Active</span></td><td><button class="action-btn" onclick="openModal('modal-view-client')">View</button><button class="action-btn success" onclick="openModal('modal-update-job')">Update</button></td></tr>
+                <tr><td>David Njoroge</td><td>+254 700 777 888</td><td>david@email.com</td><td>Mitsubishi Pajero 2017</td><td>4 May 2025</td><td><span class="status-badge status-pending">Pending</span></td><td><button class="action-btn" onclick="openModal('modal-view-client')">View</button><button class="action-btn success" onclick="openModal('modal-update-job')">Update</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="crm-section" id="crm-active-jobs"><p style="color:rgba(245,240,232,.4);font-size:.9rem;padding:1rem 0">Showing clients with active jobs — same data filtered.</p></div>
+        <div class="crm-section" id="crm-completed"><p style="color:rgba(245,240,232,.4);font-size:.9rem;padding:1rem 0">Showing completed jobs history.</p></div>
+      </div>
+
+      <!-- Active Jobs -->
+      <div class="admin-section" id="admin-jobs">
+        <div class="admin-header"><div class="admin-title">Active Jobs</div><button class="btn-primary" style="font-size:.8rem;padding:.5rem 1rem" onclick="openModal('modal-update-job')">+ Update Job</button></div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Job #</th><th>Client</th><th>Vehicle</th><th>Service</th><th>In Date</th><th>Progress</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td style="font-family:'Space Mono',monospace;font-size:.8rem">DA-047</td><td>John Kamau</td><td>Hilux 2018</td><td>Engine Repair</td><td>2 May</td><td><div class="progress-bar" style="margin:0;width:120px"><div class="progress-fill" style="width:65%"></div></div></td><td><select class="select-status" onchange="showNotif('Status updated!','success')"><option>In Progress</option><option>Pending</option><option>Complete</option><option>Awaiting Parts</option></select></td><td><button class="action-btn success" onclick="openModal('modal-update-job')">Update</button><button class="action-btn" onclick="openModal('modal-view-client')">Invoice</button></td></tr>
+              <tr><td style="font-family:'Space Mono',monospace;font-size:.8rem">DA-048</td><td>Agnes Muthoni</td><td>Prado 2019</td><td>Brakes</td><td>3 May</td><td><div class="progress-bar" style="margin:0;width:120px"><div class="progress-fill" style="width:40%"></div></div></td><td><select class="select-status" onchange="showNotif('Status updated!','success')"><option>In Progress</option><option>Pending</option><option>Complete</option><option>Awaiting Parts</option></select></td><td><button class="action-btn success" onclick="openModal('modal-update-job')">Update</button><button class="action-btn">Invoice</button></td></tr>
+              <tr><td style="font-family:'Space Mono',monospace;font-size:.8rem">DA-049</td><td>Peter Otieno</td><td>Forester 2020</td><td>AC Service</td><td>1 May</td><td><div class="progress-bar" style="margin:0;width:120px"><div class="progress-fill" style="width:20%"></div></div></td><td><select class="select-status" onchange="showNotif('Status updated!','success')"><option>Pending</option><option>In Progress</option><option>Complete</option><option>Awaiting Parts</option></select></td><td><button class="action-btn success" onclick="openModal('modal-update-job')">Update</button><button class="action-btn">Invoice</button></td></tr>
+              <tr><td style="font-family:'Space Mono',monospace;font-size:.8rem">DA-050</td><td>David Njoroge</td><td>Pajero 2017</td><td>Diagnostics</td><td>4 May</td><td><div class="progress-bar" style="margin:0;width:120px"><div class="progress-fill" style="width:10%"></div></div></td><td><select class="select-status" onchange="showNotif('Status updated!','success')"><option>Pending</option><option>In Progress</option><option>Complete</option></select></td><td><button class="action-btn success" onclick="openModal('modal-update-job')">Update</button><button class="action-btn">Invoice</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Invoices -->
+      <div class="admin-section" id="admin-invoices">
+        <div class="admin-header"><div class="admin-title">Invoices</div><button class="btn-primary" style="font-size:.8rem;padding:.5rem 1rem" onclick="showNotif('New invoice created!','success')">+ Create Invoice</button></div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Invoice #</th><th>Client</th><th>Vehicle</th><th>Amount</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td style="font-family:'Space Mono',monospace">DA-2025-0047</td><td>John Kamau</td><td>Hilux 2018</td><td>KES 14,906</td><td><span class="status-badge status-progress">Pending</span></td><td>2 May 2025</td><td><button class="action-btn">View</button><button class="action-btn success">Mark Paid</button></td></tr>
+              <tr><td style="font-family:'Space Mono',monospace">DA-2025-0046</td><td>Mary Wanjiku</td><td>Nissan Note</td><td>KES 3,200</td><td><span class="status-badge status-complete">Paid</span></td><td>29 Apr 2025</td><td><button class="action-btn">View</button></td></tr>
+              <tr><td style="font-family:'Space Mono',monospace">DA-2025-0045</td><td>Grace Achieng</td><td>Vitz 2015</td><td>KES 5,800</td><td><span class="status-badge status-pending">Draft</span></td><td>28 Apr 2025</td><td><button class="action-btn">View</button><button class="action-btn success">Finalize</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Products Admin -->
+      <div class="admin-section" id="admin-products-admin">
+        <div class="admin-header"><div class="admin-title">Products</div><button class="btn-primary" style="font-size:.8rem;padding:.5rem 1rem" onclick="openModal('modal-add-product')">+ Add Product</button></div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Actions</th></tr></thead>
+            <tbody id="admin-products-table"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Gallery Admin -->
+      <div class="admin-section" id="admin-gallery-admin">
+        <div class="admin-header"><div class="admin-title">Gallery</div><button class="btn-primary" style="font-size:.8rem;padding:.5rem 1rem" onclick="showNotif('Gallery upload feature — add images via file upload','success')">+ Upload Image</button></div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Title</th><th>Description</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td>Engine Overhaul — Toyota Hilux</td><td>Full engine rebuild including valve job</td><td><button class="action-btn">Edit</button><button class="action-btn danger">Delete</button></td></tr>
+              <tr><td>Nissan X-Trail Suspension Rebuild</td><td>Complete lower arm and shock replacement</td><td><button class="action-btn">Edit</button><button class="action-btn danger">Delete</button></td></tr>
+              <tr><td>Wheel Alignment — Subaru Forester</td><td>Computerized 4-wheel alignment</td><td><button class="action-btn">Edit</button><button class="action-btn danger">Delete</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Bookings Admin -->
+      <div class="admin-section" id="admin-bookings">
+        <div class="admin-header"><div class="admin-title">Bookings</div></div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Name</th><th>Phone</th><th>Vehicle</th><th>Service</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td>Samuel Gitau</td><td>+254 712 999 000</td><td>Honda Fit 2017</td><td>Oil Change</td><td>6 May 2025</td><td><span class="status-badge status-pending">New</span></td><td><button class="action-btn success">Confirm</button><button class="action-btn danger">Decline</button></td></tr>
+              <tr><td>Fatuma Hassan</td><td>+254 725 888 777</td><td>Toyota Aqua 2019</td><td>Brakes</td><td>7 May 2025</td><td><span class="status-badge status-pending">New</span></td><td><button class="action-btn success">Confirm</button><button class="action-btn danger">Decline</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Feedback Admin -->
+      <div class="admin-section" id="admin-feedback-admin">
+        <div class="admin-header"><div class="admin-title">Feedback & Complaints</div></div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Name</th><th>Type</th><th>Rating</th><th>Message</th><th>Actions</th></tr></thead>
+            <tbody id="feedback-admin-table">
+              <tr><td>Anonymous</td><td><span class="tag tag-green">Compliment</span></td><td>⭐⭐⭐⭐⭐</td><td>Best garage in Machakos! James fixed my engine in one day.</td><td><button class="action-btn">Reply</button></td></tr>
+              <tr><td>Sarah K.</td><td><span class="tag tag-red">Complaint</span></td><td>⭐⭐⭐</td><td>The wait was longer than expected but the work was good.</td><td><button class="action-btn">Reply</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Services Admin -->
+      <div class="admin-section" id="admin-services-admin">
+        <div class="admin-header"><div class="admin-title">Services Management</div><button class="btn-primary" style="font-size:.8rem;padding:.5rem 1rem" onclick="showNotif('Add service feature ready','success')">+ Add Service</button></div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Service Name</th><th>Starting Price</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td>Engine Diagnostics & Repair</td><td>KES 3,500</td><td><span class="tag tag-green">Active</span></td><td><button class="action-btn">Edit</button></td></tr>
+              <tr><td>Electrical Systems</td><td>KES 2,000</td><td><span class="tag tag-green">Active</span></td><td><button class="action-btn">Edit</button></td></tr>
+              <tr><td>Brakes & Suspension</td><td>KES 4,500</td><td><span class="tag tag-green">Active</span></td><td><button class="action-btn">Edit</button></td></tr>
+              <tr><td>AC Service & Repair</td><td>KES 5,000</td><td><span class="tag tag-green">Active</span></td><td><button class="action-btn">Edit</button></td></tr>
+              <tr><td>Oil & Filter Service</td><td>KES 1,800</td><td><span class="tag tag-green">Active</span></td><td><button class="action-btn">Edit</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODALS ===== -->
+<div class="modal-overlay" id="modal-add-client">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Add New Client</div><button class="modal-close" onclick="closeModal('modal-add-client')">✕</button></div>
+    <div class="admin-form-grid">
+      <div class="form-group"><label>Full Name</label><input type="text" placeholder="Client name"></div>
+      <div class="form-group"><label>Phone</label><input type="tel" placeholder="+254 ..."></div>
+      <div class="form-group"><label>Email</label><input type="email" placeholder="email@example.com"></div>
+      <div class="form-group"><label>Vehicle</label><input type="text" placeholder="Make, Model, Year"></div>
+      <div class="form-group"><label>Registration</label><input type="text" placeholder="KXX 000X"></div>
+      <div class="form-group"><label>Mileage</label><input type="number" placeholder="km"></div>
+    </div>
+    <div class="form-group"><label>Service Required</label><select><option>Engine Repair</option><option>Brakes</option><option>Electrical</option><option>AC Service</option><option>Oil Change</option></select></div>
+    <div class="form-group"><label>Notes</label><textarea placeholder="Any additional notes..."></textarea></div>
+    <button class="btn-primary" onclick="closeModal('modal-add-client');showNotif('Client added successfully!','success')" style="width:100%">Save Client</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-update-job">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Update Job Status</div><button class="modal-close" onclick="closeModal('modal-update-job')">✕</button></div>
+    <div class="info-row" style="margin-bottom:1rem"><span class="label" style="color:rgba(245,240,232,.4)">Job</span><span class="value">DA-047 — John Kamau / Toyota Hilux</span></div>
+    <div class="form-group"><label>Update Status</label>
+      <select id="job-status-update">
+        <option>In Progress</option><option>Awaiting Parts</option><option>Quality Check</option><option>Ready for Collection</option><option>Complete</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Progress % (0-100)</label><input type="range" min="0" max="100" value="65" id="job-progress" oninput="document.getElementById('progress-out').textContent=this.value+'%'"><span id="progress-out" style="font-size:.85rem;color:rgba(245,240,232,.5)">65%</span></div>
+    <div class="form-group"><label>Mechanic Note / Update</label><textarea id="mechanic-note" placeholder="Describe what was done, what was found, next steps..." style="min-height:120px"></textarea></div>
+    <div class="form-group"><label>Mechanic Name</label><input type="text" placeholder="e.g. James M." value="James M."></div>
+    <button class="btn-primary" onclick="closeModal('modal-update-job');showNotif('Job updated! Client notified.','success')" style="width:100%">Save Update</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-view-client">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Client Profile</div><button class="modal-close" onclick="closeModal('modal-view-client')">✕</button></div>
+    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem">
+      <div style="width:52px;height:52px;border-radius:50%;background:rgba(192,57,43,.15);display:flex;align-items:center;justify-content:center;font-size:1.4rem">👤</div>
+      <div><div style="font-size:1rem;font-weight:600;color:var(--cream)">John Kamau</div><div style="font-size:.8rem;color:rgba(245,240,232,.4)">Client since 2023 · 3 visits</div></div>
+    </div>
+    <div class="info-card" style="margin-bottom:1rem">
+      <div class="info-row"><span class="label">Phone</span><span class="value">+254 712 345 678</span></div>
+      <div class="info-row"><span class="label">Email</span><span class="value">john@email.com</span></div>
+      <div class="info-row"><span class="label">Vehicle</span><span class="value">Toyota Hilux 2018 — White</span></div>
+      <div class="info-row"><span class="label">Reg Number</span><span class="value">KCA 456X</span></div>
+      <div class="info-row"><span class="label">Mileage</span><span class="value">94,820 km</span></div>
+    </div>
+    <div class="info-card">
+      <div style="font-size:.8rem;letter-spacing:.5px;text-transform:uppercase;color:rgba(245,240,232,.35);margin-bottom:.75rem">Service History</div>
+      <div class="info-row"><span class="label">2023</span><span class="value">Oil Change — KES 2,100 (Paid)</span></div>
+      <div class="info-row"><span class="label">2024</span><span class="value">Tyre Alignment — KES 3,500 (Paid)</span></div>
+      <div class="info-row"><span class="label">2025</span><span class="value">Engine Repair — KES 14,906 (Pending)</span></div>
+    </div>
+    <div style="display:flex;gap:.75rem;margin-top:1.25rem">
+      <button class="btn-primary" onclick="closeModal('modal-view-client');showAdmin('jobs')">View Active Job</button>
+      <button class="btn-outline" onclick="closeModal('modal-view-client')">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-add-product">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Add Product</div><button class="modal-close" onclick="closeModal('modal-add-product')">✕</button></div>
+    <div class="admin-form-grid">
+      <div class="form-group"><label>Product Name</label><input type="text" id="new-product-name" placeholder="e.g. Bosch Oil Filter"></div>
+      <div class="form-group"><label>Category</label>
+        <select id="new-product-cat"><option value="engine">Engine</option><option value="brakes">Brakes</option><option value="electrical">Electrical</option><option value="filters">Filters</option></select>
+      </div>
+      <div class="form-group"><label>Price (KES)</label><input type="number" id="new-product-price" placeholder="2500"></div>
+      <div class="form-group"><label>Stock Quantity</label><input type="number" id="new-product-stock" placeholder="10"></div>
+    </div>
+    <div class="form-group"><label>Description</label><textarea id="new-product-desc" placeholder="Short description of the product..."></textarea></div>
+    <button class="btn-primary" onclick="addProduct()" style="width:100%">Add Product</button>
+  </div>
+</div>
+
+<!-- Cart Modal -->
+<div class="modal-overlay" id="modal-cart">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">🛒 Your Cart</div><button class="modal-close" onclick="closeModal('modal-cart')">✕</button></div>
+    <div id="cart-items"></div>
+    <div class="invoice-total" style="margin-top:1rem"><span class="total-label">TOTAL</span><span class="total-amount" id="cart-total">KES 0</span></div>
+    <button class="btn-primary" style="width:100%;margin-top:1rem" onclick="closeModal('modal-cart');showNotif('Order placed! We will contact you to confirm.','success')">Place Order</button>
+  </div>
+</div>
+
+<script>
+// ============ STATE ============
+let currentUser = null;
+let cartItems = [];
+let feedbackRating = 0;
+
+const products = [
+  {id:1,name:'Bosch Oil Filter',cat:'filters',price:650,desc:'OEM quality oil filter for most Japanese makes',icon:'🔩'},
+  {id:2,name:'NGK Spark Plug Set (4)',cat:'engine',price:2400,desc:'Iridium spark plugs — Toyota, Nissan, Honda',icon:'⚡'},
+  {id:3,name:'Genuine Toyota Timing Belt Kit',cat:'engine',price:8500,desc:'Complete kit with tensioner and idler',icon:'🔧'},
+  {id:4,name:'Brake Disc (Front Pair)',cat:'brakes',price:4200,desc:'Vented disc rotors for Toyota/Nissan',icon:'🛞'},
+  {id:5,name:'Ceramic Brake Pads (Front)',cat:'brakes',price:2800,desc:'Low dust, high performance pads',icon:'🔴'},
+  {id:6,name:'Air Filter — Universal',cat:'filters',price:850,desc:'High-flow cotton gauze air filter',icon:'💨'},
+  {id:7,name:'Alternator — Nissan D22',cat:'electrical',price:12000,desc:'Remanufactured OEM alternator',icon:'🔋'},
+  {id:8,name:'Car Battery 55Ah',cat:'electrical',price:8500,desc:'Maintenance free — 2 yr warranty',icon:'🔌'},
+  {id:9,name:'Fuel Filter — Universal',cat:'filters',price:450,desc:'Inline fuel filter with fittings',icon:'⛽'},
+  {id:10,name:'Clutch Kit — Toyota Hilux',cat:'engine',price:16500,desc:'Full kit: disc, pressure plate, bearing',icon:'⚙️'},
+  {id:11,name:'Wiper Blades (Pair)',cat:'electrical',price:1200,desc:'Silicone flat wiper blades 22"/18"',icon:'🌧️'},
+  {id:12,name:'Rear Shock Absorber',cat:'brakes',price:3800,desc:'Gas-filled rear shock per unit',icon:'🏎️'},
+];
+
+// ============ NAVIGATION ============
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const el = document.getElementById('page-'+page);
+  if(el) el.classList.add('active');
+  window.scrollTo(0,0);
+  if(page==='products') renderProducts('all');
+  if(page==='admin') renderAdminProducts();
+}
+
+function showPortal(section) {
+  showPage('portal');
+  document.querySelectorAll('[id^="portal-"]').forEach(el=>{if(!el.id.includes('username')&&!el.id.includes('dashboard')&&!el.id.includes('register')&&!el.id.includes('status')&&!el.id.includes('invoice')&&!el.id.includes('settings')){}});
+  const sections = ['dashboard','register-service','status','invoice','settings'];
+  sections.forEach(s=>{
+    const el = document.getElementById('portal-'+s);
+    if(el) el.style.display = (s===section)?'block':'none';
+  });
+  document.querySelectorAll('.portal-nav-item').forEach(item=>{
+    item.classList.toggle('active', item.getAttribute('onclick')?.includes("'"+section+"'"));
+  });
+}
+
+function showAdmin(section) {
+  document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active'));
+  const el = document.getElementById('admin-'+section);
+  if(el) el.classList.add('active');
+  document.querySelectorAll('.admin-nav-item').forEach(item=>{
+    item.classList.toggle('active', item.getAttribute('onclick')?.includes("'"+section+"'"));
+  });
+}
+
+// ============ AUTH ============
+const DEMO_USERS = [
+  {email:'admin@doctoranimal.co.ke',password:'admin123',role:'admin',name:'Admin'},
+  {email:'client@test.com',password:'client123',role:'client',name:'John Kamau'},
+];
+
+function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-password').value;
+  const user = DEMO_USERS.find(u=>u.email===email && u.password===pass);
+  if(!user) { showNotif('Invalid email or password','error'); return; }
+  currentUser = user;
+  document.getElementById('nav-public').style.display='none';
+  if(user.role==='admin') {
+    document.getElementById('nav-admin').style.display='flex';
+    showPage('admin');
+    renderAdminProducts();
+  } else {
+    document.getElementById('nav-client').style.display='flex';
+    document.getElementById('client-name-nav').textContent='👤 '+user.name;
+    document.getElementById('portal-username').textContent=user.name;
+    showPortal('dashboard');
+  }
+  showNotif('Welcome back, '+user.name+'!','success');
+}
+
+function doRegister() {
+  const name = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  if(!name||!email) { showNotif('Please fill all required fields','error'); return; }
+  currentUser = {email,name,role:'client'};
+  document.getElementById('nav-public').style.display='none';
+  document.getElementById('nav-client').style.display='flex';
+  document.getElementById('client-name-nav').textContent='👤 '+name;
+  document.getElementById('portal-username').textContent=name;
+  showPortal('register-service');
+  showNotif('Account created! Please register your vehicle.','success');
+}
+
+function logout() {
+  currentUser = null;
+  document.getElementById('nav-public').style.display='flex';
+  document.getElementById('nav-client').style.display='none';
+  document.getElementById('nav-admin').style.display='none';
+  showPage('home');
+  showNotif('You have been logged out.','success');
+}
+
+function deleteAccount() {
+  if(confirm('Are you sure? This cannot be undone.')) {
+    logout();
+    showNotif('Account deleted. We are sorry to see you go.','success');
+  }
+}
+
+function switchAuthTab(tab) {
+  document.getElementById('auth-login').style.display = tab==='login'?'block':'none';
+  document.getElementById('auth-register').style.display = tab==='register'?'block':'none';
+  document.querySelectorAll('.auth-tab').forEach((t,i)=>t.classList.toggle('active',(tab==='login'&&i===0)||(tab==='register'&&i===1)));
+}
+
+// ============ PRODUCTS ============
+function renderProducts(filter) {
+  const grid = document.getElementById('products-grid');
+  if(!grid) return;
+  const filtered = filter==='all'?products:products.filter(p=>p.cat===filter);
+  grid.innerHTML = filtered.map(p=>`
+    <div class="product-card">
+      <div class="product-img">${p.icon}</div>
+      <div class="product-info">
+        <h4>${p.name}</h4>
+        <p>${p.desc}</p>
+        <div class="product-footer">
+          <span class="product-price">KES ${p.price.toLocaleString()}</span>
+          <button class="cart-btn" onclick="addToCart(${p.id})">Add to Cart</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function filterProducts(cat, btn) {
+  document.querySelectorAll('.type-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts(cat);
+}
+
+function addToCart(id) {
+  const product = products.find(p=>p.id===id);
+  const existing = cartItems.find(c=>c.id===id);
+  if(existing) existing.qty++;
+  else cartItems.push({...product,qty:1});
+  updateCartBadge();
+  showNotif(product.name+' added to cart!','success');
+}
+
+function updateCartBadge() {
+  const total = cartItems.reduce((s,c)=>s+c.qty,0);
+  document.getElementById('cart-count').textContent=total;
+  document.getElementById('cart-badge').style.display=total>0?'block':'none';
+}
+
+function showCart() {
+  const container = document.getElementById('cart-items');
+  if(cartItems.length===0){container.innerHTML='<p style="color:rgba(245,240,232,.4);text-align:center;padding:1rem">Cart is empty</p>';}
+  else{
+    container.innerHTML=cartItems.map(c=>`
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:.75rem 0;border-bottom:1px solid rgba(255,255,255,.06)">
+        <div><div style="font-size:.9rem;color:var(--cream)">${c.icon} ${c.name}</div><div style="font-size:.75rem;color:rgba(245,240,232,.4)">Qty: ${c.qty}</div></div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--red)">KES ${(c.price*c.qty).toLocaleString()}</div>
+      </div>`).join('');
+    const total = cartItems.reduce((s,c)=>s+c.price*c.qty,0);
+    document.getElementById('cart-total').textContent='KES '+total.toLocaleString();
+  }
+  openModal('modal-cart');
+}
+
+function renderAdminProducts() {
+  const tbody = document.getElementById('admin-products-table');
+  if(!tbody) return;
+  tbody.innerHTML = products.map(p=>`
+    <tr><td>${p.name}</td><td><span class="tag tag-blue">${p.cat}</span></td><td>KES ${p.price.toLocaleString()}</td><td>${Math.floor(Math.random()*20+1)}</td>
+    <td><button class="action-btn">Edit</button><button class="action-btn danger" onclick="showNotif('Product removed','success')">Delete</button></td></tr>`).join('');
+}
+
+function addProduct() {
+  const name = document.getElementById('new-product-name').value;
+  const cat = document.getElementById('new-product-cat').value;
+  const price = parseInt(document.getElementById('new-product-price').value)||0;
+  const desc = document.getElementById('new-product-desc').value;
+  if(!name) { showNotif('Product name required','error'); return; }
+  products.push({id:products.length+1,name,cat,price,desc,icon:'📦'});
+  closeModal('modal-add-product');
+  showNotif('Product added!','success');
+  renderAdminProducts();
+}
+
+// ============ FORMS ============
+function submitBooking() {
+  const name = document.getElementById('book-name').value.trim();
+  const vehicle = document.getElementById('book-vehicle').value.trim();
+  if(!name||!vehicle) { showNotif('Please fill in your name and vehicle details','error'); return; }
+  showNotif('Booking submitted! We will confirm within 2 hours.','success');
+}
+
+function submitVehicleReg() {
+  const make = document.getElementById('prt-make').value.trim();
+  if(!make) { showNotif('Please enter vehicle make','error'); return; }
+  showNotif('Vehicle registered successfully!','success');
+  setTimeout(()=>showPortal('status'),1000);
+}
+
+function submitFeedback() {
+  const msg = document.getElementById('fb-message').value.trim();
+  if(!msg) { showNotif('Please write your feedback message','error'); return; }
+  document.getElementById('fb-success').classList.add('show');
+  document.getElementById('fb-message').value='';
+  // Add to admin table
+  const tbody = document.getElementById('feedback-admin-table');
+  const name = document.getElementById('fb-name').value||'Anonymous';
+  const type = document.getElementById('feedback-type').value;
+  const stars = '⭐'.repeat(feedbackRating||5);
+  const typeClass = type==='complaint'?'tag-red':type==='suggestion'?'tag-yellow':'tag-green';
+  const row = `<tr><td>${name}</td><td><span class="tag ${typeClass}">${type}</span></td><td>${stars}</td><td>${msg.substring(0,60)}...</td><td><button class="action-btn">Reply</button></td></tr>`;
+  if(tbody) tbody.innerHTML = row + tbody.innerHTML;
+  setTimeout(()=>document.getElementById('fb-success').classList.remove('show'),4000);
+}
+
+function submitContact() {
+  const name = document.getElementById('ct-name').value.trim();
+  if(!name) { showNotif('Please fill in your name','error'); return; }
+  showNotif('Message sent! We will get back to you shortly.','success');
+}
+
+// ============ FEEDBACK ============
+function selectFeedbackType(type, btn) {
+  document.getElementById('feedback-type').value = type;
+  document.querySelectorAll('.type-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function setRating(n) {
+  feedbackRating = n;
+  document.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('active',i<n));
+}
+
+// ============ MODALS ============
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+document.querySelectorAll('.modal-overlay').forEach(overlay=>{
+  overlay.addEventListener('click',e=>{if(e.target===overlay) overlay.classList.remove('open');});
+});
+
+// ============ ADMIN TABS ============
+function switchCrmTab(tab) {
+  document.querySelectorAll('.crm-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.crm-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('crm-'+tab).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ============ NOTIFICATIONS ============
+function showNotif(msg, type='success') {
+  const el = document.getElementById('notif');
+  el.textContent = (type==='success'?'✓ ':'')+msg;
+  el.className = 'notif show'+(type==='error'?' error':'');
+  setTimeout(()=>el.classList.remove('show'),3500);
+}
+
+// ============ INIT ============
+renderProducts('all');
+// Set today's date as default for booking
+const today = new Date().toISOString().split('T')[0];
+document.getElementById('book-date').value = today;
+document.getElementById('prt-date').value = today;
+</script>
+</body>
+</html>
