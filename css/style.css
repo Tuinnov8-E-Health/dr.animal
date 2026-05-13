@@ -161,6 +161,7 @@ form,.feedback-container,.auth-box,.client-register-form,.contact-grid>div:last-
 .book-info-text h4,.contact-detail h4{font-size:.95rem;margin-bottom:.35rem}
 .book-info-text p,.contact-detail p{font-size:.84rem;color:var(--text-secondary);line-height:1.6}
 .map-placeholder{height:220px;margin-top:1rem;border:1px dashed rgba(192,57,43,.35);border-radius:8px;background:rgba(192,57,43,.05);display:flex;align-items:center;justify-content:center;font-size:3rem;color:var(--red)}
+.map-placeholder iframe{width:100%;height:100%;border:0;border-radius:8px;display:block}
 
 .feedback-container{max-width:760px}
 .feedback-type-btns{display:flex;flex-wrap:wrap;gap:.75rem;margin-bottom:1.5rem}
