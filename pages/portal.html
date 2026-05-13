@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Client Portal - Doctor Animal Auto</title>
+<link rel="icon" type="image/png" href="../images/logo24.png">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div id="notif" class="notif"></div>
+  <nav>
+    <div class="nav-logo" onclick="window.location.href='../index.html'"><img src="../images/logo24.png" alt="Dr. Animal Autotune"><span>Dr. Animal Autotune</span></div>
+    <button class="nav-hamburger" id="nav-hamburger" onclick="toggleNavMenu()"><span></span><span></span><span></span></button>
+    <div class="nav-links" id="nav-public" style="display:none">
+      <a href="../index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="services.html">Services</a>
+      <a href="products.html">Products</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="booking.html">Book Now</a>
+      <a href="feedback.html">Feedback</a>
+      <a href="contact.html">Contact</a>
+      <a class="nav-cta" href="login.html">Login / Register</a>
+    </div>
+    <div class="nav-links" id="nav-client">
+      <a href="portal.html">My Portal</a>
+      <div class="nav-user"><span id="client-name-nav">👤 Client</span><button onclick="logout()">Logout</button></div>
+    </div>
+    <div class="nav-links" id="nav-admin" style="display:none">
+      <a href="../admin/index.html">Admin Dashboard</a>
+      <div class="nav-user" style="color:var(--red)"><span>👑 Admin</span><button onclick="logout()">Logout</button></div>
+    </div>
+  </nav>
+
+  <main>
+    <div class="portal-layout">
+      <div class="portal-sidebar">
+        <div style="padding:1.25rem 1.5rem 1.5rem;border-bottom:1px solid rgba(0,0,0,.08)">
+          <div style="font-size:.8rem;color:rgba(0,0,0,.4);margin-bottom:.25rem">Logged in as</div>
+          <div style="font-weight:600;color:var(--text-primary)" id="portal-username">Client Name</div>
+          <div style="font-size:.75rem;color:var(--green);margin-top:.25rem">● Active Account</div>
+        </div>
+        <div style="margin-top:.75rem">
+          <div class="portal-nav-item active" onclick="showPortalSection('dashboard')"><span class="portal-nav-icon">🏠</span>Dashboard</div>
+          <div class="portal-nav-item" onclick="showPortalSection('register-service')"><span class="portal-nav-icon">📋</span>Register Vehicle</div>
+          <div class="portal-nav-item" onclick="showPortalSection('status')"><span class="portal-nav-icon">🔍</span>Track Status</div>
+          <div class="portal-nav-item" onclick="showPortalSection('invoice')"><span class="portal-nav-icon">💰</span>My Invoice</div>
+          <div class="portal-nav-item" onclick="showPortalSection('settings')"><span class="portal-nav-icon">⚙️</span>Settings</div>
+        </div>
+      </div>
+      <div class="portal-content">
+        <!-- Dashboard -->
+        <div id="portal-dashboard" style="display:block">
+          <div class="portal-title">My Dashboard</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem">
+            <div class="info-card" style="text-align:center"><div style="font-size:1.8rem;margin-bottom:.5rem">🚗</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--red)">1</div><div style="font-size:.75rem;color:rgba(0,0,0,.4);text-transform:uppercase;letter-spacing:.5px">Vehicle Registered</div></div>
+            <div class="info-card" style="text-align:center"><div style="font-size:1.8rem;margin-bottom:.5rem">🔧</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--yellow)">In Progress</div><div style="font-size:.75rem;color:rgba(0,0,0,.4);text-transform:uppercase;letter-spacing:.5px">Current Status</div></div>
+            <div class="info-card" style="text-align:center"><div style="font-size:1.8rem;margin-bottom:.5rem">💳</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--green)">KES 12,500</div><div style="font-size:.75rem;color:rgba(0,0,0,.4);text-transform:uppercase;letter-spacing:.5px">Pending Invoice</div></div>
+          </div>
+          <div class="info-card">
+            <div style="font-weight:600;color:var(--text-primary);margin-bottom:1rem;font-size:.95rem">Current Vehicle</div>
+            <div class="info-row"><span class="label">Vehicle</span><span class="value">BMW 320i 2018</span></div>
+            <div class="info-row"><span class="label">Registration</span><span class="value">KCA 456X</span></div>
+            <div class="info-row"><span class="label">Service</span><span class="value">Engine Diagnostics & Repair</span></div>
+            <div class="info-row"><span class="label">Date Brought In</span><span class="value">2 May 2025</span></div>
+            <div class="info-row"><span class="label">Status</span><span class="value"><span class="status-badge status-progress">In Progress</span></span></div>
+          </div>
+          <div style="margin-top:1rem">
+            <button class="btn-primary" onclick="showPortalSection('status')">Track Repair Progress →</button>
+            <button class="btn-outline" style="margin-left:1rem" onclick="showPortalSection('invoice')">View Invoice →</button>
+          </div>
+        </div>
+
+        <!-- Register Service -->
+        <div id="portal-register-service" style="display:none">
+          <div class="portal-title">Register a Vehicle</div>
+          <div class="client-register-form">
+            <div class="form-group"><label>Full Name</label><input type="text" id="prt-name" placeholder="Your full name"></div>
+            <div class="form-group"><label>Email</label><input type="email" id="prt-email" placeholder="your@email.com"></div>
+            <div class="form-group"><label>Contact Number</label><input type="tel" id="prt-phone" placeholder="+254 ..."></div>
+            <div style="height:1px;background:rgba(0,0,0,.08);margin:1.5rem 0"></div>
+            <div style="font-size:.85rem;letter-spacing:1px;text-transform:uppercase;color:rgba(0,0,0,.4);margin-bottom:1rem">Vehicle & Service Details</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+              <div class="form-group"><label>Vehicle Make</label><input type="text" id="prt-make" placeholder="BMW"></div>
+              <div class="form-group"><label>Vehicle Model</label><input type="text" id="prt-model" placeholder="320i"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+              <div class="form-group"><label>Year</label><input type="text" id="prt-year" placeholder="2018"></div>
+              <div class="form-group"><label>Reg. Number</label><input type="text" id="prt-reg" placeholder="KCA 123B"></div>
+            </div>
+            <div class="form-group"><label>Colour</label><input type="text" id="prt-colour" placeholder="White"></div>
+            <div class="form-group"><label>Service Requested</label>
+              <select id="prt-service">
+                <option>Engine Diagnostics & Repair</option>
+                <option>Electrical Systems</option>
+                <option>Brakes & Suspension</option>
+                <option>AC Service & Repair</option>
+                <option>Oil & Filter Service</option>
+                <option>Tyre & Wheel Alignment</option>
+                <option>Transmission Service</option>
+                <option>General Maintenance</option>
+              </select>
+            </div>
+            <div class="form-group"><label>Date Brought In</label><input type="date" id="prt-date"></div>
+            <div class="form-group"><label>Mileage (km)</label><input type="number" id="prt-mileage" placeholder="95000"></div>
+            <div class="form-group"><label>Problem Description</label><textarea id="prt-problem" placeholder="Describe what you have noticed..."></textarea></div>
+            <button class="btn-primary" onclick="showNotif('Vehicle registered successfully!','success')" style="width:100%">Submit Vehicle Registration</button>
+          </div>
+        </div>
+
+        <!-- Track Status -->
+        <div id="portal-status" style="display:none">
+          <div class="portal-title">Repair Progress</div>
+          <div class="info-card" style="margin-bottom:2rem">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+              <div><div style="font-size:.75rem;color:rgba(0,0,0,.4);margin-bottom:.2rem">CURRENT JOB</div><div style="font-weight:600;color:var(--text-primary)">BMW 320i 2018 — Engine Diagnostics</div></div>
+              <span class="status-badge status-progress">In Progress</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" style="width:65%"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:.75rem;color:rgba(0,0,0,.3)"><span>0%</span><span>65% Complete</span><span>100%</span></div>
+          </div>
+          <div class="portal-title" style="font-size:1.4rem;margin-bottom:1.25rem">Mechanic Updates</div>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-dot done">✓</div>
+              <div class="timeline-body">
+                <h4>Vehicle Received & Checked In</h4>
+                <p>Vehicle received, initial visual inspection done. Mileage recorded at 94,820 km.</p>
+                <div class="timeline-date">2 May 2025, 09:15 AM — James M.</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot done">✓</div>
+              <div class="timeline-body">
+                <h4>OBD Diagnostic Scan Complete</h4>
+                <p>Scan revealed P0301 (Cylinder 1 misfire) and P0171 (System too lean).</p>
+                <div class="timeline-date">2 May 2025, 11:40 AM — Grace A.</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot current">⟳</div>
+              <div class="timeline-body">
+                <h4>Parts Replacement Underway</h4>
+                <p>Injector on cylinder 1 replaced. Vacuum leak repair in progress.</p>
+                <div class="timeline-date">3 May 2025, 10:00 AM — James M.</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot pending">○</div>
+              <div class="timeline-body">
+                <h4>Test Drive & Quality Check</h4>
+                <p>Pending — will follow upon completion of parts replacement.</p>
+                <div class="timeline-date">Estimated: 4 May 2025</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Invoice -->
+        <div id="portal-invoice" style="display:none">
+          <div class="portal-title">My Invoice</div>
+          <div class="info-card">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem">
+              <div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--red);letter-spacing:1px">INVOICE #DA-2025-0047</div>
+                <div style="font-size:.8rem;color:rgba(0,0,0,.4);margin-top:.25rem">Date: 2 May 2025 | Est. Completion: 5 May 2025</div>
+              </div>
+              <span class="status-badge status-progress">In Progress</span>
+            </div>
+            <table class="invoice-table">
+              <thead><tr><th>Description</th><th>Qty</th><th style="text-align:right">Unit Price</th><th style="text-align:right">Total</th></tr></thead>
+              <tbody>
+                <tr><td>OBD Diagnostic Scan</td><td>1</td><td style="text-align:right">KES 2,500</td><td style="text-align:right">KES 2,500</td></tr>
+                <tr><td>Fuel Injector (Cylinder 1) — OEM</td><td>1</td><td style="text-align:right">KES 4,800</td><td style="text-align:right">KES 4,800</td></tr>
+                <tr><td>Intake Manifold Gasket Set</td><td>1</td><td style="text-align:right">KES 1,200</td><td style="text-align:right">KES 1,200</td></tr>
+                <tr><td>Engine Oil (5W-30, 5L)</td><td>1</td><td style="text-align:right">KES 2,400</td><td style="text-align:right">KES 2,400</td></tr>
+                <tr><td>Oil Filter</td><td>1</td><td style="text-align:right">KES 450</td><td style="text-align:right">KES 450</td></tr>
+                <tr><td>Labour — Engine & Injector</td><td>1</td><td style="text-align:right">KES 1,500</td><td style="text-align:right">KES 1,500</td></tr>
+              </tbody>
+            </table>
+            <div class="invoice-total">
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.25rem">
+                <div style="font-size:.8rem;color:rgba(0,0,0,.4)">Subtotal: KES 12,850</div>
+                <div style="font-size:.8rem;color:rgba(0,0,0,.4)">VAT (16%): KES 2,056</div>
+                <div style="display:flex;gap:1rem;align-items:baseline;margin-top:.5rem">
+                  <span class="total-label">TOTAL DUE</span>
+                  <span class="total-amount">KES 14,906</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Settings -->
+        <div id="portal-settings" style="display:none">
+          <div class="portal-title">Account Settings</div>
+          <div class="info-card" style="max-width:500px">
+            <div style="font-weight:600;color:var(--text-primary);margin-bottom:1.25rem">Personal Information</div>
+            <div class="form-group"><label>Full Name</label><input type="text" value="John Kamau" id="set-name"></div>
+            <div class="form-group"><label>Email</label><input type="email" value="john@email.com" id="set-email"></div>
+            <div class="form-group"><label>Phone</label><input type="tel" value="+254 712 345 678" id="set-phone"></div>
+            <div class="form-group"><label>New Password (leave blank to keep current)</label><input type="password" placeholder="••••••••"></div>
+            <button class="btn-primary" onclick="showNotif('Profile updated successfully!','success')">Save Changes</button>
+          </div>
+          <div class="info-card" style="max-width:500px;margin-top:1.25rem;border-color:rgba(192,57,43,.2)">
+            <div style="font-weight:600;color:var(--red);margin-bottom:.75rem">Danger Zone</div>
+            <p style="font-size:.85rem;color:rgba(0,0,0,.4);margin-bottom:1rem">Permanently delete your account and all associated data. This action cannot be undone.</p>
+            <button style="background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.3);color:var(--red);padding:.6rem 1.25rem;border-radius:4px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.85rem" onclick="deleteAccount()">Delete My Account</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer-section">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h3 class="footer-logo"><img src="../images/logo24.png" alt="Dr. Animal Autotune"><span>Dr. Animal Autotune</span></h3>
+        <p>Your trusted European and American car care partner since 2010. Expert mechanics, genuine parts, and transparent pricing — all under one roof.</p>
+        <p style="margin-top:1rem;font-size:.8rem;color:rgba(255,255,255,.6)">📍 Corner, Kamakis, Kiambu County, Kenya</p>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <a href="services.html">Engine Repair</a>
+        <a href="services.html">Diagnostics</a>
+        <a href="services.html">Electrical</a>
+        <a href="services.html">AC Service</a>
+        <a href="services.html">Tyre & Wheel</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="about.html">About Us</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="feedback.html">Feedback</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Client</h4>
+        <a href="login.html">Login</a>
+        <a href="booking.html">Book Service</a>
+        <a href="products.html">Spare Parts</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Doctor Animal Auto. All rights reserved.</span>
+      <a href="https://tuinnov8.com" target="_blank" rel="noopener" style="color:rgba(192,57,43,.65);text-decoration:none">Built with care by Tuinnov8</a>
+    </div>
+  </footer>
+
+<script src="../js/common.js"></script>
+<script>
+function showPortalSection(section) {
+  const sections = ['dashboard','register-service','status','invoice','settings'];
+  sections.forEach(s=>{
+    const el = document.getElementById('portal-'+s);
+    if(el) el.style.display = (s===section)?'block':'none';
+  });
+  document.querySelectorAll('.portal-nav-item').forEach(item=>{
+    item.classList.toggle('active', item.getAttribute('onclick')?.includes("'"+section+"'"));
+  });
+}
+// Set client name if logged in
+if(currentUser && currentUser.name) {
+  document.getElementById('portal-username').textContent = currentUser.name;
+  document.getElementById('client-name-nav').textContent = '👤 '+currentUser.name;
+}
+</script>
+</body>
+</html>

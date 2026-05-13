@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gallery - Doctor Animal Auto</title>
+<link rel="icon" type="image/png" href="../images/logo24.png">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div id="notif" class="notif"></div>
+  <nav>
+    <div class="nav-logo" onclick="window.location.href='../index.html'"><img src="../images/logo24.png" alt="Dr. Animal Autotune"><span>Dr. Animal Autotune</span></div>
+    <button class="nav-hamburger" id="nav-hamburger" onclick="toggleNavMenu()"><span></span><span></span><span></span></button>
+    <div class="nav-links" id="nav-public">
+      <a href="../index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="services.html">Services</a>
+      <a href="products.html">Products</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="booking.html">Book Now</a>
+      <a href="feedback.html">Feedback</a>
+      <a href="contact.html">Contact</a>
+      <a class="nav-cta" href="login.html">Login / Register</a>
+    </div>
+    <div class="nav-links" id="nav-client" style="display:none">
+      <a href="portal.html">My Portal</a>
+      <div class="nav-user"><span id="client-name-nav">👤 Client</span><button onclick="logout()">Logout</button></div>
+    </div>
+    <div class="nav-links" id="nav-admin" style="display:none">
+      <a href="../admin/index.html">Admin Dashboard</a>
+      <div class="nav-user" style="color:var(--red)"><span>👑 Admin</span><button onclick="logout()">Logout</button></div>
+    </div>
+  </nav>
+
+  <main style="padding-top:64px">
+    <div class="section">
+      <div class="section-label">Our Work</div>
+      <div class="section-title">Gallery</div>
+      <p class="section-sub">Real European and American vehicles, real results. A glimpse into our workshop and the quality of work we deliver every day.</p>
+      <div class="gallery-grid">
+        <div class="gallery-item"><div class="gallery-img">🔧</div><div class="gallery-desc"><h4>Engine Overhaul — BMW 320i</h4><p>Full N20 engine service including timing inspection, leak correction and post-repair diagnostics.</p></div></div>
+        <div class="gallery-item"><div class="gallery-img">🚗</div><div class="gallery-desc"><h4>Volvo XC60 Suspension Rebuild</h4><p>Complete control arm, shock absorber and wheel bearing replacement. Comfort restored.</p></div></div>
+        <div class="gallery-item"><div class="gallery-img">🛞</div><div class="gallery-desc"><h4>Wheel Alignment — Ford Ranger</h4><p>Computerized 4-wheel alignment after suspension repair. Tracking corrected.</p></div></div>
+        <div class="gallery-item"><div class="gallery-img">🔋</div><div class="gallery-desc"><h4>Electrical Diagnosis — Mercedes C200</h4><p>Traced intermittent starting fault to faulty crank sensor. Diagnosed and replaced in 3 hours.</p></div></div>
+        <div class="gallery-item"><div class="gallery-img">❄️</div><div class="gallery-desc"><h4>AC System Overhaul — Range Rover Sport</h4><p>New compressor, condenser and full gas recharge. Cool cabin in under a day.</p></div></div>
+        <div class="gallery-item"><div class="gallery-img">🎨</div><div class="gallery-desc"><h4>Paintwork — Jeep Grand Cherokee</h4><p>Factory-matched paint correction and panel repair after a side impact scrape.</p></div></div>
+        <div class="gallery-item"><div class="gallery-img">🔩</div><div class="gallery-desc"><h4>Gearbox Service — Ford Transit</h4><p>Commercial van gearbox service, bearing inspection and clutch system checks.</p></div></div>
+        <div class="gallery-item"><div class="gallery-img">🚿</div><div class="gallery-desc"><h4>Detailing & Ceramic Coat — VW Tiguan</h4><p>Clay bar treatment, machine polish and 5-year ceramic coating applied by hand.</p></div></div>
+        <div class="gallery-item"><div class="gallery-img">🛡️</div><div class="gallery-desc"><h4>Brake System — Mercedes-Benz E-Class</h4><p>4-wheel brake refresh with OEM-grade pads, discs and sensor reset.</p></div></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer-section">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h3 class="footer-logo"><img src="../images/logo24.png" alt="Dr. Animal Autotune"><span>Dr. Animal Autotune</span></h3>
+        <p>Your trusted European and American car care partner since 2010. Expert mechanics, genuine parts, and transparent pricing — all under one roof.</p>
+        <p style="margin-top:1rem;font-size:.8rem;color:rgba(255,255,255,.6)">📍 Corner, Kamakis, Kiambu County, Kenya</p>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <a href="services.html">Engine Repair</a>
+        <a href="services.html">Diagnostics</a>
+        <a href="services.html">Electrical</a>
+        <a href="services.html">AC Service</a>
+        <a href="services.html">Tyre & Wheel</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="about.html">About Us</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="feedback.html">Feedback</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Client</h4>
+        <a href="login.html">Login</a>
+        <a href="booking.html">Book Service</a>
+        <a href="products.html">Spare Parts</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Doctor Animal Auto. All rights reserved.</span>
+      <a href="https://tuinnov8.com" target="_blank" rel="noopener" style="color:rgba(192,57,43,.65);text-decoration:none">Built with care by Tuinnov8</a>
+    </div>
+  </footer>
+
+<script src="../js/common.js"></script>
+</body>
+</html>

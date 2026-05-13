@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us - Doctor Animal Auto</title>
+<link rel="icon" type="image/png" href="../images/logo24.png">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div id="notif" class="notif"></div>
+  <nav>
+    <div class="nav-logo" onclick="window.location.href='../index.html'"><img src="../images/logo24.png" alt="Dr. Animal Autotune"><span>Dr. Animal Autotune</span></div>
+    <button class="nav-hamburger" id="nav-hamburger" onclick="toggleNavMenu()"><span></span><span></span><span></span></button>
+    <div class="nav-links" id="nav-public">
+      <a href="../index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="services.html">Services</a>
+      <a href="products.html">Products</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="booking.html">Book Now</a>
+      <a href="feedback.html">Feedback</a>
+      <a href="contact.html">Contact</a>
+      <a class="nav-cta" href="login.html">Login / Register</a>
+    </div>
+    <div class="nav-links" id="nav-client" style="display:none">
+      <a href="portal.html">My Portal</a>
+      <div class="nav-user"><span id="client-name-nav">👤 Client</span><button onclick="logout()">Logout</button></div>
+    </div>
+    <div class="nav-links" id="nav-admin" style="display:none">
+      <a href="../admin/index.html">Admin Dashboard</a>
+      <div class="nav-user" style="color:var(--red)"><span>👑 Admin</span><button onclick="logout()">Logout</button></div>
+    </div>
+  </nav>
+
+  <main style="padding-top:64px">
+    <div class="section">
+      <div class="section-label">Our Story</div>
+      <div class="section-title">About Doctor<br>Animal Auto</div>
+      <div class="about-grid">
+        <div>
+          <p style="color:var(--text-secondary);line-height:1.8;font-size:1rem;margin-bottom:1.25rem">Founded in 2010 at Corner, Kamakis in Kiambu County, Doctor Animal Auto started as a small two-bay workshop with one mechanic and a dream: to give every Kenyan driver access to honest, expert automotive care.</p>
+          <p style="color:var(--text-secondary);line-height:1.8;font-size:.9rem;margin-bottom:1.25rem">Today, we operate a 20-bay facility with over 30 certified technicians, modern OBD diagnostic equipment, and a strong specialization in European and American vehicles including Volvo, Mercedes-Benz, BMW, Ford, Range Rover and Jeep.</p>
+          <p style="color:var(--text-secondary);line-height:1.8;font-size:.9rem">We believe your car is more than a machine — it's your livelihood, your freedom, your family's safety. That's why we treat every vehicle with surgical precision and genuine care.</p>
+          <div class="about-points">
+            <div class="about-point"><div class="about-point-dot"></div><p>Certified by Kenya Motor Industry Association</p></div>
+            <div class="about-point"><div class="about-point-dot"></div><p>Specialized sourcing for Volvo, Mercedes-Benz, BMW, Ford, Range Rover, Jeep and other European and American parts</p></div>
+            <div class="about-point"><div class="about-point-dot"></div><p>Final diagnostic checks and road-test review before every vehicle handover</p></div>
+            <div class="about-point"><div class="about-point-dot"></div><p>24-hour emergency breakdown support</p></div>
+            <div class="about-point"><div class="about-point-dot"></div><p>Digital repair tracking for full transparency</p></div>
+          </div>
+          <button class="btn-primary" style="margin-top:2rem" onclick="window.location.href='contact.html'">Get In Touch</button>
+        </div>
+        <div class="about-img">
+          <div class="about-img-bg"><div class="about-img-icon">🔧</div></div>
+          <div style="position:absolute;bottom:1.5rem;left:1.5rem;right:1.5rem;background:rgba(13,13,13,.85);border-radius:8px;padding:1.25rem;border:1px solid rgba(255,255,255,.08)">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+              <div style="text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--red)">30+</div><div style="font-size:.7rem;color:var(--text-secondary);letter-spacing:1px;text-transform:uppercase">Mechanics</div></div>
+              <div style="text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--red)">20</div><div style="font-size:.7rem;color:var(--text-secondary);letter-spacing:1px;text-transform:uppercase">Service Bays</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Team -->
+    <div class="section" style="padding-top:0">
+      <div class="section-label">The Team</div>
+      <div class="section-title">Meet Our Experts</div>
+      <div class="cards-grid" style="margin-top:2rem">
+        <div class="card" style="text-align:center">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(192,57,43,.15);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 1rem">👨‍🔧</div>
+          <h3>Ronald Nyongesa</h3><p style="color:var(--red);font-size:.8rem;margin:.3rem 0 .75rem">Chief Executive Officer</p><p>Leads Doctor Animal Auto's customer-first service, operations, and growth.</p></div>
+        <div class="card" style="text-align:center">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(192,57,43,.15);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 1rem">👩‍🔧</div>
+          <h3>Grace Achieng</h3><p style="color:var(--red);font-size:.8rem;margin:.3rem 0 .75rem">Diagnostic Technician</p><p>OBD specialist, electrical systems & ECU reprogramming</p></div>
+        <div class="card" style="text-align:center">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(192,57,43,.15);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 1rem">👨‍🔬</div>
+          <h3>Peter Otieno</h3><p style="color:var(--red);font-size:.8rem;margin:.3rem 0 .75rem">Suspension & Brakes</p><p>15 years specialized in chassis and safety systems</p></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer-section">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h3 class="footer-logo"><img src="../images/logo24.png" alt="Dr. Animal Autotune"><span>Dr. Animal Autotune</span></h3>
+        <p>Your trusted European and American car care partner since 2010. Expert mechanics, genuine parts, and transparent pricing — all under one roof.</p>
+        <p style="margin-top:1rem;font-size:.8rem;color:rgba(255,255,255,.6)">📍 Corner, Kamakis, Kiambu County, Kenya</p>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <a href="services.html">Engine Repair</a>
+        <a href="services.html">Diagnostics</a>
+        <a href="services.html">Electrical</a>
+        <a href="services.html">AC Service</a>
+        <a href="services.html">Tyre & Wheel</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="about.html">About Us</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="feedback.html">Feedback</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Client</h4>
+        <a href="login.html">Login</a>
+        <a href="booking.html">Book Service</a>
+        <a href="products.html">Spare Parts</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Doctor Animal Auto. All rights reserved.</span>
+      <a href="https://tuinnov8.com" target="_blank" rel="noopener" style="color:rgba(192,57,43,.65);text-decoration:none">Built with care by Tuinnov8</a>
+    </div>
+  </footer>
+
+<script src="../js/common.js"></script>
+</body>
+</html>
