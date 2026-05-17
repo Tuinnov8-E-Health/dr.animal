@@ -5,84 +5,84 @@ let feedbackRating = 0;
 
 const products = [
   {
-    id:1,name:'MANN Oil Filter HU 816 X',cat:'filters',price:1850,
+    id:1,name:'MANN Oil Filter HU 816 X',cat:'filters',price:1850,image:'../images/part1.jpeg',
     desc:'OEM-grade cartridge oil filter for selected BMW and Mini petrol engines.',icon:'🔩',
     make:'MANN-FILTER',partNo:'HU 816 X',
     specs:['Cartridge filter with sealing rings','Designed for clean oil flow and pressure stability','Recommended during every oil service'],
     fits:['BMW 1 Series F20/F21 116i, 118i','BMW 3 Series F30 316i, 320i','Mini Cooper F56 1.5 petrol']
   },
   {
-    id:2,name:'Bosch Platinum Spark Plug Set',cat:'engine',price:6200,
+    id:2,name:'Bosch Platinum Spark Plug Set',cat:'engine',price:6200,image:'../images/engine1.jpeg',
     desc:'Platinum plug set for Mercedes-Benz and BMW petrol engines.',icon:'⚡',
     make:'Bosch',partNo:'0242236563 / FR7NPP332',
     specs:['Set of 4 plugs','Platinum center electrode','Improves cold starts and stable idle'],
     fits:['Mercedes-Benz C180/C200 W204, W205','BMW 320i F30 N20 engine','BMW 118i F20 N13 engine']
   },
   {
-    id:3,name:'Continental Timing Belt Kit',cat:'engine',price:18500,
+    id:3,name:'Continental Timing Belt Kit',cat:'engine',price:18500,image:'../images/engine2.jpeg',
     desc:'Complete belt kit for selected Ford EcoBoost engines.',icon:'🔧',
     make:'Continental ContiTech',partNo:'CT1168K1',
     specs:['Timing belt, tensioner and idler kit','Built for high-temperature engine bays','Professional installation recommended'],
     fits:['Ford Focus 1.0 EcoBoost','Ford Fiesta 1.0 EcoBoost','Ford EcoSport 1.0 EcoBoost']
   },
   {
-    id:4,name:'ATE Front Brake Disc Pair',cat:'brakes',price:14200,
+    id:4,name:'ATE Front Brake Disc Pair',cat:'brakes',price:14200,image:'../images/repair1.jpeg',
     desc:'Vented front brake discs for Mercedes-Benz C-Class applications.',icon:'🛞',
     make:'ATE',partNo:'24.0128-0158.1',
     specs:['Vented front disc pair','Balanced for low vibration braking','Use with matching ceramic or OEM pads'],
     fits:['Mercedes-Benz C200 W204','Mercedes-Benz C250 W204','Mercedes-Benz E200 W212 with matching disc size']
   },
   {
-    id:5,name:'Textar Ceramic Brake Pads',cat:'brakes',price:9800,
+    id:5,name:'Textar Ceramic Brake Pads',cat:'brakes',price:9800,image:'../images/repair2.jpeg',
     desc:'Low-dust front pads for BMW 3 Series and 4 Series models.',icon:'🔴',
     make:'Textar',partNo:'2372301',
     specs:['Front axle pad set','Low dust ceramic compound','Includes wear sensor where applicable'],
     fits:['BMW 3 Series F30/F31','BMW 4 Series F32/F36','BMW X1 F48 with matching caliper']
   },
   {
-    id:6,name:'MAHLE Air Filter LX 1566',cat:'filters',price:3200,
+    id:6,name:'MAHLE Air Filter LX 1566',cat:'filters',price:3200,image:'../images/img1.jpeg',
     desc:'High-flow panel air filter for Volvo Drive-E and selected Ford engines.',icon:'💨',
     make:'MAHLE',partNo:'LX 1566',
     specs:['Panel-style intake filter','Protects MAF and turbo intake path','Best replaced every major service'],
     fits:['Volvo XC60 2.0 T5/T6','Volvo S60 2.0 petrol','Ford Mondeo 2.0 EcoBoost']
   },
   {
-    id:7,name:'Valeo Alternator 150A',cat:'electrical',price:28500,
+    id:7,name:'Valeo Alternator 150A',cat:'electrical',price:28500,image:'../images/software1.jpeg',
     desc:'Remanufactured alternator for Volvo and Ford 2.0 applications.',icon:'🔋',
     make:'Valeo',partNo:'439658',
     specs:['150 amp output','Pulley and regulator included','Bench-tested before dispatch'],
     fits:['Volvo S60/V60 2.0','Volvo XC60 2.0','Ford Kuga 2.0 EcoBoost']
   },
   {
-    id:8,name:'Varta AGM Battery 70Ah',cat:'electrical',price:24500,
+    id:8,name:'Varta AGM Battery 70Ah',cat:'electrical',price:24500,image:'../images/img2.jpeg',
     desc:'AGM battery for start-stop Mercedes, BMW, Volvo and Ford vehicles.',icon:'🔌',
     make:'Varta',partNo:'E39 570 901 076',
     specs:['70Ah AGM battery','760A cold cranking amps','Supports start-stop and heavy electronics'],
     fits:['Mercedes-Benz C-Class W204/W205','BMW 3 Series F30','Volvo XC60 and Ford Ranger trims requiring AGM']
   },
   {
-    id:9,name:'Bosch Fuel Filter',cat:'filters',price:4200,
+    id:9,name:'Bosch Fuel Filter',cat:'filters',price:4200,image:'../images/part1.jpeg',
     desc:'Diesel fuel filter for selected Mercedes-Benz CDI models.',icon:'⛽',
     make:'Bosch',partNo:'F 026 402 068',
     specs:['High-efficiency diesel filtration','Protects injectors and high-pressure pump','Water separation support on compatible housings'],
     fits:['Mercedes-Benz E220 CDI W212','Mercedes-Benz C220 CDI W204','Mercedes-Benz Sprinter CDI variants']
   },
   {
-    id:10,name:'LuK Clutch Kit',cat:'engine',price:36500,
+    id:10,name:'LuK Clutch Kit',cat:'engine',price:36500,image:'../images/gear1.jpeg',
     desc:'Complete clutch kit for Ford Ranger and Transit manual drivetrains.',icon:'⚙️',
     make:'LuK',partNo:'624 3336 09',
     specs:['Pressure plate, disc and release bearing','Designed for high-torque diesel use','Flywheel inspection required during fitting'],
     fits:['Ford Ranger 2.2 TDCi','Ford Transit 2.2 TDCi','Ford Everest manual variants']
   },
   {
-    id:11,name:'Bosch Aerotwin Wiper Set',cat:'electrical',price:4300,
+    id:11,name:'Bosch Aerotwin Wiper Set',cat:'electrical',price:4300,image:'../images/ford1.jpeg',
     desc:'Flat-blade wiper set for BMW, Mercedes and Volvo windscreen profiles.',icon:'🌧️',
     make:'Bosch',partNo:'A 864 S',
     specs:['Twin front wiper set','Quiet beam-blade design','Includes vehicle-specific adapters'],
     fits:['BMW 3 Series F30','Mercedes-Benz C-Class W205','Volvo V40/V60 selected years']
   },
   {
-    id:12,name:'Bilstein B4 Rear Shock Absorber',cat:'brakes',price:16500,
+    id:12,name:'Bilstein B4 Rear Shock Absorber',cat:'brakes',price:16500,image:'../images/repair3.jpeg',
     desc:'OEM-replacement rear shock for Volvo and BMW comfort suspension.',icon:'🏎️',
     make:'Bilstein',partNo:'19-171593',
     specs:['Gas-pressure rear shock','Restores factory ride control','Replace in pairs for balanced handling'],
@@ -229,7 +229,7 @@ function renderProducts(filter) {
   const filtered = filter==='all'?products:products.filter(p=>p.cat===filter);
   grid.innerHTML = filtered.map(p=>`
     <div class="product-card">
-      <div class="product-img">${p.icon}</div>
+      <div class="product-img">${p.image ? `<img src="${p.image}" alt="${p.name}">` : p.icon}</div>
       <div class="product-info">
         <div class="product-title-row">
           <h4>${p.name}</h4>
@@ -254,7 +254,7 @@ function showProductInfo(id) {
 
   body.innerHTML = `
     <div class="product-detail-hero">
-      <div class="product-detail-icon">${product.icon}</div>
+      <div class="product-detail-icon">${product.image ? `<img src="${product.image}" alt="${product.name}">` : product.icon}</div>
       <div>
         <div class="product-detail-brand">${product.make || 'OEM-grade part'}</div>
         <h3>${product.name}</h3>
