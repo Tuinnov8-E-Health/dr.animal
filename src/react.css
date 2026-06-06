@@ -3,9 +3,9 @@
 }
 
 .mini-services {
-  background: rgba(255,255,255,.02);
-  border-top: 1px solid rgba(255,255,255,.06);
-  border-bottom: 1px solid rgba(255,255,255,.06);
+  background: rgba(0,0,0,.015);
+  border-top: 1px solid rgba(0,0,0,.06);
+  border-bottom: 1px solid rgba(0,0,0,.06);
   padding: 3rem 2rem;
 }
 
@@ -16,26 +16,39 @@
 
 .mini-services-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 2rem;
   text-align: center;
 }
 
 .mini-service-icon {
-  font-size: 2rem;
+  font-size: 1.75rem;
   margin-bottom: .5rem;
   color: var(--red);
 }
 
 .mini-services h4 {
-  font-size: .9rem;
+  font-size: .85rem;
   color: var(--text-primary);
   margin-bottom: .3rem;
 }
 
 .mini-services p {
-  font-size: .8rem;
+  font-size: .78rem;
   color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+  .mini-services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .mini-services-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
 }
 
 .difference-grid {

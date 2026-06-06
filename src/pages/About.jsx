@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { galleryItems } from '../data';
+import { aboutPhotos } from '../data';
 
 function About() {
   return (
-    <section className="section page-section" style={{ paddingTop: '64px' }}>
+    <section className="section page-section" style={{ paddingTop: 0 }}>
       <div className="about-hero">
         <div className="about-hero-img">
-          <img src={galleryItems[0]} alt="Doctor Animal Autotune workshop team" />
+          <img src={aboutPhotos.hero} alt="Doctor Animal Auto workshop" />
         </div>
         <div className="about-hero-content">
           <div className="section-label">Our Story</div>
@@ -42,7 +42,7 @@ function About() {
             </Link>
           </div>
           <div className="about-img">
-            <div className="about-img-bg"><img src={galleryItems[1]} alt="Doctor Animal Autotune team at work" /></div>
+            <div className="about-img-bg"><img src={aboutPhotos.workshop} alt="Doctor Animal Auto workshop interior" /></div>
           </div>
         </div>
       </div>
@@ -51,24 +51,14 @@ function About() {
         <div className="section-label">The Team</div>
         <div className="section-title">Meet Our Experts</div>
         <div className="cards-grid" style={{ marginTop: '2rem' }}>
-          <div className="card" style={{ textAlign: 'center' }}>
-            <div className="profile-avatar"><img src={galleryItems[0]} alt="Ronald Nyongesa" /></div>
-            <h3>Ronald Nyongesa</h3>
-            <p style={{ color: 'var(--red)', fontSize: '.8rem', margin: '.3rem 0 .75rem' }}>Chief Executive Officer</p>
-            <p>Leads Doctor Animal Auto's customer-first service, operations, and growth.</p>
-          </div>
-          <div className="card" style={{ textAlign: 'center' }}>
-            <div className="profile-avatar"><i className="fa-solid fa-user-tie"></i></div>
-            <h3>Grace Achieng</h3>
-            <p style={{ color: 'var(--red)', fontSize: '.8rem', margin: '.3rem 0 .75rem' }}>Diagnostic Technician</p>
-            <p>OBD specialist, electrical systems and ECU reprogramming.</p>
-          </div>
-          <div className="card" style={{ textAlign: 'center' }}>
-            <div className="profile-avatar"><i className="fa-solid fa-user-gear"></i></div>
-            <h3>Peter Otieno</h3>
-            <p style={{ color: 'var(--red)', fontSize: '.8rem', margin: '.3rem 0 .75rem' }}>Suspension & Brakes</p>
-            <p>15 years specialized in chassis and safety systems.</p>
-          </div>
+          {aboutPhotos.team.map((member) => (
+            <div className="card" key={member.name} style={{ textAlign: 'center' }}>
+              <div className="profile-avatar"><img src={member.photo} alt={member.name} /></div>
+              <h3>{member.name}</h3>
+              <p style={{ color: 'var(--red)', fontSize: '.8rem', margin: '.3rem 0 .75rem' }}>{member.role}</p>
+              <p>{member.desc}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>

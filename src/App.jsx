@@ -121,7 +121,7 @@ function Nav({ currentUser, menuOpen, setMenuOpen, logout, clientLinks, adminLin
   return (
     <nav>
       <Link className="nav-logo" to="/" onClick={() => setMenuOpen(false)}>
-        <img src={logo} alt="Dr. Animal Autotune" />
+        {logo && <img src={logo} alt="Dr. Animal Autotune" />}
         <span>Dr. Animal Autotune</span>
       </Link>
       <button
@@ -186,7 +186,7 @@ function Footer() {
       <div className="footer-grid">
         <div className="footer-brand">
           <h3 className="footer-logo">
-            <img src={logo} alt="Dr. Animal Autotune" />
+            {logo && <img src={logo} alt="Dr. Animal Autotune" />}
             <span>Dr. Animal Autotune</span>
           </h3>
           <p>Your trusted European and American car care partner since 2010. Expert mechanics, genuine parts, and transparent pricing - all under one roof.</p>

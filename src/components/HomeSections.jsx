@@ -56,13 +56,13 @@ export function MiniServices() {
     <section className="mini-services">
       <div className="mini-services-inner">
         <div className="mini-services-grid">
-          {services.map(([icon, title, description]) => (
-            <div key={title}>
+          {services.map((s) => (
+            <div key={s.title}>
               <div className="mini-service-icon">
-                <i className={icon}></i>
+                <i className={s.icon}></i>
               </div>
-              <h4>{title}</h4>
-              <p>{description}</p>
+              <h4>{s.title}</h4>
+              <p>{s.desc}</p>
             </div>
           ))}
         </div>
@@ -77,13 +77,13 @@ export function Difference() {
       <div className="section-label">Why Choose Us</div>
       <div className="section-title">The Doctor<br />Difference</div>
       <div className="cards-grid difference-grid">
-        {featureCards.map(([src, alt, title, description]) => (
-          <div className="card" key={title}>
+        {featureCards.map((card) => (
+          <div className="card" key={card.title}>
             <div className="card-icon">
-              <img src={src} alt={alt} />
+              <i className={card.icon}></i>
             </div>
-            <h3>{title}</h3>
-            <p>{description}</p>
+            <h3>{card.title}</h3>
+            <p>{card.desc}</p>
           </div>
         ))}
       </div>

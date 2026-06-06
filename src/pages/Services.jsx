@@ -7,12 +7,17 @@ function Services() {
     <section className="section page-section" style={{ paddingTop: '64px' }}>
       <div className="section-label">Our Services</div>
       <div className="section-title">What We Do Best</div>
-      <div className="cards-grid" style={{ marginTop: '2rem' }}>
-        {services.map(([icon, title, description]) => (
-          <div className="card" key={title}>
-            <div className="card-icon"><i className={icon}></i></div>
-            <h3>{title}</h3>
-            <p>{description}</p>
+      <p className="section-sub">From routine maintenance to complex engine rebuilds, our certified technicians handle it all with precision and care.</p>
+      <div className="services-list">
+        {services.map((s, i) => (
+          <div className="service-item" key={s.title}>
+            <div className="service-photo">
+              <img src={s.photo} alt={s.title} loading="lazy" />
+            </div>
+            <div className="service-num">DR. ANIMAL / {String(i + 1).padStart(2, '0')}</div>
+            <h3>{s.title}</h3>
+            <p>{s.desc}</p>
+            <Link className="btn-book" to="/booking">Book This Service</Link>
           </div>
         ))}
       </div>
