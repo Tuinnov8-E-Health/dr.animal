@@ -40,22 +40,22 @@ function App() {
     const user = demoUsers.find((item) => item.email === email && item.password === password);
     if (!user) {
       showNotif('Invalid email or password.', 'error');
-      return false;
+      return null;
     }
     setCurrentUser(user);
     showNotif(`Welcome back, ${user.name}!`, 'success');
-    return true;
+    return user;
   };
 
   const register = (name, email) => {
     if (!name || !email) {
       showNotif('Please provide your name and email.', 'error');
-      return false;
+      return null;
     }
     const user = { email, name, role: 'client' };
     setCurrentUser(user);
     showNotif('Account created! Welcome to Doctor Animal Auto.', 'success');
-    return true;
+    return user;
   };
 
   const addToCart = (product) => {
@@ -69,7 +69,7 @@ function App() {
     showNotif(`${product.name} added to cart.`, 'success');
   };
 
-  const clientLinks = [['Portal', '/portal']];
+  const clientLinks = [['Dashboard', '/portal']];
   const adminLinks = [['Dashboard', '/admin']];
 
   return (
@@ -97,7 +97,10 @@ function App() {
           <Route path="/booking" element={<Booking />} />
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/login" element={<Login onLogin={login} onRegister={register} />} />
+          <Route
+            path="/login"
+            element={currentUser ? <Navigate to={currentUser.role === 'admin' ? '/admin' : '/portal'} replace /> : <Login onLogin={login} onRegister={register} />}
+          />
           <Route
             path="/portal"
             element={currentUser?.role === 'client' ? <Portal currentUser={currentUser} cartItems={cartItems} /> : <Navigate to="/login" replace />}

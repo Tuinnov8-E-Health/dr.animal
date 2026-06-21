@@ -1,30 +1,37 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { services } from '../data';
+import { SplitLayout, IconList } from '../components/ContentLayout';
+import { services, heroImages } from '../data';
 
 function Services() {
+  const listItems = services.map((s) => ({
+    icon: s.icon,
+    title: s.title,
+    desc: s.desc,
+    action: (
+      <Link className="btn-book btn-book--inline" to="/booking">
+        Book
+      </Link>
+    ),
+  }));
+
   return (
     <section className="section page-section" style={{ paddingTop: '64px' }}>
       <div className="section-label">Our Services</div>
       <div className="section-title">What We Do Best</div>
-      <p className="section-sub">From routine maintenance to complex engine rebuilds, our certified technicians handle it all with precision and care.</p>
-      <div className="services-list">
-        {services.map((s, i) => (
-          <div className="service-item" key={s.title}>
-            <div className="service-photo">
-              <img src={s.photo} alt={s.title} loading="lazy" />
-            </div>
-            <div className="service-num">DR. ANIMAL / {String(i + 1).padStart(2, '0')}</div>
-            <h3>{s.title}</h3>
-            <p>{s.desc}</p>
-            <Link className="btn-book" to="/booking">Book This Service</Link>
-          </div>
-        ))}
-      </div>
+      <p className="section-sub">
+        From routine maintenance to complex engine rebuilds — handled with precision and care.
+      </p>
+      <SplitLayout
+        images={[
+          { src: heroImages.workshop, alt: 'Workshop interior', label: '6-bay workshop' },
+          { src: heroImages.diagnostic, alt: 'Diagnostics', label: 'OBD diagnostics' },
+        ]}
+      >
+        <IconList items={listItems} numbered />
+      </SplitLayout>
       <div className="section-action">
-        <Link className="btn-primary" to="/booking">
-          Book Your Service
-        </Link>
+        <Link className="btn-primary" to="/booking">Book Your Service</Link>
       </div>
     </section>
   );

@@ -8,9 +8,6 @@ function Booking() {
       <div className="section-title">Schedule Your Appointment</div>
       <div className="book-grid">
         <form>
-          <div className="form-photo">
-            <img src={bookingPhoto} alt="Engine service at Doctor Animal Auto" loading="lazy" />
-          </div>
           <div className="form-group">
             <label>Full Name</label>
             <input type="text" placeholder="John Kamau" />
@@ -69,9 +66,10 @@ function Booking() {
               <p>+254 700 000 000</p>
             </div>
           </div>
-          <div className="side-photo">
-            <img src={bookingPhoto} alt="Workshop bay" loading="lazy" style={{ height: '200px' }} />
-          </div>
+          <figure className="side-photo">
+            <img src={bookingPhoto} alt="Workshop bay" loading="lazy" />
+            <figcaption>Our workshop — ready when you are</figcaption>
+          </figure>
         </div>
       </div>
     </section>

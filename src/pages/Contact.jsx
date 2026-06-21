@@ -8,9 +8,6 @@ function Contact() {
       <div className="section-title">Get In Touch</div>
       <div className="contact-grid" style={{ marginTop: '2rem' }}>
         <form>
-          <div className="form-photo">
-            <img src={contactPhoto} alt="Doctor Animal Auto workshop" loading="lazy" />
-          </div>
           <div className="form-group">
             <label>Your Name</label>
             <input type="text" placeholder="John Kamau" />
@@ -58,6 +55,10 @@ function Contact() {
               <p>Monday to Saturday, 8am - 6pm</p>
             </div>
           </div>
+          <figure className="side-photo">
+            <img src={contactPhoto} alt="Doctor Animal Auto workshop" loading="lazy" />
+            <figcaption>Visit us at Corner, Kamakis</figcaption>
+          </figure>
           <div className="map-placeholder">
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.8!2d36.8!3d-1.2!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMTInMDAuMCJTIDM2wrA0OCcwMC4wIkU!5e0!3m2!1sen!2ske!4v1"

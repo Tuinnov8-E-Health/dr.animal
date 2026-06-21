@@ -1,12 +1,25 @@
 import React from 'react';
-import { Hero, MiniServices, Difference, CtaStrip } from '../components/HomeSections';
+import {
+  Hero,
+  TrustStrip,
+  ServicesSection,
+  Difference,
+  ProcessSection,
+  GalleryPreview,
+  Testimonials,
+  CtaStrip,
+} from '../components/HomeSections';
 
 function Home() {
   return (
     <>
       <Hero />
-      <MiniServices />
+      <TrustStrip />
+      <ServicesSection />
       <Difference />
+      <ProcessSection />
+      <GalleryPreview />
+      <Testimonials />
       <CtaStrip />
     </>
   );

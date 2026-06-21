@@ -1,0 +1,94 @@
+// Demo portal data for client dashboard
+export function getClientPortalData(user) {
+  const name = user?.name || 'Client';
+  const email = user?.email || 'client@test.com';
+
+  return {
+    memberSince: 'Jan 2024',
+    vehicles: [
+      {
+        id: 1,
+        make: 'BMW',
+        model: '320i F30',
+        year: 2018,
+        plate: 'KDA 452X',
+        vin: 'WBA8E9G50JNU12345',
+        mileage: '84,200 km',
+        color: 'Alpine White',
+        lastService: '12 May 2025',
+      },
+      {
+        id: 2,
+        make: 'Ford',
+        model: 'Ranger XLT',
+        year: 2020,
+        plate: 'KDG 891B',
+        vin: 'MNAUMFF50MW123456',
+        mileage: '56,400 km',
+        color: 'Moondust Silver',
+        lastService: '3 Mar 2025',
+      },
+    ],
+    activeJob: {
+      id: 'JOB-2847',
+      vehicleId: 1,
+      vehicleLabel: 'BMW 320i · KDA 452X',
+      service: 'OBD Diagnostics & Front Brake Service',
+      status: 'in_progress',
+      statusLabel: 'In Progress',
+      progress: 68,
+      bookedDate: '18 Jun 2025',
+      estimatedCompletion: 'Mon, 23 Jun 2025',
+      technician: 'Grace Achieng',
+      bay: 'Bay 3',
+      summary: 'Customer reported ABS warning light and brake squeal. Full scan completed — front pads worn, rear sensors flagged.',
+    },
+    timeline: [
+      { id: 1, title: 'Booking confirmed', desc: 'Appointment scheduled for diagnostics and brake inspection.', date: '18 Jun 2025, 09:00', done: true },
+      { id: 2, title: 'Vehicle received', desc: 'Checked in at reception. Initial walk-around completed.', date: '20 Jun 2025, 08:45', done: true },
+      { id: 3, title: 'OBD diagnostic scan', desc: 'Fault codes read: ABS sensor intermittent, brake pad wear sensor triggered.', date: '20 Jun 2025, 11:20', done: true },
+      { id: 4, title: 'Parts ordered', desc: 'ATE front brake discs and Textar pads confirmed — genuine OEM spec.', date: '21 Jun 2025, 14:00', done: true },
+      { id: 5, title: 'Brake service in progress', desc: 'Front discs and pads being fitted. ABS sensor cleaning underway.', date: '21 Jun 2025, 16:30', done: false, current: true },
+      { id: 6, title: 'Quality check & road test', desc: 'Final inspection, bleed procedure, and road-test review.', date: 'Pending', done: false },
+      { id: 7, title: 'Ready for collection', desc: 'Vehicle handover with full service report.', date: 'Pending', done: false },
+    ],
+    reportUpdates: [
+      { id: 1, date: '21 Jun 2025, 16:30', author: 'Grace Achieng', title: 'Brake work started', body: 'Front brake discs removed. Wear on pads confirmed at 2mm — replacement proceeding as quoted. ABS sensor contacts cleaned.' },
+      { id: 2, date: '21 Jun 2025, 14:00', author: 'Peter Otieno', title: 'Genuine parts received', body: 'ATE discs and Textar pads checked in from stores. Part numbers verified against your BMW 320i build sheet.' },
+      { id: 3, date: '20 Jun 2025, 11:20', author: 'Grace Achieng', title: 'Diagnostic report', body: 'Full OBD scan complete. Primary faults: front brake pad wear sensor, intermittent rear ABS sensor. Full quote sent — awaiting your approval (approved).' },
+      { id: 4, date: '20 Jun 2025, 08:45', author: 'Reception', title: 'Vehicle checked in', body: 'Your BMW 320i has been logged into Bay 3. Mileage recorded at 84,200 km. Keys and belongings secured.' },
+    ],
+    messages: [
+      { id: 1, from: 'workshop', sender: 'Grace Achieng', role: 'Diagnostic Technician', text: 'Hi John — brake discs and pads are now being fitted. We expect to complete by tomorrow afternoon. I will update you once the road test is done.', time: '21 Jun 2025, 16:45', read: true },
+      { id: 2, from: 'client', sender: name, text: 'Thanks Grace. Please also check the AC — it has been weak on the passenger side.', time: '21 Jun 2025, 17:02', read: true },
+      { id: 3, from: 'workshop', sender: 'Grace Achieng', role: 'Diagnostic Technician', text: 'Noted. We will run a quick AC pressure check during the quality inspection at no extra charge and add findings to your report.', time: '21 Jun 2025, 17:18', read: true },
+      { id: 4, from: 'workshop', sender: 'Peter Otieno', role: 'Suspension & Brakes', text: 'Parts have arrived and match your vehicle spec. Work commencing this afternoon.', time: '21 Jun 2025, 14:05', read: false },
+    ],
+    invoice: {
+      id: 'INV-2025-184',
+      jobId: 'JOB-2847',
+      status: 'open',
+      statusLabel: 'Compiling',
+      issued: '20 Jun 2025',
+      due: 'On collection',
+      items: [
+        { id: 1, type: 'service', description: 'OBD full-system diagnostic scan & report', qty: 1, unitPrice: 3500, added: true },
+        { id: 2, type: 'service', description: 'Front brake disc & pad replacement (labour)', qty: 1, unitPrice: 8500, added: true },
+        { id: 3, type: 'part', description: 'ATE Front Brake Disc Pair (BMW F30)', qty: 1, unitPrice: 14200, added: true },
+        { id: 4, type: 'part', description: 'Textar Ceramic Brake Pads — Front', qty: 1, unitPrice: 9800, added: true },
+        { id: 5, type: 'service', description: 'Brake fluid flush & bleed', qty: 1, unitPrice: 3200, added: true },
+        { id: 6, type: 'service', description: 'ABS sensor inspection & cleaning', qty: 1, unitPrice: 2500, added: false },
+        { id: 7, type: 'service', description: 'AC pressure check (complimentary)', qty: 1, unitPrice: 0, added: false },
+      ],
+      notes: 'Invoice compiles as work progresses. Items marked pending will be added once approved or completed. Final total confirmed before handover.',
+    },
+    stats: {
+      totalJobs: 7,
+      activeJobs: 1,
+      vehiclesRegistered: 2,
+      outstandingBalance: 39000,
+    },
+    email,
+    name,
+  };
+}
