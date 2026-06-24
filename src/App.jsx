@@ -38,6 +38,13 @@ function App() {
     return () => window.removeEventListener('load', handleLoad);
   }, []);
 
+  useEffect(() => {
+    const favicon = document.querySelector("link[rel='icon']");
+    if (favicon && logo) {
+      favicon.href = logo;
+    }
+  }, []);
+
   const showNotif = (message, type = 'success') => {
     setNotification({ message, type });
   };
@@ -83,6 +90,7 @@ function App() {
 
   const clientLinks = [['Dashboard', '/portal']];
   const adminLinks = [['Dashboard', '/admin']];
+  const cartCount = cartItems.reduce((sum, item) => sum + (item.qty || 0), 0);
 
   return (
     <Router>
@@ -114,6 +122,12 @@ function App() {
       >
         <i className="fa-brands fa-whatsapp"></i>
       </a>
+      {cartCount > 0 && (
+        <Link className="cart-float" to="/cart" aria-label="View cart">
+          <i className="fa-solid fa-cart-shopping"></i>
+          <span>{cartCount}</span>
+        </Link>
+      )}
 
       <main className={`app-shell ${isLoading ? 'loading' : ''}`}>
         <Routes>
