@@ -1,54 +1,67 @@
-import React, { useMemo, useState } from 'react';
-import { products as productData } from '../data';
+import React, { useState } from 'react';
+import { products as productData, vehicles } from '../data';
 
-const categoryIcons = {
-  filters: 'fa-solid fa-filter',
-  engine: 'fa-solid fa-gears',
-  brakes: 'fa-solid fa-circle-stop',
-  electrical: 'fa-solid fa-bolt',
-};
+const viewCategories = [
+  { id: 'spare parts', title: 'Spare Parts' },
+  { id: 'cars', title: 'Cars' },
+];
 
 function Products({ addToCart }) {
-  const [filter, setFilter] = useState('all');
-  const categories = useMemo(() => ['all', ...new Set(productData.map((product) => product.cat))], []);
-  const filtered = filter === 'all' ? productData : productData.filter((item) => item.cat === filter);
+  const [filter, setFilter] = useState('spare parts');
+  const filtered = filter === 'cars' ? vehicles : productData;
 
   return (
     <section className="section page-section" style={{ paddingTop: '64px' }}>
-      <div className="section-label">Shop Parts</div>
-      <div className="section-title">Genuine Car Parts</div>
+      <div
+        className="products-hero"
+        style={{
+          backgroundImage: `linear-gradient(180deg, rgba(15, 23, 39, 0.72), rgba(15, 23, 39, 0.18)), url(/images/part1.jpeg)`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        <div className="products-hero-copy">
+          <span className="section-label">Shop Parts</span>
+          <h1>Buy genuine car parts and accessories</h1>
+          <p className="section-sub">
+            Explore brand new and second-hand cars to find the perfect ride for you, then shop premium parts and accessories to keep it running great.
+          </p>
+        </div>
+      </div>
+
       <div className="type-filter">
-        {categories.map((cat) => (
+        {viewCategories.map((cat) => (
           <button
-            key={cat}
+            key={cat.id}
             type="button"
-            className={`type-btn ${filter === cat ? 'active' : ''}`}
-            onClick={() => setFilter(cat)}
+            className={`type-btn ${filter === cat.id ? 'active' : ''}`}
+            onClick={() => setFilter(cat.id)}
           >
-            {cat === 'all' ? 'All' : cat}
+            {cat.title}
           </button>
         ))}
       </div>
-      <ul className="product-list">
-        {filtered.map((product) => (
-          <li className="product-list__item" key={product.id}>
-            <span className="product-list__icon">
-              <i className={categoryIcons[product.cat] || 'fa-solid fa-box'}></i>
-            </span>
-            <div className="product-list__body">
-              <div className="product-list__header">
-                <h4>{product.name}</h4>
-                <span className="product-price">KES {product.price.toLocaleString()}</span>
-              </div>
-              <p className="product-list__meta">{product.make} · {product.partNo}</p>
-              <p>{product.desc}</p>
+
+      <div className="product-grid">
+        {filtered.map((item) => (
+          <article key={item.id} className="product-card">
+            <div className="product-thumb">
+              <img src={item.image} alt={item.name} />
             </div>
-            <button className="cart-btn" type="button" onClick={() => addToCart(product)}>
-              Add
-            </button>
-          </li>
+            <div className="product-body">
+              <span className="product-category">{filter === 'cars' ? item.category : item.make}</span>
+              <h3>{item.name}</h3>
+              <p>{item.desc}</p>
+            </div>
+            <div className="product-footer">
+              <strong className="product-price">KES {item.price.toLocaleString()}</strong>
+              <button className="product-link" type="button" onClick={() => addToCart(item)}>
+                Add to Cart
+              </button>
+            </div>
+          </article>
         ))}
-      </ul>
+      </div>
     </section>
   );
 }

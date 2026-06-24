@@ -433,6 +433,7 @@
   min-height: 380px;
   object-fit: cover;
   display: block;
+  border-radius: 28px;
 }
 
 /* ── Side photo with caption ── */
@@ -441,15 +442,15 @@
   font-size: .75rem;
   color: var(--text-secondary);
   text-align: center;
-  border-top: 1px solid rgba(255, 255, 255, .06);
-  background: var(--bg-card);
+  border-top: 1px solid rgba(0, 0, 0, .08);
+  background: #f8fafc;
 }
 
 /* ── Trust strip ── */
 .trust-strip {
-  background: var(--steel);
-  border-top: 1px solid rgba(255, 255, 255, .06);
-  border-bottom: 1px solid rgba(255, 255, 255, .06);
+  background: var(--surface-soft);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
   padding: 1.25rem 2rem;
 }
 
@@ -458,63 +459,61 @@
   margin: 0 auto;
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 1rem;
   flex-wrap: wrap;
 }
 
 .trust-label {
   font-family: 'Space Mono', monospace;
-  font-size: .68rem;
+  font-size: .75rem;
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: var(--text-secondary);
+  color: var(--accent);
   white-space: nowrap;
 }
 
 .trust-brands {
   display: flex;
   flex-wrap: wrap;
-  gap: .6rem;
+  gap: .75rem;
 }
 
 .trust-brand {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 1rem;
   letter-spacing: 1px;
-  color: rgba(255, 255, 255, .45);
-  padding: .3rem .85rem;
-  border: 1px solid rgba(255, 255, 255, .08);
-  border-radius: 4px;
+  color: var(--text-primary);
+  padding: .65rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
 }
 
 /* ── Section variants ── */
-.home-services {
-  background: var(--steel);
+.home-services,
+.home-difference,
+.home-process,
+.home-gallery-preview,
+.home-testimonials {
   max-width: none;
   padding-left: max(2rem, calc((100vw - 1200px) / 2));
   padding-right: max(2rem, calc((100vw - 1200px) / 2));
 }
 
 .home-difference {
-  background: var(--dark);
+  background: var(--surface);
 }
 
 .home-process {
-  background: var(--steel);
-  max-width: none;
-  padding-left: max(2rem, calc((100vw - 1200px) / 2));
-  padding-right: max(2rem, calc((100vw - 1200px) / 2));
+  background: var(--surface-soft);
 }
 
 .home-gallery-preview {
-  background: var(--dark);
+  background: var(--surface);
 }
 
 .home-testimonials {
-  background: var(--steel);
-  max-width: none;
-  padding-left: max(2rem, calc((100vw - 1200px) / 2));
-  padding-right: max(2rem, calc((100vw - 1200px) / 2));
+  background: var(--surface-soft);
 }
 
 .section-header-row {
@@ -537,8 +536,7 @@
 
 /* ── CTA strip ── */
 .cta-strip {
-  background: var(--bg-card);
-  border-top: 1px solid rgba(231, 76, 60, .2);
+  background: var(--accent);
   padding: 4rem 2rem;
   text-align: center;
 }
@@ -551,13 +549,15 @@
 .cta-title {
   font-family: 'Bebas Neue', sans-serif;
   font-size: clamp(2rem, 5vw, 3rem);
-  color: var(--text-primary);
+  color: #fff;
   letter-spacing: 1px;
   margin-bottom: .75rem;
 }
 
 .cta-strip p {
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, .9);
+}
+
   margin-bottom: 2rem;
   font-size: 1rem;
   line-height: 1.6;

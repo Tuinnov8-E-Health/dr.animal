@@ -1,10 +1,10 @@
 import React from 'react';
 import {
   Hero,
-  TrustStrip,
   ServicesSection,
   Difference,
-  ProcessSection,
+  BrandsSection,
+  FeaturedProductsSection,
   GalleryPreview,
   Testimonials,
   CtaStrip,
@@ -14,10 +14,10 @@ function Home() {
   return (
     <>
       <Hero />
-      <TrustStrip />
       <ServicesSection />
       <Difference />
-      <ProcessSection />
+      <BrandsSection />
+      <FeaturedProductsSection />
       <GalleryPreview />
       <Testimonials />
       <CtaStrip />

@@ -9,6 +9,7 @@ import Gallery from './pages/Gallery';
 import Booking from './pages/Booking';
 import Feedback from './pages/Feedback';
 import Contact from './pages/Contact';
+import Cart from './pages/Cart';
 import Login from './pages/Login';
 import Portal from './pages/Portal';
 import AdminDashboard from './pages/AdminDashboard';
@@ -85,7 +86,18 @@ function App() {
         logout={logout}
         clientLinks={clientLinks}
         adminLinks={adminLinks}
+        cartItems={cartItems}
       />
+
+      <a
+        className="whatsapp-float"
+        href="https://wa.me/254735548605"
+        target="_blank"
+        rel="noreferrer noopener"
+        aria-label="Chat on WhatsApp"
+      >
+        <i className="fa-brands fa-whatsapp"></i>
+      </a>
 
       <main className="app-shell">
         <Routes>
@@ -93,6 +105,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/services" element={<Services />} />
           <Route path="/products" element={<Products addToCart={addToCart} />} />
+          <Route path="/cart" element={<Cart cartItems={cartItems} setCartItems={setCartItems} />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/booking" element={<Booking />} />
           <Route path="/feedback" element={<Feedback />} />
@@ -118,14 +131,15 @@ function App() {
   );
 }
 
-function Nav({ currentUser, menuOpen, setMenuOpen, logout, clientLinks, adminLinks }) {
+function Nav({ currentUser, menuOpen, setMenuOpen, logout, clientLinks, adminLinks, cartItems }) {
   const role = currentUser?.role;
+  const cartCount = cartItems.reduce((sum, item) => sum + (item.qty || 0), 0);
 
   return (
     <nav>
       <Link className="nav-logo" to="/" onClick={() => setMenuOpen(false)}>
-        {logo && <img src={logo} alt="Dr. Animal Autotune" />}
-        <span>Dr. Animal Autotune</span>
+        {logo && <img src={logo} alt="Dr. Animal Auto Tune" />}
+        <span>Dr. Animal Auto Tune</span>
       </Link>
       <button
         className={`nav-hamburger ${menuOpen ? 'active' : ''}`}
@@ -146,6 +160,10 @@ function Nav({ currentUser, menuOpen, setMenuOpen, logout, clientLinks, adminLin
               {label}
             </NavLink>
           ))}
+          <NavLink className="nav-cart" to="/cart" onClick={() => setMenuOpen(false)}>
+            <i className="fa-solid fa-cart-shopping"></i>
+            {cartCount > 0 && <span>{cartCount}</span>}
+          </NavLink>
           <NavLink className="nav-cta" to="/login" onClick={() => setMenuOpen(false)}>
             Login / Register
           </NavLink>
@@ -159,6 +177,10 @@ function Nav({ currentUser, menuOpen, setMenuOpen, logout, clientLinks, adminLin
               {label}
             </NavLink>
           ))}
+          <NavLink className="nav-cart" to="/cart" onClick={() => setMenuOpen(false)}>
+            <i className="fa-solid fa-cart-shopping"></i>
+            {cartCount > 0 && <span>{cartCount}</span>}
+          </NavLink>
           <div className="nav-user">
             <span id="client-name-nav">👤 {currentUser.name}</span>
             <button type="button" onClick={logout}>Logout</button>
@@ -173,6 +195,10 @@ function Nav({ currentUser, menuOpen, setMenuOpen, logout, clientLinks, adminLin
               {label}
             </NavLink>
           ))}
+          <NavLink className="nav-cart" to="/cart" onClick={() => setMenuOpen(false)}>
+            <i className="fa-solid fa-cart-shopping"></i>
+            {cartCount > 0 && <span>{cartCount}</span>}
+          </NavLink>
           <div className="nav-user nav-user-admin">
             <span>👑 Admin</span>
             <button type="button" onClick={logout}>Logout</button>
@@ -189,18 +215,23 @@ function Footer() {
       <div className="footer-grid">
         <div className="footer-brand">
           <h3 className="footer-logo">
-            {logo && <img src={logo} alt="Dr. Animal Autotune" />}
-            <span>Dr. Animal Autotune</span>
+            {logo && <img src={logo} alt="Dr. Animal Auto Tune" />}
+            <span>Dr. Animal Auto Tune</span>
           </h3>
-          <p>Your trusted European and American car care partner since 2010. Expert mechanics, genuine parts, and transparent pricing - all under one roof.</p>
+          <p>Your trusted European and American car care partner since 2010. Expert mechanics, genuine parts, and transparent pricing — all under one roof.</p>
           <p className="footer-location">📍 Corner, Kamakis, Kiambu County, Kenya</p>
         </div>
+        <FooterColumn title="Quick Links" links={['Home', 'Services', 'Gallery', 'Book Now']} basePath="/" />
         <FooterColumn title="Services" links={['Engine Repair', 'Diagnostics', 'Electrical', 'AC Service', 'Transmission']} basePath="/services" />
-        <FooterColumn title="Company" links={['About Us', 'Gallery', 'Feedback', 'Contact']} basePath="/" />
-        <FooterColumn title="Client" links={['Login', 'Book Service', 'Spare Parts']} basePath="/" />
+        <div className="footer-col footer-contact">
+          <h4>Contact</h4>
+          <a href="tel:+254720862971">+254 720 862 971</a>
+          <a href="mailto:info@doctoranimal.co.ke">info@doctoranimal.co.ke</a>
+          <p>Karen / Kamakis, Nairobi metropolitan area.</p>
+        </div>
       </div>
       <div className="footer-bottom">
-        <span>© 2025 Doctor Animal Auto. All rights reserved.</span>
+        <span>© 2026 Doctor Animal Auto. All rights reserved.</span>
         <a href="https://tuinnov8.com" target="_blank" rel="noopener noreferrer" className="builder-link">
           Built with care by Tuinnov8
         </a>
@@ -211,6 +242,7 @@ function Footer() {
 
 function FooterColumn({ title, links, basePath }) {
   const pathMap = {
+    Home: '/',
     'About Us': '/about',
     Gallery: '/gallery',
     Feedback: '/feedback',

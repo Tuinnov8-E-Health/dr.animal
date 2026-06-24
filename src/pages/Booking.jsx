@@ -10,7 +10,7 @@ function Booking() {
         <form>
           <div className="form-group">
             <label>Full Name</label>
-            <input type="text" placeholder="John Kamau" />
+            <input type="text" placeholder="John Juma" />
           </div>
           <div className="form-group">
             <label>Email Address</label>
@@ -18,7 +18,7 @@ function Booking() {
           </div>
           <div className="form-group">
             <label>Phone Number</label>
-            <input type="tel" placeholder="+254 700 000 000" />
+            <input type="tel" placeholder="+254 720 862 971" />
           </div>
           <div className="form-group">
             <label>Vehicle Make & Model</label>
@@ -42,7 +42,7 @@ function Booking() {
             <label>Additional Notes</label>
             <textarea placeholder="Describe the issue or any special requests" rows={4} />
           </div>
-          <button type="button" className="btn-primary" style={{ width: '100%' }}>Request Booking</button>
+          <button type="submit" className="btn-primary full">Request Booking</button>
         </form>
         <div className="book-info">
           <div className="book-info-item">
@@ -63,7 +63,7 @@ function Booking() {
             <div className="book-info-icon"><i className="fa-solid fa-phone"></i></div>
             <div className="book-info-text">
               <h4>Call Us</h4>
-              <p>+254 700 000 000</p>
+              <p>+254 720 862 971</p>
             </div>
           </div>
           <figure className="side-photo">

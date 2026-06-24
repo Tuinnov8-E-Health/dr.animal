@@ -28,155 +28,141 @@ function Login({ onLogin, onRegister }) {
   };
 
   return (
-    <div className="auth-page">
-      <aside className="auth-panel">
-        <div className="auth-panel__bg" style={{ '--auth-image': `url(${heroImages.workshop})` }}></div>
-        <div className="auth-panel__content">
-          <Link className="auth-panel__logo" to="/">
-            <img src={logo} alt="Dr. Animal Autotune" />
-            <span>Dr. Animal Autotune</span>
-          </Link>
-          <h1>Your vehicle.<br />Your portal.<br /><span>Total control.</span></h1>
-          <p className="auth-panel__lead">
-            Sign in to track repairs, view invoices, and book services — all from one place.
-          </p>
-          <ul className="auth-perks">
-            {perks.map((perk) => (
-              <li key={perk.text}>
-                <i className={perk.icon}></i>
-                <span>{perk.text}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </aside>
-
-      <main className="auth-main">
-        <div className="auth-card">
-          <div className="auth-card__header">
-            <h2>{tab === 'login' ? 'Welcome back' : 'Create account'}</h2>
-            <p>{tab === 'login' ? 'Sign in to access your client portal' : 'Register to start managing your vehicle services'}</p>
-          </div>
-
-          <div className="auth-tabs" role="tablist">
-            <button
-              className={`auth-tab ${tab === 'login' ? 'active' : ''}`}
-              type="button"
-              role="tab"
-              aria-selected={tab === 'login'}
-              onClick={() => setTab('login')}
-            >
-              <i className="fa-solid fa-right-to-bracket"></i> Login
-            </button>
-            <button
-              className={`auth-tab ${tab === 'register' ? 'active' : ''}`}
-              type="button"
-              role="tab"
-              aria-selected={tab === 'register'}
-              onClick={() => setTab('register')}
-            >
-              <i className="fa-solid fa-user-plus"></i> Register
-            </button>
-          </div>
-
-          {tab === 'login' ? (
-            <form className="auth-form" onSubmit={handleLogin}>
-              <div className="form-group">
-                <label htmlFor="login-email">Email address</label>
-                <div className="auth-input-wrap">
-                  <i className="fa-solid fa-envelope"></i>
-                  <input
-                    id="login-email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    type="email"
-                    placeholder="you@example.com"
-                    autoComplete="email"
-                    required
-                  />
-                </div>
-              </div>
-              <div className="form-group">
-                <label htmlFor="login-password">Password</label>
-                <div className="auth-input-wrap">
-                  <i className="fa-solid fa-lock"></i>
-                  <input
-                    id="login-password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    type="password"
-                    placeholder="Enter your password"
-                    autoComplete="current-password"
-                    required
-                  />
-                </div>
-              </div>
-              <button type="submit" className="btn-primary auth-submit">
-                <i className="fa-solid fa-arrow-right-to-bracket"></i> Sign in
-              </button>
-              <div className="auth-demo">
-                <span className="auth-demo__label">Demo accounts</span>
-                <div className="auth-demo__row">
-                  <i className="fa-solid fa-user"></i>
-                  <code>client@test.com</code>
-                  <span>/</span>
-                  <code>client123</code>
-                </div>
-                <div className="auth-demo__row">
-                  <i className="fa-solid fa-crown"></i>
-                  <code>admin@doctoranimal.co.ke</code>
-                  <span>/</span>
-                  <code>admin123</code>
-                </div>
-              </div>
-            </form>
-          ) : (
-            <form className="auth-form" onSubmit={handleRegister}>
-              <div className="form-group">
-                <label htmlFor="register-name">Full name</label>
-                <div className="auth-input-wrap">
-                  <i className="fa-solid fa-user"></i>
-                  <input
-                    id="register-name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    type="text"
-                    placeholder="John Kamau"
-                    autoComplete="name"
-                    required
-                  />
-                </div>
-              </div>
-              <div className="form-group">
-                <label htmlFor="register-email">Email address</label>
-                <div className="auth-input-wrap">
-                  <i className="fa-solid fa-envelope"></i>
-                  <input
-                    id="register-email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    type="email"
-                    placeholder="you@example.com"
-                    autoComplete="email"
-                    required
-                  />
-                </div>
-              </div>
-              <button type="submit" className="btn-primary auth-submit">
-                <i className="fa-solid fa-user-plus"></i> Create account
-              </button>
-              <p className="auth-note">
-                By registering you agree to receive service updates about your vehicle.
-              </p>
-            </form>
-          )}
-
-          <p className="auth-back">
-            <Link to="/"><i className="fa-solid fa-arrow-left"></i> Back to homepage</Link>
+    <main className="auth-page login-page">
+      <div className="auth-card">
+        <div className="auth-card__header">
+          <h1>{tab === 'login' ? 'Login to your account' : 'Register a new account'}</h1>
+          <p>
+            {tab === 'login'
+              ? 'Access your portal to track your car progress and purchased products.'
+              : 'Create your account to manage your service requests and purchased products.'}
           </p>
         </div>
-      </main>
-    </div>
+
+        <div className="auth-tabs" role="tablist">
+          <button
+            className={`auth-tab ${tab === 'login' ? 'active' : ''}`}
+            type="button"
+            role="tab"
+            aria-selected={tab === 'login'}
+            onClick={() => setTab('login')}
+          >
+            Login
+          </button>
+          <button
+            className={`auth-tab ${tab === 'register' ? 'active' : ''}`}
+            type="button"
+            role="tab"
+            aria-selected={tab === 'register'}
+            onClick={() => setTab('register')}
+          >
+            Register
+          </button>
+        </div>
+
+        {tab === 'login' ? (
+          <form className="auth-form" onSubmit={handleLogin}>
+            <div className="form-group">
+              <label htmlFor="login-email">Email</label>
+              <input
+                id="login-email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                placeholder="name@company.com"
+                autoComplete="email"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="login-password">Password</label>
+              <input
+                id="login-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type="password"
+                placeholder="••••••••"
+                autoComplete="current-password"
+                required
+              />
+            </div>
+
+            <button type="submit" className="btn-primary auth-submit">
+              Login
+            </button>
+
+            <p className="auth-footer">
+              Don't have an account? <button type="button" className="auth-link" onClick={() => setTab('register')}>Register here</button>
+            </p>
+          </form>
+        ) : (
+          <form className="auth-form" onSubmit={handleRegister}>
+            <div className="form-group">
+              <label htmlFor="register-name">Your name</label>
+              <input
+                id="register-name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                type="text"
+                placeholder="Firstname Lastname"
+                autoComplete="name"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="register-email">Email</label>
+              <input
+                id="register-email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                placeholder="name@company.com"
+                autoComplete="email"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="register-password">Password</label>
+              <input
+                id="register-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type="password"
+                placeholder="••••••••"
+                autoComplete="new-password"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="register-password-confirm">Confirm Password</label>
+              <input
+                id="register-password-confirm"
+                type="password"
+                placeholder="••••••••"
+                required
+              />
+            </div>
+
+            <label className="auth-checkbox">
+              <input type="checkbox" required />
+              I agree to the <a href="/terms-of-service">Terms of Service</a> and <a href="/privacy-policy">Privacy Policy</a>
+            </label>
+
+            <button type="submit" className="btn-primary auth-submit">
+              Register
+            </button>
+
+            <p className="auth-footer">
+              Already have an account? <button type="button" className="auth-link" onClick={() => setTab('login')}>Login here</button>
+            </p>
+          </form>
+        )}
+      </div>
+    </main>
   );
 }
 

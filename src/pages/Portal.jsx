@@ -5,6 +5,7 @@ import { getClientPortalData } from '../data/portalData';
 const NAV = [
   { id: 'overview', label: 'Overview', icon: 'fa-solid fa-gauge-high' },
   { id: 'vehicles', label: 'My Vehicles', icon: 'fa-solid fa-car' },
+  { id: 'parts', label: 'Parts', icon: 'fa-solid fa-boxes-stacked' },
   { id: 'progress', label: 'Progress & Report', icon: 'fa-solid fa-clipboard-list' },
   { id: 'messages', label: 'Messages', icon: 'fa-solid fa-comments' },
   { id: 'invoice', label: 'Invoice', icon: 'fa-solid fa-file-invoice-dollar' },
@@ -69,6 +70,9 @@ function Portal({ currentUser, cartItems }) {
               {item.id === 'messages' && unread > 0 && (
                 <span className="portal-nav-badge">{unread}</span>
               )}
+              {item.id === 'parts' && cartItems.length > 0 && (
+                <span className="portal-nav-badge">{cartItems.reduce((sum, i) => sum + i.qty, 0)}</span>
+              )}
             </button>
           ))}
         </nav>
@@ -89,6 +93,7 @@ function Portal({ currentUser, cartItems }) {
           />
         )}
         {view === 'vehicles' && <Vehicles data={data} />}
+        {view === 'parts' && <Parts cartItems={cartItems} />}
         {view === 'progress' && <ProgressReport data={data} />}
         {view === 'messages' && (
           <Messages
@@ -419,6 +424,57 @@ function Invoice({ invoice, added, pending, subtotal, vat, total }) {
         <p className="portal-invoice-disclaimer">
           Final amount confirmed before vehicle handover. No hidden charges.
         </p>
+      </div>
+    </>
+  );
+}
+
+function Parts({ cartItems }) {
+  const cartCount = cartItems.reduce((sum, item) => sum + item.qty, 0);
+  const cartTotal = cartItems.reduce((sum, item) => sum + item.price * item.qty, 0);
+
+  return (
+    <>
+      <header className="portal-header">
+        <div>
+          <h1 className="portal-title">Spare Parts</h1>
+          <p className="portal-sub">Request parts and track your cart from the client portal.</p>
+        </div>
+      </header>
+
+      <div className="portal-grid-2">
+        <div className="info-card portal-card">
+          <h3 className="portal-card__title"><i className="fa-solid fa-boxes-stacked"></i> Parts Cart</h3>
+          {cartCount > 0 ? (
+            <>
+              <p>{cartCount} item{cartCount > 1 ? 's' : ''} currently in your cart.</p>
+              <div className="portal-invoice-totals">
+                <div className="portal-invoice-totals__row"><span>Estimated cart total</span><strong>KES {cartTotal.toLocaleString()}</strong></div>
+              </div>
+              <Link className="btn-primary" to="/cart">Review cart</Link>
+            </>
+          ) : (
+            <>
+              <p>You have no parts in your cart yet.</p>
+              <Link className="btn-outline" to="/products">Browse parts catalog</Link>
+            </>
+          )}
+        </div>
+
+        <div className="info-card portal-card">
+          <h3 className="portal-card__title"><i className="fa-solid fa-headset"></i> Request Parts</h3>
+          <p className="portal-card__summary">If you need help selecting parts, send a message to the workshop or request via WhatsApp.</p>
+          <div className="portal-actions">
+            <button type="button" className="portal-action" onClick={() => window.open('https://wa.me/254720862971', '_blank', 'noopener')}>
+              <i className="fa-brands fa-whatsapp"></i>
+              <span>Request on WhatsApp</span>
+            </button>
+            <button type="button" className="portal-action" onClick={() => window.location.assign('/contact')}>
+              <i className="fa-solid fa-envelope"></i>
+              <span>Contact support</span>
+            </button>
+          </div>
+        </div>
       </div>
     </>
   );
