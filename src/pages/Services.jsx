@@ -8,7 +8,7 @@ function Services() {
     <>
       <section className="about-hero">
         <div className="about-hero-img">
-          <img src="/images/img6.jpeg" alt="Service workshop" />
+          <img src={heroImages.workshop} alt="Service workshop" loading="lazy" />
         </div>
         <div className="about-hero-content">
           <div className="section-label">Our Services</div>

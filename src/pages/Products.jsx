@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { products as productData, vehicles } from '../data';
+import { heroImages, products as productData, vehicles } from '../data';
 
 const viewCategories = [
   { id: 'spare parts', title: 'Spare Parts' },
@@ -15,7 +15,7 @@ function Products({ addToCart }) {
       <div
         className="products-hero"
         style={{
-          backgroundImage: `linear-gradient(180deg, rgba(15, 23, 39, 0.72), rgba(15, 23, 39, 0.18)), url(/images/part1.jpeg)`,
+          backgroundImage: `linear-gradient(180deg, rgba(15, 23, 39, 0.72), rgba(15, 23, 39, 0.18)), url(${heroImages.engine})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
@@ -46,7 +46,7 @@ function Products({ addToCart }) {
         {filtered.map((item) => (
           <article key={item.id} className="product-card">
             <div className="product-thumb">
-              <img src={item.image} alt={item.name} />
+              <img src={item.image} alt={item.name} loading="lazy" />
             </div>
             <div className="product-body">
               <span className="product-category">{filter === 'cars' ? item.category : item.make}</span>

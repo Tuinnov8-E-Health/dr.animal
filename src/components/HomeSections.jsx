@@ -127,7 +127,7 @@ export function Difference() {
   );
 }
 
-export function BrandsSection() {
+export const BrandsSection = () => {
   return (
     <section className="section section-soft brands-section">
       <div className="section-header-column">
@@ -170,7 +170,7 @@ export function FeaturedProductsSection() {
         {featuredProducts.map((product) => (
           <article key={product.id} className="product-card">
             <div className="product-thumb">
-              <img src={product.image} alt={product.name} />
+              <img src={product.image} alt={product.name} loading="lazy" />
             </div>
             <div className="product-body">
               <span className="product-category">{product.make}</span>

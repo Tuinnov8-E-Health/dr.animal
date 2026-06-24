@@ -20,12 +20,23 @@ function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [notification, setNotification] = useState(null);
   const [cartItems, setCartItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!notification) return undefined;
     const timer = window.setTimeout(() => setNotification(null), 3400);
     return () => window.clearTimeout(timer);
   }, [notification]);
+
+  useEffect(() => {
+    const handleLoad = () => setIsLoading(false);
+    if (document.readyState === 'complete') {
+      handleLoad();
+      return undefined;
+    }
+    window.addEventListener('load', handleLoad);
+    return () => window.removeEventListener('load', handleLoad);
+  }, []);
 
   const showNotif = (message, type = 'success') => {
     setNotification({ message, type });
@@ -75,6 +86,11 @@ function App() {
 
   return (
     <Router>
+      <div className={`loading-overlay ${isLoading ? 'active' : ''}`}>
+        <div className="loading-spinner" />
+        <div>Loading Doctor Animal Auto...</div>
+      </div>
+
       <div className={`notif ${notification ? 'show' : ''} ${notification?.type === 'error' ? 'error' : ''}`}>
         {notification ? `${notification.type === 'success' ? '✓ ' : ''}${notification.message}` : ''}
       </div>
@@ -99,7 +115,7 @@ function App() {
         <i className="fa-brands fa-whatsapp"></i>
       </a>
 
-      <main className="app-shell">
+      <main className={`app-shell ${isLoading ? 'loading' : ''}`}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />

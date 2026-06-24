@@ -10,7 +10,7 @@ function About() {
     <section className="section page-section" style={{ paddingTop: 0 }}>
       <div className="about-hero">
         <div className="about-hero-img">
-          <img src={aboutPhotos.hero} alt="Doctor Animal Auto workshop" />
+          <img src={aboutPhotos.hero} alt="Doctor Animal Auto workshop" loading="lazy" />
         </div>
         <div className="about-hero-content">
           <div className="section-label">Our Story</div>
@@ -68,7 +68,7 @@ function About() {
       <div className="section founder-section">
         <div className="founder-grid">
           <div className="founder-photo">
-            <img src={founder.photo} alt={founder.name} />
+            <img src={founder.photo} alt={founder.name} loading="lazy" />
           </div>
           <div className="founder-bio">
             <div className="section-label">Founder</div>

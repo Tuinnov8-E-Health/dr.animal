@@ -56,7 +56,7 @@ function Cart({ cartItems, setCartItems }) {
             {cartItems.map((item) => (
               <div key={item.id} className="cart-row">
                 <div className="cart-product">
-                  <img src={item.image} alt={item.name} />
+                  <img src={item.image} alt={item.name} loading="lazy" />
                   <div>
                     <h3>{item.name}</h3>
                     <p>{item.make || item.category}</p>

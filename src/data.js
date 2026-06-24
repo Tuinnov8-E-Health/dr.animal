@@ -1,5 +1,9 @@
-// Local images from /images — resolved by Vite for dev and production builds
-const img = (file) => new URL(`../images/${file}`, import.meta.url).href;
+// Build a static mapping of all image assets so nested files resolve correctly in Vite.
+const imageModules = import.meta.glob('../images/**/*.{png,jpg,jpeg,webp}', { eager: true, import: 'default' });
+const img = (file) => {
+  const key = `../images/${file}`;
+  return imageModules[key] ?? `/images/${file}`;
+};
 
 export const logo = img('logo24.png');
 
@@ -43,39 +47,39 @@ export const processSteps = [
 export const trustedBrands = [
   {
     name: 'BMW',
-    logo: '/images/logos/bmw.webp',
+    logo: img('logos/bmw.webp'),
   },
   {
     name: 'Mercedes-Benz',
-    logo: '/images/logos/mercedes.webp',
+    logo: img('logos/mercedes.webp'),
   },
   {
     name: 'Audi',
-    logo: '/images/logos/audi.png',
+    logo: img('logos/audi.png'),
   },
   {
     name: 'Volvo',
-    logo: '/images/logos/volvo.webp',
+    logo: img('logos/volvo.webp'),
   },
   {
     name: 'Ford',
-    logo: '/images/logos/ford.jpg',
+    logo: img('logos/ford.jpg'),
   },
   {
     name: 'Land Rover',
-    logo: '/images/logos/landrover.webp',
+    logo: img('logos/landrover.webp'),
   },
   {
     name: 'Mini',
-    logo: '/images/logos/mini.webp',
+    logo: img('logos/mini.webp'),
   },
   {
     name: 'Peugeot',
-    logo: '/images/logos/puegeot.png',
+    logo: img('logos/puegeot.png'),
   },
   {
     name: 'Chevrolet',
-    logo: '/images/logos/chevrolet.png',
+    logo: img('logos/chevrolet.png'),
   },
 ];
 
@@ -193,21 +197,21 @@ export const galleryItems = [
 ];
 
 export const products = [
-  { id: 1, name: 'MANN Oil Filter HU 816 X', cat: 'filters', price: 1850, image: '/images/parts/MANN Oil Filter HU 816 X.webp', desc: 'OEM-grade cartridge oil filter for selected BMW and Mini petrol engines.', make: 'MANN-FILTER', partNo: 'HU 816 X' },
-  { id: 2, name: 'Bosch Platinum Spark Plug Set', cat: 'engine', price: 6200, image: '/images/parts/Bosch Platinum Spark Plug Set.png', desc: 'Platinum plug set for Mercedes-Benz and BMW petrol engines.', make: 'Bosch', partNo: '0242236563 / FR7NPP332' },
-  { id: 3, name: 'Continental Timing Belt Kit', cat: 'engine', price: 18500, image: '/images/parts/Continental Timing Belt Kit.webp', desc: 'Complete belt kit for selected Ford EcoBoost engines.', make: 'Continental ContiTech', partNo: 'CT1168K1' },
-  { id: 4, name: 'ATE Front Brake Disc Pair', cat: 'brakes', price: 14200, image: '/images/parts/ATE Front Brake Disc Pair.webp', desc: 'Vented front brake discs for Mercedes-Benz C-Class applications.', make: 'ATE', partNo: '24.0128-0158.1' },
-  { id: 5, name: 'Textar Ceramic Brake Pads', cat: 'brakes', price: 9800, image: '/images/parts/Textar Ceramic Brake Pads.webp', desc: 'Low-dust front pads for BMW 3 Series and 4 Series models.', make: 'Textar', partNo: '2372301' },
-  { id: 6, name: 'MAHLE Air Filter LX 1566', cat: 'filters', price: 3200, image: '/images/parts/MAHLE Air Filter LX 1566.webp', desc: 'High-flow panel air filter for Volvo Drive-E and selected Ford engines.', make: 'MAHLE', partNo: 'LX 1566' },
-  { id: 7, name: 'Valeo Alternator 150A', cat: 'electrical', price: 28500, image: '/images/parts/Valeo Alternator 150A.webp', desc: 'Remanufactured alternator for Volvo and Ford 2.0 applications.', make: 'Valeo', partNo: '439658' },
-  { id: 8, name: 'Varta AGM Battery 70Ah', cat: 'electrical', price: 24500, image: '/images/parts/Varta AGM Battery 70Ah.webp', desc: 'AGM battery for start-stop Mercedes, BMW, Volvo and Ford vehicles.', make: 'Varta', partNo: 'E39 570 901 076' },
+  { id: 1, name: 'MANN Oil Filter HU 816 X', cat: 'filters', price: 1850, image: img('parts/MANN Oil Filter HU 816 X.webp'), desc: 'OEM-grade cartridge oil filter for selected BMW and Mini petrol engines.', make: 'MANN-FILTER', partNo: 'HU 816 X' },
+  { id: 2, name: 'Bosch Platinum Spark Plug Set', cat: 'engine', price: 6200, image: img('parts/Bosch Platinum Spark Plug Set.png'), desc: 'Platinum plug set for Mercedes-Benz and BMW petrol engines.', make: 'Bosch', partNo: '0242236563 / FR7NPP332' },
+  { id: 3, name: 'Continental Timing Belt Kit', cat: 'engine', price: 18500, image: img('parts/Continental Timing Belt Kit.webp'), desc: 'Complete belt kit for selected Ford EcoBoost engines.', make: 'Continental ContiTech', partNo: 'CT1168K1' },
+  { id: 4, name: 'ATE Front Brake Disc Pair', cat: 'brakes', price: 14200, image: img('parts/ATE Front Brake Disc Pair.webp'), desc: 'Vented front brake discs for Mercedes-Benz C-Class applications.', make: 'ATE', partNo: '24.0128-0158.1' },
+  { id: 5, name: 'Textar Ceramic Brake Pads', cat: 'brakes', price: 9800, image: img('parts/Textar Ceramic Brake Pads.webp'), desc: 'Low-dust front pads for BMW 3 Series and 4 Series models.', make: 'Textar', partNo: '2372301' },
+  { id: 6, name: 'MAHLE Air Filter LX 1566', cat: 'filters', price: 3200, image: img('parts/MAHLE Air Filter LX 1566.webp'), desc: 'High-flow panel air filter for Volvo Drive-E and selected Ford engines.', make: 'MAHLE', partNo: 'LX 1566' },
+  { id: 7, name: 'Valeo Alternator 150A', cat: 'electrical', price: 28500, image: img('parts/Valeo Alternator 150A.webp'), desc: 'Remanufactured alternator for Volvo and Ford 2.0 applications.', make: 'Valeo', partNo: '439658' },
+  { id: 8, name: 'Varta AGM Battery 70Ah', cat: 'electrical', price: 24500, image: img('parts/Varta AGM Battery 70Ah.webp'), desc: 'AGM battery for start-stop Mercedes, BMW, Volvo and Ford vehicles.', make: 'Varta', partNo: 'E39 570 901 076' },
 ];
 
 export const vehicles = [
-  { id: 101, name: 'BMW 320i', category: 'Luxury Sedan', price: 4250000, image: '/images/cars/BMW 320i.webp', desc: 'Premium European sedan service package with factory-standard care for BMW engines and suspension.' },
-  { id: 102, name: 'Mercedes-Benz C-Class', category: 'Luxury Sedan', price: 4450000, image: '/images/cars/Mercedes-Benz C-Class.webp', desc: 'Comprehensive maintenance for Mercedes-Benz with genuine parts and precise diagnostics.' },
-  { id: 103, name: 'Volvo XC60', category: 'Luxury SUV', price: 4700000, image: '/images/cars/Volvo XC60.webp', desc: 'Complete SUV service tailored for Volvo safety systems, brakes, and suspension.' },
-  { id: 104, name: 'Ford Ranger', category: 'Pickup Truck', price: 3850000, image: '/images/cars/Ford Ranger.webp', desc: 'Durable pickup maintenance and drivetrain inspection for Ford Ranger reliability.' },
+  { id: 101, name: 'BMW 320i', category: 'Luxury Sedan', price: 4250000, image: img('cars/BMW 320i.webp'), desc: 'Premium European sedan service package with factory-standard care for BMW engines and suspension.' },
+  { id: 102, name: 'Mercedes-Benz C-Class', category: 'Luxury Sedan', price: 4450000, image: img('cars/Mercedes-Benz C-Class.webp'), desc: 'Comprehensive maintenance for Mercedes-Benz with genuine parts and precise diagnostics.' },
+  { id: 103, name: 'Volvo XC60', category: 'Luxury SUV', price: 4700000, image: img('cars/Volvo XC60.webp'), desc: 'Complete SUV service tailored for Volvo safety systems, brakes, and suspension.' },
+  { id: 104, name: 'Ford Ranger', category: 'Pickup Truck', price: 3850000, image: img('cars/Ford Ranger.webp'), desc: 'Durable pickup maintenance and drivetrain inspection for Ford Ranger reliability.' },
 ];
 
 export const aboutPhotos = {
