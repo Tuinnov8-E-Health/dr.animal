@@ -202,6 +202,12 @@ function App() {
 
       <FloatingActions cartCount={cartCount} />
 
+      {!supabaseEnabled && (
+        <div className="auth-alert warning supabase-banner">
+          <strong>Supabase is not configured.</strong> Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in your environment and redeploy.
+        </div>
+      )}
+
       <main className={`app-shell ${isLoading ? 'loading' : ''}`}>
         <Routes>
           <Route path="/" element={<Home />} />

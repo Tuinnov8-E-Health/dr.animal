@@ -1,7 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { contactPhoto } from '../data';
+import { supabase, supabaseEnabled } from '../supabaseClient';
 
 function Contact() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [subject, setSubject] = useState('');
+  const [message, setMessage] = useState('');
+  const [status, setStatus] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setStatus('');
+    if (!name || !message) {
+      setStatus('Please provide your name and service request.');
+      return;
+    }
+    if (!supabaseEnabled) {
+      setStatus('Supabase is not configured, so contact requests cannot be saved.');
+      return;
+    }
+    setIsSubmitting(true);
+    const { error } = await supabase.from('contact_messages').insert([
+      {
+        name,
+        email,
+        phone,
+        subject,
+        vehicle_or_service: message,
+        message,
+      },
+    ]);
+    setIsSubmitting(false);
+    if (error) {
+      setStatus(error.message || 'Unable to send message.');
+      return;
+    }
+    setStatus('Message sent successfully. We will contact you shortly.');
+    setName('');
+    setEmail('');
+    setPhone('');
+    setSubject('');
+    setMessage('');
+  };
+
   return (
     <section className="section page-section contact-page" style={{ paddingTop: '64px' }}>
       <div className="section-header contact-header">
@@ -51,25 +95,35 @@ function Contact() {
             <p>Send us a message and our service advisors will get back to you within minutes.</p>
           </div>
 
-          <form className="contact-form">
+          <form className="contact-form" onSubmit={handleSubmit}>
+            {status && <div className="auth-alert">{status}</div>}
+            {!supabaseEnabled && (
+              <div className="auth-alert warning">
+                Supabase is not configured, so contact requests cannot be saved yet.
+              </div>
+            )}
             <div className="form-group">
               <label>Your Name</label>
-              <input type="text" placeholder="John Kamau" />
+              <input value={name} onChange={(e) => setName(e.target.value)} type="text" placeholder="John Kamau" />
             </div>
             <div className="form-group">
               <label>Email Address</label>
-              <input type="email" placeholder="john@example.com" />
+              <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="john@example.com" />
             </div>
             <div className="form-group">
               <label>Phone Number</label>
-              <input type="tel" placeholder="+254 720 862 971" />
+              <input value={phone} onChange={(e) => setPhone(e.target.value)} type="tel" placeholder="+254 720 862 971" />
+            </div>
+            <div className="form-group">
+              <label>Subject</label>
+              <input value={subject} onChange={(e) => setSubject(e.target.value)} type="text" placeholder="Service request or vehicle issue" />
             </div>
             <div className="form-group">
               <label>Vehicle / Service Request</label>
-              <textarea placeholder="Tell us what you need" rows={5} />
+              <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Tell us what you need" rows={5} />
             </div>
-            <button type="button" className="btn-primary btn-block">
-              Send Message
+            <button type="submit" className="btn-primary btn-block" disabled={isSubmitting}>
+              {isSubmitting ? 'Sending…' : 'Send Message'}
             </button>
           </form>
         </div>

@@ -1,7 +1,39 @@
 import React, { useState } from 'react';
+import { supabase, supabaseEnabled } from '../supabaseClient';
 
 function Feedback() {
   const [rating, setRating] = useState(5);
+  const [message, setMessage] = useState('');
+  const [status, setStatus] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setStatus('');
+    if (!message) {
+      setStatus('Please add a message describing your experience.');
+      return;
+    }
+    if (!supabaseEnabled) {
+      setStatus('Supabase is not configured, so feedback cannot be saved.');
+      return;
+    }
+    setIsSubmitting(true);
+    const { error } = await supabase.from('feedback').insert([
+      {
+        rating,
+        message,
+      },
+    ]);
+    setIsSubmitting(false);
+    if (error) {
+      setStatus(error.message || 'Unable to submit feedback.');
+      return;
+    }
+    setStatus('Thank you! Your feedback was submitted successfully.');
+    setRating(5);
+    setMessage('');
+  };
 
   return (
     <section className="section page-section feedback-page" style={{ paddingTop: '64px' }}>
@@ -26,7 +58,13 @@ function Feedback() {
             </p>
           </div>
 
-          <form className="contact-form feedback-form">
+          <form className="contact-form feedback-form" onSubmit={handleSubmit}>
+            {status && <div className="auth-alert">{status}</div>}
+            {!supabaseEnabled && (
+              <div className="auth-alert warning">
+                Supabase is not configured, so feedback cannot be saved yet.
+              </div>
+            )}
             <div className="feedback-rating">
               {[1, 2, 3, 4, 5].map((value) => (
                 <button
@@ -42,11 +80,11 @@ function Feedback() {
 
             <div className="form-group">
               <label>Tell us what went well</label>
-              <textarea placeholder="Describe your experience" rows="6" />
+              <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Describe your experience" rows="6" />
             </div>
 
-            <button type="button" className="btn-primary">
-              Submit Feedback
+            <button type="submit" className="btn-primary" disabled={isSubmitting}>
+              {isSubmitting ? 'Submitting…' : 'Submit Feedback'}
             </button>
           </form>
         </div>

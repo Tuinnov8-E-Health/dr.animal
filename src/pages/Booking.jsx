@@ -1,48 +1,105 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { bookingPhoto } from '../data';
+import { supabase, supabaseEnabled } from '../supabaseClient';
 
 function Booking() {
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [vehicle, setVehicle] = useState('');
+  const [service, setService] = useState('');
+  const [notes, setNotes] = useState('');
+  const [status, setStatus] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setStatus('');
+    if (!fullName || !email || !phone || !service) {
+      setStatus('Please fill in your name, email, phone, and service request.');
+      return;
+    }
+    if (!supabaseEnabled) {
+      setStatus('Supabase is not configured, so booking cannot be saved to the database.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    const { error } = await supabase.from('bookings').insert([
+      {
+        full_name: fullName,
+        email,
+        phone,
+        vehicle_label: vehicle,
+        service_name: service,
+        notes,
+      },
+    ]);
+    setIsSubmitting(false);
+
+    if (error) {
+      setStatus(error.message || 'Unable to submit booking.');
+      return;
+    }
+
+    setStatus('Booking request submitted successfully. We will contact you soon.');
+    setFullName('');
+    setEmail('');
+    setPhone('');
+    setVehicle('');
+    setService('');
+    setNotes('');
+  };
+
   return (
     <section className="section page-section" style={{ paddingTop: '64px' }}>
       <div className="section-label">Book Service</div>
       <div className="section-title">Schedule Your Appointment</div>
       <div className="book-grid">
-        <form>
+        <form onSubmit={handleSubmit}>
+          {status && <div className="auth-alert">{status}</div>}
+          {!supabaseEnabled && (
+            <div className="auth-alert warning">
+              Supabase is not configured, so booking cannot be saved to the database.
+            </div>
+          )}
           <div className="form-group">
             <label>Full Name</label>
-            <input type="text" placeholder="John Juma" />
+            <input value={fullName} onChange={(e) => setFullName(e.target.value)} type="text" placeholder="John Juma" />
           </div>
           <div className="form-group">
             <label>Email Address</label>
-            <input type="email" placeholder="john@example.com" />
+            <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="john@example.com" />
           </div>
           <div className="form-group">
             <label>Phone Number</label>
-            <input type="tel" placeholder="+254 720 862 971" />
+            <input value={phone} onChange={(e) => setPhone(e.target.value)} type="tel" placeholder="+254 720 862 971" />
           </div>
           <div className="form-group">
             <label>Vehicle Make & Model</label>
-            <input type="text" placeholder="e.g. BMW 320i, Ford Ranger" />
+            <input value={vehicle} onChange={(e) => setVehicle(e.target.value)} type="text" placeholder="e.g. BMW 320i, Ford Ranger" />
           </div>
           <div className="form-group">
             <label>Service Needed</label>
-            <select defaultValue="">
+            <select value={service} onChange={(e) => setService(e.target.value)}>
               <option value="" disabled>Select a service</option>
-              <option>Engine Repair</option>
-              <option>Electrical Systems</option>
-              <option>AC Service</option>
-              <option>OBD Diagnostics</option>
-              <option>Brake Service</option>
-              <option>Transmission</option>
-              <option>Suspension & Steering</option>
-              <option>General Maintenance</option>
+              <option value="Engine Repair">Engine Repair</option>
+              <option value="Electrical Systems">Electrical Systems</option>
+              <option value="AC Service">AC Service</option>
+              <option value="OBD Diagnostics">OBD Diagnostics</option>
+              <option value="Brake Service">Brake Service</option>
+              <option value="Transmission">Transmission</option>
+              <option value="Suspension & Steering">Suspension & Steering</option>
+              <option value="General Maintenance">General Maintenance</option>
             </select>
           </div>
           <div className="form-group">
             <label>Additional Notes</label>
-            <textarea placeholder="Describe the issue or any special requests" rows={4} />
+            <textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Describe the issue or any special requests" rows={4} />
           </div>
-          <button type="submit" className="btn-primary full">Request Booking</button>
+          <button type="submit" className="btn-primary full" disabled={isSubmitting}>
+            {isSubmitting ? 'Submitting…' : 'Request Booking'}
+          </button>
         </form>
         <div className="book-info">
           <div className="book-info-item">
