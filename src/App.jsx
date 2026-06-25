@@ -39,6 +39,20 @@ function App() {
     }
   }, []);
 
+  const fetchUserProfile = async (userId) => {
+    if (!supabaseEnabled || !userId) return null;
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('full_name, role')
+      .eq('id', userId)
+      .single();
+    if (error) {
+      console.error('Supabase profile fetch error:', error.message);
+      return null;
+    }
+    return data;
+  };
+
   useEffect(() => {
     if (!supabaseEnabled) return undefined;
 
@@ -51,22 +65,24 @@ function App() {
         console.error('Supabase session error:', error.message);
       }
       if (session?.user) {
+        const profile = await fetchUserProfile(session.user.id);
         setCurrentUser({
           email: session.user.email,
-          name: session.user.user_metadata?.full_name || session.user.email,
-          role: 'client',
+          name: profile?.full_name || session.user.user_metadata?.full_name || session.user.email,
+          role: profile?.role || 'client',
         });
       }
     };
 
     init();
 
-    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (session?.user) {
+        const profile = await fetchUserProfile(session.user.id);
         setCurrentUser({
           email: session.user.email,
-          name: session.user.user_metadata?.full_name || session.user.email,
-          role: 'client',
+          name: profile?.full_name || session.user.user_metadata?.full_name || session.user.email,
+          role: profile?.role || 'client',
         });
       } else {
         setCurrentUser(null);
@@ -108,10 +124,11 @@ function App() {
         return { user: null, error: error.message };
       }
       const user = data.user;
+      const profile = await fetchUserProfile(user.id);
       const current = {
         email: user.email,
-        name: user.user_metadata?.full_name || user.email,
-        role: 'client',
+        name: profile?.full_name || user.user_metadata?.full_name || user.email,
+        role: profile?.role || 'client',
       };
       setCurrentUser(current);
       showNotif(`Welcome back, ${current.name}!`, 'success');
