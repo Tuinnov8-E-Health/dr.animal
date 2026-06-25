@@ -32,7 +32,12 @@ function Login({ onLogin, onRegister, supabaseEnabled }) {
       }, 700);
       return;
     }
-    setAuthError(result?.error || 'Login failed. Check your email, password, or connection.');
+    const errorMessage = result?.error || 'Login failed. Check your email, password, or connection.';
+    if (errorMessage.toLowerCase().includes('confirm') || errorMessage.toLowerCase().includes('confirmed')) {
+      setAuthError('Your email has not been confirmed. Please verify your account from the confirmation email.');
+      return;
+    }
+    setAuthError(errorMessage);
   };
 
   const handleRegister = async (e) => {
@@ -44,6 +49,10 @@ function Login({ onLogin, onRegister, supabaseEnabled }) {
       return;
     }
     const result = await onRegister(name, email, password);
+    if (result?.requiresEmailConfirmation) {
+      setAuthStatus('Registration successful. Check your email and confirm your account before logging in.');
+      return;
+    }
     if (result?.user) {
       setAuthStatus('Registration successful! Redirecting to your portal...');
       window.setTimeout(() => {
@@ -127,7 +136,7 @@ function Login({ onLogin, onRegister, supabaseEnabled }) {
                   onClick={() => setShowPassword((prev) => !prev)}
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
-                  {showPassword ? 'Hide' : 'Show'}
+                  <i className={showPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'}></i>
                 </button>
               </div>
             </div>
@@ -193,7 +202,7 @@ function Login({ onLogin, onRegister, supabaseEnabled }) {
                   onClick={() => setShowPassword((prev) => !prev)}
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
-                  {showPassword ? 'Hide' : 'Show'}
+                  <i className={showPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'}></i>
                 </button>
               </div>
             </div>
@@ -216,7 +225,7 @@ function Login({ onLogin, onRegister, supabaseEnabled }) {
                   onClick={() => setShowConfirmPassword((prev) => !prev)}
                   aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
                 >
-                  {showConfirmPassword ? 'Hide' : 'Show'}
+                  <i className={showConfirmPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'}></i>
                 </button>
               </div>
             </div>

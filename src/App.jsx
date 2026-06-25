@@ -148,14 +148,26 @@ function App() {
         showNotif(error.message, 'error');
         return { user: null, error: error.message };
       }
-      const current = {
-        email,
-        name,
-        role: 'client',
-      };
-      setCurrentUser(current);
-      showNotif('Account created! Welcome to Doctor Animal Auto.', 'success');
-      return { user: current, error: null };
+      if (data.user && !data.session) {
+        const confirmationMessage =
+          'Registration successful. Please check your email and confirm your account before logging in.';
+        showNotif(confirmationMessage, 'success');
+        return { user: null, error: null, requiresEmailConfirmation: true };
+      }
+      if (data.user) {
+        const current = {
+          email,
+          name,
+          role: 'client',
+        };
+        setCurrentUser(current);
+        showNotif('Account created! Welcome to Doctor Animal Auto.', 'success');
+        return { user: current, error: null };
+      }
+      const confirmationMessage =
+        'Registration request sent. Please check your email and confirm your account before logging in.';
+      showNotif(confirmationMessage, 'success');
+      return { user: null, error: null, requiresEmailConfirmation: true };
     }
 
     const user = { email, name, role: 'client' };
