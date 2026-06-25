@@ -105,7 +105,7 @@ function App() {
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) {
         showNotif(error.message, 'error');
-        return null;
+        return { user: null, error: error.message };
       }
       const user = data.user;
       const current = {
@@ -115,23 +115,25 @@ function App() {
       };
       setCurrentUser(current);
       showNotif(`Welcome back, ${current.name}!`, 'success');
-      return current;
+      return { user: current, error: null };
     }
 
     const user = demoUsers.find((item) => item.email === email && item.password === password);
     if (!user) {
-      showNotif('Invalid email or password.', 'error');
-      return null;
+      const error = 'Invalid email or password.';
+      showNotif(error, 'error');
+      return { user: null, error };
     }
     setCurrentUser(user);
     showNotif(`Welcome back, ${user.name}!`, 'success');
-    return user;
+    return { user, error: null };
   };
 
   const register = async (name, email, password) => {
     if (!name || !email || !password) {
-      showNotif('Please provide your name, email, and password.', 'error');
-      return null;
+      const error = 'Please provide your name, email, and password.';
+      showNotif(error, 'error');
+      return { user: null, error };
     }
 
     if (supabaseEnabled) {
@@ -144,7 +146,7 @@ function App() {
       });
       if (error) {
         showNotif(error.message, 'error');
-        return null;
+        return { user: null, error: error.message };
       }
       const current = {
         email,
@@ -153,13 +155,13 @@ function App() {
       };
       setCurrentUser(current);
       showNotif('Account created! Welcome to Doctor Animal Auto.', 'success');
-      return current;
+      return { user: current, error: null };
     }
 
     const user = { email, name, role: 'client' };
     setCurrentUser(user);
     showNotif('Account created! Welcome to Doctor Animal Auto.', 'success');
-    return user;
+    return { user, error: null };
   };
 
   const addToCart = (product) => {
@@ -213,7 +215,13 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route
             path="/login"
-            element={currentUser ? <Navigate to={currentUser.role === 'admin' ? '/admin' : '/portal'} replace /> : <Login onLogin={login} onRegister={register} />}
+            element={
+              currentUser ? (
+                <Navigate to={currentUser.role === 'admin' ? '/admin' : '/portal'} replace />
+              ) : (
+                <Login onLogin={login} onRegister={register} supabaseEnabled={supabaseEnabled} />
+              )
+            }
           />
           <Route
             path="/portal"

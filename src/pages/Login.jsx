@@ -8,23 +8,39 @@ const perks = [
   { icon: 'fa-solid fa-calendar-check', text: 'Book appointments in under 2 minutes' },
 ];
 
-function Login({ onLogin, onRegister }) {
+function Login({ onLogin, onRegister, supabaseEnabled }) {
   const navigate = useNavigate();
   const [tab, setTab] = useState('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
+  const [authError, setAuthError] = useState('');
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    const user = onLogin(email, password);
-    if (user) navigate(user.role === 'admin' ? '/admin' : '/portal');
+    setAuthError('');
+    const result = await onLogin(email, password);
+    if (result?.user) {
+      navigate(result.user.role === 'admin' ? '/admin' : '/portal');
+      return;
+    }
+    setAuthError(result?.error || 'Login failed. Check your email, password, or connection.');
   };
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    const user = onRegister(name, email, password);
-    if (user) navigate('/portal');
+    setAuthError('');
+    if (password !== confirmPassword) {
+      setAuthError('Passwords do not match.');
+      return;
+    }
+    const result = await onRegister(name, email, password);
+    if (result?.user) {
+      navigate('/portal');
+      return;
+    }
+    setAuthError(result?.error || 'Registration failed. Check your details or connection.');
   };
 
   return (
@@ -62,6 +78,12 @@ function Login({ onLogin, onRegister }) {
 
         {tab === 'login' ? (
           <form className="auth-form" onSubmit={handleLogin}>
+            {authError && <div className="auth-alert error">{authError}</div>}
+            {!supabaseEnabled && (
+              <div className="auth-alert warning">
+                Supabase is not configured. Only demo login is available locally.
+              </div>
+            )}
             <div className="form-group">
               <label htmlFor="login-email">Email</label>
               <input
@@ -141,8 +163,11 @@ function Login({ onLogin, onRegister }) {
               <label htmlFor="register-password-confirm">Confirm Password</label>
               <input
                 id="register-password-confirm"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 type="password"
                 placeholder="••••••••"
+                autoComplete="new-password"
                 required
               />
             </div>
