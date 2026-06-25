@@ -23,7 +23,7 @@ function Login({ onLogin, onRegister }) {
 
   const handleRegister = (e) => {
     e.preventDefault();
-    const user = onRegister(name, email);
+    const user = onRegister(name, email, password);
     if (user) navigate('/portal');
   };
 

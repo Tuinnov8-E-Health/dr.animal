@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Link, NavLink, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { logo, publicLinks, products as productData, demoUsers } from './data';
+import { supabase, supabaseEnabled } from './supabaseClient';
 import Home from './pages/Home';
 import About from './pages/About';
 import Services from './pages/Services';
@@ -32,10 +33,47 @@ function App() {
     const handleLoad = () => setIsLoading(false);
     if (document.readyState === 'complete') {
       handleLoad();
-      return undefined;
+    } else {
+      window.addEventListener('load', handleLoad);
+      return () => window.removeEventListener('load', handleLoad);
     }
-    window.addEventListener('load', handleLoad);
-    return () => window.removeEventListener('load', handleLoad);
+  }, []);
+
+  useEffect(() => {
+    if (!supabaseEnabled) return undefined;
+
+    const init = async () => {
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.getSession();
+      if (error) {
+        console.error('Supabase session error:', error.message);
+      }
+      if (session?.user) {
+        setCurrentUser({
+          email: session.user.email,
+          name: session.user.user_metadata?.full_name || session.user.email,
+          role: 'client',
+        });
+      }
+    };
+
+    init();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        setCurrentUser({
+          email: session.user.email,
+          name: session.user.user_metadata?.full_name || session.user.email,
+          role: 'client',
+        });
+      } else {
+        setCurrentUser(null);
+      }
+    });
+
+    return () => authListener?.subscription?.unsubscribe();
   }, []);
 
   useEffect(() => {
@@ -49,13 +87,37 @@ function App() {
     setNotification({ message, type });
   };
 
-  const logout = () => {
+  const logout = async () => {
     setMenuOpen(false);
+    if (supabaseEnabled) {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        showNotif(error.message, 'error');
+        return;
+      }
+    }
     setCurrentUser(null);
     showNotif('You have been logged out.', 'success');
   };
 
-  const login = (email, password) => {
+  const login = async (email, password) => {
+    if (supabaseEnabled) {
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        showNotif(error.message, 'error');
+        return null;
+      }
+      const user = data.user;
+      const current = {
+        email: user.email,
+        name: user.user_metadata?.full_name || user.email,
+        role: 'client',
+      };
+      setCurrentUser(current);
+      showNotif(`Welcome back, ${current.name}!`, 'success');
+      return current;
+    }
+
     const user = demoUsers.find((item) => item.email === email && item.password === password);
     if (!user) {
       showNotif('Invalid email or password.', 'error');
@@ -66,11 +128,34 @@ function App() {
     return user;
   };
 
-  const register = (name, email) => {
-    if (!name || !email) {
-      showNotif('Please provide your name and email.', 'error');
+  const register = async (name, email, password) => {
+    if (!name || !email || !password) {
+      showNotif('Please provide your name, email, and password.', 'error');
       return null;
     }
+
+    if (supabaseEnabled) {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { full_name: name },
+        },
+      });
+      if (error) {
+        showNotif(error.message, 'error');
+        return null;
+      }
+      const current = {
+        email,
+        name,
+        role: 'client',
+      };
+      setCurrentUser(current);
+      showNotif('Account created! Welcome to Doctor Animal Auto.', 'success');
+      return current;
+    }
+
     const user = { email, name, role: 'client' };
     setCurrentUser(user);
     showNotif('Account created! Welcome to Doctor Animal Auto.', 'success');
