@@ -16,13 +16,20 @@ function Login({ onLogin, onRegister, supabaseEnabled }) {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
   const [authError, setAuthError] = useState('');
+  const [authStatus, setAuthStatus] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setAuthError('');
+    setAuthStatus('');
     const result = await onLogin(email, password);
     if (result?.user) {
-      navigate(result.user.role === 'admin' ? '/admin' : '/portal');
+      setAuthStatus('Login successful! Redirecting...');
+      window.setTimeout(() => {
+        navigate(result.user.role === 'admin' ? '/admin' : '/portal');
+      }, 700);
       return;
     }
     setAuthError(result?.error || 'Login failed. Check your email, password, or connection.');
@@ -31,13 +38,17 @@ function Login({ onLogin, onRegister, supabaseEnabled }) {
   const handleRegister = async (e) => {
     e.preventDefault();
     setAuthError('');
+    setAuthStatus('');
     if (password !== confirmPassword) {
       setAuthError('Passwords do not match.');
       return;
     }
     const result = await onRegister(name, email, password);
     if (result?.user) {
-      navigate('/portal');
+      setAuthStatus('Registration successful! Redirecting to your portal...');
+      window.setTimeout(() => {
+        navigate('/portal');
+      }, 900);
       return;
     }
     setAuthError(result?.error || 'Registration failed. Check your details or connection.');
@@ -79,6 +90,7 @@ function Login({ onLogin, onRegister, supabaseEnabled }) {
         {tab === 'login' ? (
           <form className="auth-form" onSubmit={handleLogin}>
             {authError && <div className="auth-alert error">{authError}</div>}
+            {authStatus && <div className="auth-alert success">{authStatus}</div>}
             {!supabaseEnabled && (
               <div className="auth-alert warning">
                 Supabase is not configured. Only demo login is available locally.
@@ -97,17 +109,27 @@ function Login({ onLogin, onRegister, supabaseEnabled }) {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group password-field">
               <label htmlFor="login-password">Password</label>
-              <input
-                id="login-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                type="password"
-                placeholder="••••••••"
-                autoComplete="current-password"
-                required
-              />
+              <div className="password-input-wrapper">
+                <input
+                  id="login-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="••••••••"
+                  autoComplete="current-password"
+                  required
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? 'Hide' : 'Show'}
+                </button>
+              </div>
             </div>
 
             <button type="submit" className="btn-primary auth-submit">
@@ -120,6 +142,13 @@ function Login({ onLogin, onRegister, supabaseEnabled }) {
           </form>
         ) : (
           <form className="auth-form" onSubmit={handleRegister}>
+            {authError && <div className="auth-alert error">{authError}</div>}
+            {authStatus && <div className="auth-alert success">{authStatus}</div>}
+            {!supabaseEnabled && (
+              <div className="auth-alert warning">
+                Supabase is not configured. Only demo registration is available locally.
+              </div>
+            )}
             <div className="form-group">
               <label htmlFor="register-name">Your name</label>
               <input
@@ -146,30 +175,50 @@ function Login({ onLogin, onRegister, supabaseEnabled }) {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group password-field">
               <label htmlFor="register-password">Password</label>
-              <input
-                id="register-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                type="password"
-                placeholder="••••••••"
-                autoComplete="new-password"
-                required
-              />
+              <div className="password-input-wrapper">
+                <input
+                  id="register-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="••••••••"
+                  autoComplete="new-password"
+                  required
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? 'Hide' : 'Show'}
+                </button>
+              </div>
             </div>
 
-            <div className="form-group">
+            <div className="form-group password-field">
               <label htmlFor="register-password-confirm">Confirm Password</label>
-              <input
-                id="register-password-confirm"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                type="password"
-                placeholder="••••••••"
-                autoComplete="new-password"
-                required
-              />
+              <div className="password-input-wrapper">
+                <input
+                  id="register-password-confirm"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  placeholder="••••••••"
+                  autoComplete="new-password"
+                  required
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowConfirmPassword((prev) => !prev)}
+                  aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
+                >
+                  {showConfirmPassword ? 'Hide' : 'Show'}
+                </button>
+              </div>
             </div>
 
             <label className="auth-checkbox">
