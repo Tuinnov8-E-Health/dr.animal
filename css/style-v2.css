@@ -1000,7 +1000,6 @@ nav {
 }
 
 /* Booking page styles */
-..book-grid{display:grid}
 .book-grid{display:grid;grid-template-columns:1fr 360px;gap:2rem;align-items:start}
 @media (max-width:900px){
   .book-grid{grid-template-columns:1fr}

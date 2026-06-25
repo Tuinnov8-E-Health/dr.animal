@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Link, NavLink, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Link, NavLink, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { logo, publicLinks, products as productData, demoUsers } from './data';
 import Home from './pages/Home';
 import About from './pages/About';
@@ -113,21 +113,7 @@ function App() {
         cartItems={cartItems}
       />
 
-      <a
-        className="whatsapp-float"
-        href="https://wa.me/254735548605"
-        target="_blank"
-        rel="noreferrer noopener"
-        aria-label="Chat on WhatsApp"
-      >
-        <i className="fa-brands fa-whatsapp"></i>
-      </a>
-      {cartCount > 0 && (
-        <Link className="cart-float" to="/cart" aria-label="View cart">
-          <i className="fa-solid fa-cart-shopping"></i>
-          <span>{cartCount}</span>
-        </Link>
-      )}
+      <FloatingActions cartCount={cartCount} />
 
       <main className={`app-shell ${isLoading ? 'loading' : ''}`}>
         <Routes>
@@ -158,6 +144,33 @@ function App() {
 
       <Footer />
     </Router>
+  );
+}
+
+function FloatingActions({ cartCount }) {
+  const { pathname } = useLocation();
+  const hideWhatsapp = ['/login', '/portal', '/admin'].some((path) => pathname.startsWith(path));
+
+  return (
+    <>
+      {!hideWhatsapp && (
+        <a
+          className="whatsapp-float"
+          href="https://wa.me/254735548605"
+          target="_blank"
+          rel="noreferrer noopener"
+          aria-label="Chat on WhatsApp"
+        >
+          <i className="fa-brands fa-whatsapp"></i>
+        </a>
+      )}
+      {cartCount > 0 && (
+        <Link className="cart-float" to="/cart" aria-label="View cart">
+          <i className="fa-solid fa-cart-shopping"></i>
+          <span>{cartCount}</span>
+        </Link>
+      )}
+    </>
   );
 }
 
