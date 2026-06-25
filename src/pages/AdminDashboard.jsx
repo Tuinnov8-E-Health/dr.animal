@@ -1,20 +1,21 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   getInitialAdminState,
   calcInvoiceTotals,
   nowLabel,
   technicians,
 } from '../data/adminData';
+import { supabase, supabaseEnabled } from '../supabaseClient';
 
 const NAV = [
   { id: 'overview', label: 'Dashboard', icon: 'fa-solid fa-chart-line' },
   { id: 'bookings', label: 'Bookings', icon: 'fa-solid fa-calendar-check' },
   { id: 'orders', label: 'Orders', icon: 'fa-solid fa-bag-shopping' },
-  { id: 'products', label: 'Products', icon: 'fa-solid fa-boxes-stacked' },
   { id: 'clients', label: 'Clients', icon: 'fa-solid fa-users' },
-  { id: 'repairs', label: 'Repairs', icon: 'fa-solid fa-screwdriver-wrench' },
+  { id: 'admins', label: 'Admins', icon: 'fa-solid fa-user-shield' },
   { id: 'feedbacks', label: 'Feedbacks', icon: 'fa-solid fa-star-half-stroke' },
   { id: 'contacts', label: 'Contact', icon: 'fa-solid fa-address-book' },
+  { id: 'repairs', label: 'Repairs', icon: 'fa-solid fa-screwdriver-wrench' },
   { id: 'reports', label: 'Reports', icon: 'fa-solid fa-file-lines' },
   { id: 'messages', label: 'Messages', icon: 'fa-solid fa-comments' },
   { id: 'invoices', label: 'Invoices', icon: 'fa-solid fa-file-invoice-dollar' },
@@ -71,14 +72,138 @@ function AdminDashboard({ products }) {
   const [orders, setOrders] = useState(seedOrders);
   const [feedbacks, setFeedbacks] = useState(seedFeedbacks);
   const [contacts, setContacts] = useState(seedContacts);
+  const [dbClients, setDbClients] = useState([]);
+  const [admins, setAdmins] = useState([]);
+  const [dbBookings, setDbBookings] = useState([]);
+  const [isAdminLoading, setIsAdminLoading] = useState(false);
   const [selectedClientId, setSelectedClientId] = useState('client-1');
   const [msgDraft, setMsgDraft] = useState('');
   const [reportDraft, setReportDraft] = useState({ title: '', body: '' });
   const [newInvoiceItem, setNewInvoiceItem] = useState({ description: '', type: 'service', unitPrice: '', qty: 1 });
 
-  const selectedClient = state.clients.find((c) => c.id === selectedClientId) || state.clients[0];
-  const pendingBookings = state.bookings.filter((b) => b.status === 'pending');
-  const activeJobs = state.clients.filter((c) => c.activeJob.status === 'in_progress').length;
+  useEffect(() => {
+    if (!supabaseEnabled || !supabase) return;
+
+    const loadAdminData = async () => {
+      setIsAdminLoading(true);
+
+      const [bookingsResponse, clientsResponse, adminsResponse, ordersResponse, feedbackResponse, contactsResponse] = await Promise.all([
+        supabase.from('bookings').select('*').order('created_at', { ascending: false }).limit(100),
+        supabase.from('profiles').select('*').order('full_name', { ascending: true }).limit(100),
+        supabase.from('profiles').select('*').eq('role', 'admin').order('full_name', { ascending: true }).limit(100),
+        supabase.from('orders').select('*, order_items(*)').order('created_at', { ascending: false }).limit(100),
+        supabase.from('feedback').select('*').order('created_at', { ascending: false }).limit(100),
+        supabase.from('contact_messages').select('*').order('created_at', { ascending: false }).limit(100),
+      ]);
+
+      if (bookingsResponse.error) console.error('Bookings load error', bookingsResponse.error);
+      if (clientsResponse.error) console.error('Clients load error', clientsResponse.error);
+      if (adminsResponse.error) console.error('Admins load error', adminsResponse.error);
+      if (ordersResponse.error) console.error('Orders load error', ordersResponse.error);
+      if (feedbackResponse.error) console.error('Feedback load error', feedbackResponse.error);
+      if (contactsResponse.error) console.error('Contacts load error', contactsResponse.error);
+
+      const fetchedBookings = bookingsResponse.data ?? [];
+      const fetchedClients = clientsResponse.data ?? [];
+      const fetchedAdmins = adminsResponse.data ?? [];
+      const fetchedOrders = ordersResponse.data ?? [];
+      const fetchedFeedbacks = feedbackResponse.data ?? [];
+      const fetchedContacts = contactsResponse.data ?? [];
+
+      setDbBookings(
+        fetchedBookings.map((item) => ({
+          id: item.id,
+          clientId: item.client_id,
+          clientName: item.full_name || item.email || 'Guest',
+          email: item.email,
+          vehicle: item.vehicle_label || 'Unknown',
+          service: item.service_name || 'Service',
+          date: item.preferred_date ? new Date(item.preferred_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : item.created_at ? new Date(item.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '',
+          status: item.status,
+          notes: item.notes ?? '',
+        })),
+      );
+
+      setDbClients(
+        fetchedClients.map((profile) => ({
+          ...profile,
+          name: profile.full_name || profile.email || 'Client',
+          phone: profile.phone || '',
+          vehicles: profile.vehicles || [],
+          activeJob: profile.activeJob || {
+            id: 'N/A',
+            status: 'pending',
+            statusLabel: 'Awaiting Approval',
+            progress: 0,
+            technician: 'Unassigned',
+            bay: 'TBC',
+            summary: 'No active job',
+          },
+          timeline: profile.timeline || [],
+          messages: profile.messages || [],
+          reportUpdates: profile.reportUpdates || [],
+          invoice: profile.invoice || { id: 'INV-000', items: [] },
+        })),
+      );
+
+      if (selectedClientId === 'client-1' && fetchedClients.length) {
+        setSelectedClientId(fetchedClients[0].id);
+      }
+
+      setAdmins(
+        fetchedAdmins.map((profile) => ({
+          ...profile,
+          name: profile.full_name || profile.email || 'Admin',
+        })),
+      );
+
+      setOrders(
+        fetchedOrders.map((order) => ({
+          id: order.id,
+          client: order.customer_name || order.customer_email || 'Client',
+          email: order.customer_email || '',
+          items: (order.order_items ?? []).map((item) => item.product_name),
+          total: Number(order.total_amount ?? 0),
+          status: order.status,
+          date: order.created_at ? new Date(order.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '',
+        })),
+      );
+
+      setFeedbacks(
+        fetchedFeedbacks.map((item) => ({
+          id: item.id,
+          client: item.name || item.email || 'Client',
+          rating: item.rating ?? 0,
+          channel: item.channel,
+          status: item.status,
+          message: item.message,
+          date: item.created_at ? new Date(item.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '',
+        })),
+      );
+
+      setContacts(
+        fetchedContacts.map((item) => ({
+          id: item.id,
+          name: item.name,
+          phone: item.phone || '',
+          email: item.email || '',
+          subject: item.subject || item.vehicle_or_service || 'Inquiry',
+          status: item.status,
+          date: item.created_at ? new Date(item.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '',
+        })),
+      );
+
+      setIsAdminLoading(false);
+    };
+
+    loadAdminData();
+  }, []);
+
+  const bookings = dbBookings.length ? dbBookings : state.bookings;
+  const clients = dbClients.length ? dbClients : state.clients;
+  const selectedClient = clients.find((c) => c.id === selectedClientId) || clients[0] || state.clients[0];
+  const pendingBookings = bookings.filter((b) => b.status === 'pending');
+  const activeJobs = clients.filter((c) => c.activeJob?.status === 'in_progress').length;
   const openLeads = contacts.filter((item) => item.status === 'new').length;
 
   const stats = useMemo(() => {
@@ -216,10 +341,12 @@ function AdminDashboard({ products }) {
   const invoiceTotals = useMemo(() => calcInvoiceTotals(selectedClient?.invoice.items || []), [selectedClient]);
 
   const badgeMap = {
-    bookings: pendingBookings.length,
+    bookings: dbBookings.length || pendingBookings.length,
     orders: orders.filter((item) => item.status !== 'completed').length,
     feedbacks: feedbacks.filter((item) => item.status === 'new').length,
     contacts: openLeads,
+    clients: dbClients.length || state.clients.length,
+    admins: admins.length,
   };
 
   const needsClientPicker = ['repairs', 'reports', 'messages', 'invoices'].includes(view);
@@ -259,8 +386,8 @@ function AdminDashboard({ products }) {
         {view === 'overview' && (
           <Overview
             stats={stats}
-            clients={state.clients}
-            bookings={state.bookings}
+            clients={clients}
+            bookings={bookings}
             products={managedProducts}
             orders={orders}
             feedbacks={feedbacks}
@@ -270,13 +397,14 @@ function AdminDashboard({ products }) {
             onNavigate={setView}
           />
         )}
-        {view === 'bookings' && <Bookings bookings={state.bookings} onApprove={approveBooking} onReject={rejectBooking} />}
+        {view === 'bookings' && <Bookings bookings={dbBookings.length ? dbBookings : state.bookings} onApprove={approveBooking} onReject={rejectBooking} />}
         {view === 'orders' && <Orders orders={orders} setOrders={setOrders} />}
         {view === 'products' && <ProductsManager products={managedProducts} setProducts={setManagedProducts} />}
         {view === 'clients' && <Clients clients={state.clients} onSelect={(id) => { setSelectedClientId(id); setView('repairs'); }} />}
         {view === 'repairs' && <Repairs client={selectedClient} onUpdateJob={updateJob} onUpdateTimeline={updateTimelineStep} />}
         {view === 'feedbacks' && <Feedbacks feedbacks={feedbacks} setFeedbacks={setFeedbacks} />}
         {view === 'contacts' && <Contacts contacts={contacts} setContacts={setContacts} />}
+        {view === 'admins' && <Admins admins={admins} />}
         {view === 'reports' && <Reports client={selectedClient} draft={reportDraft} setDraft={setReportDraft} onAdd={addReport} />}
         {view === 'messages' && <Messages client={selectedClient} draft={msgDraft} setDraft={setMsgDraft} onSend={sendMessage} />}
         {view === 'invoices' && (
@@ -309,6 +437,7 @@ function TopBar({ view }) {
     orders: 'Product Orders',
     products: 'Product Catalog',
     clients: 'Clients',
+    admins: 'Admin Users',
     repairs: 'Repair Workflow',
     feedbacks: 'Customer Feedback',
     contacts: 'Contact Leads',
@@ -583,13 +712,38 @@ function Clients({ clients, onSelect }) {
               </div>
             </header>
             <div className="admin-detail-rows">
-              <div><span>Phone</span><strong>{client.phone}</strong></div>
-              <div><span>Vehicles</span><strong>{client.vehicles.length}</strong></div>
-              <div><span>Active job</span><strong>{client.activeJob.id}</strong></div>
+              <div><span>Phone</span><strong>{client.phone || 'N/A'}</strong></div>
+              <div><span>Vehicles</span><strong>{client.vehicles?.length ?? 0}</strong></div>
+              <div><span>Active job</span><strong>{client.activeJob?.id || 'N/A'}</strong></div>
             </div>
             <button type="button" className="btn-outline" onClick={() => onSelect(client.id)}>Manage repair</button>
           </article>
         ))}
+      </div>
+    </section>
+  );
+}
+
+function Admins({ admins }) {
+  return (
+    <section className="admin-card">
+      <CardTitle icon="fa-solid fa-user-shield" title="Admins" action={`${admins.length} users`} />
+      <div className="admin-table-wrap">
+        <table className="admin-table">
+          <thead>
+            <tr><th>Name</th><th>Email</th><th>Role</th><th>Joined</th></tr>
+          </thead>
+          <tbody>
+            {admins.map((admin) => (
+              <tr key={admin.id}>
+                <td>{admin.name}</td>
+                <td>{admin.email}</td>
+                <td>{admin.role || 'admin'}</td>
+                <td>{admin.created_at ? new Date(admin.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </section>
   );
