@@ -9,6 +9,19 @@ function Gallery() {
   );
   const visibleItems = filter === 'All' ? galleryItems : galleryItems.filter((item) => item.category === filter);
 
+  const getEmbedUrl = (url) => {
+    try {
+      // Expect YouTube shorts like: https://www.youtube.com/shorts/<id>
+      const m = url.match(/shorts\/(.+?)(\?|$)/);
+      const id = m ? m[1] : null;
+      return id ? `https://www.youtube.com/embed/${id}?autoplay=1&rel=0` : url;
+    } catch (e) {
+      return url;
+    }
+  };
+
+  const [showVideoUrl, setShowVideoUrl] = useState(null);
+
   return (
     <section className="section page-section" style={{ paddingTop: '64px' }}>
       <div className="products-hero gallery-hero">
@@ -37,19 +50,19 @@ function Gallery() {
       <div className="gallery-grid">
         {visibleItems.map((item) =>
           item.type === 'video' ? (
-            <a
+            <button
               className="gallery-card gallery-card--video"
               key={item.caption}
-              href={item.url}
-              target="_blank"
-              rel="noreferrer noopener"
+              type="button"
+              onClick={() => setShowVideoUrl(item.url)}
+              aria-label={`Play video: ${item.caption}`}
             >
               <img src={item.src} alt={item.caption} loading="lazy" />
               <div className="gallery-card__play">
                 <i className="fa-solid fa-play"></i>
               </div>
               <figcaption>{item.caption}</figcaption>
-            </a>
+            </button>
           ) : (
             <figure className="gallery-card" key={item.caption}>
               <img src={item.src} alt={item.caption} loading="lazy" />
@@ -58,6 +71,22 @@ function Gallery() {
           )
         )}
       </div>
+      {showVideoUrl && (
+        <div className="hero-video-modal" onClick={() => setShowVideoUrl(null)} role="dialog" aria-modal="true">
+          <div className="hero-video-container" onClick={(e) => e.stopPropagation()}>
+            <button className="hero-video-close" type="button" onClick={() => setShowVideoUrl(null)} aria-label="Close video">
+              <span aria-hidden="true">×</span>
+            </button>
+            <iframe
+              src={getEmbedUrl(showVideoUrl)}
+              title="Gallery video"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        </div>
+      )}
     </section>
   );
 }

@@ -235,7 +235,8 @@ export const galleryItems = [
   { src: img('gallery/work3.jpeg'), caption: 'Team performing quality checks before handover', category: 'Workshop' },
   { src: img('gallery/team1.jpeg'), caption: 'Certified mechanics working on a European sedan', category: 'Workshop' },
   { src: img('gallery/team3.jpeg'), caption: 'Hands-on service and expert vehicle inspection', category: 'Diagnostics' },
-  { src: img('gallery/hero2.jpeg'), caption: 'Mobile mechanic demo and service overview video', category: 'Video', type: 'video', url: 'https://www.youtube.com/shorts/nrMpFVZZep4' },
+  { src: img('gallery/hero2.jpeg'), caption: 'Mobile mechanic demo and service overview video', category: 'Video', type: 'video', url: 'https://www.youtube.com/shorts/2N1oFbBoQlA' },
+  { src: img('gallery/work1.jpeg'), caption: 'Short: Mobile mechanic demo (YouTube)', category: 'Video', type: 'video', url: 'https://www.youtube.com/shorts/nrMpFVZZep4' },
 ];
 
 export const products = [
