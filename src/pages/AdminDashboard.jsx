@@ -449,7 +449,7 @@ function TopBar({ view }) {
   return (
     <header className="admin-topbar">
       <div>
-        <p>Doctor Animal Auto Tune</p>
+        <p>Doctor Animal Auto Tunes</p>
         <h1>{titles[view]}</h1>
       </div>
       <div className="admin-topbar__tools">

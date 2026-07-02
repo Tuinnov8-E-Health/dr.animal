@@ -309,8 +309,8 @@ function Nav({ currentUser, menuOpen, setMenuOpen, logout, clientLinks, adminLin
   return (
     <nav>
       <Link className="nav-logo" to="/" onClick={() => setMenuOpen(false)}>
-        {logo && <img src={logo} alt="Dr. Animal Auto Tune" />}
-        <span>Dr. Animal Auto Tune</span>
+        {logo && <img src={logo} alt="Dr. Animal Auto Tunes" />}
+        <span>Dr. Animal Auto Tunes</span>
       </Link>
       <button
         className={`nav-hamburger ${menuOpen ? 'active' : ''}`}
@@ -386,8 +386,8 @@ function Footer() {
       <div className="footer-grid">
         <div className="footer-brand">
           <h3 className="footer-logo">
-            {logo && <img src={logo} alt="Dr. Animal Auto Tune" />}
-            <span>Dr. Animal Auto Tune</span>
+            {logo && <img src={logo} alt="Dr. Animal Auto Tunes" />}
+            <span>Dr. Animal Auto Tunes</span>
           </h3>
           <p>Your trusted European and American car care partner since 2010. Expert mechanics, genuine parts, and transparent pricing — all under one roof.</p>
           <p className="footer-location">📍 Corner, Kamakis, Kiambu County, Kenya</p>

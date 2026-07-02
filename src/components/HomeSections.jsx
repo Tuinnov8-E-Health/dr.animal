@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { SplitLayout, IconList, shortDesc } from './ContentLayout';
 import {
   heroImages,
+  heroSlides,
   services,
   featureCards,
   galleryItems,
@@ -22,17 +23,79 @@ const heroStats = [
 const featuredProducts = products.slice(0, 4);
 
 export function Hero() {
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [typedTitle, setTypedTitle] = useState('');
+  const [isTyping, setIsTyping] = useState(true);
+  const [showVideo, setShowVideo] = useState(false);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setActiveSlide((current) => (current + 1) % heroSlides.length);
+    }, 6500);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const activeHero = heroSlides[activeSlide];
+
+  useEffect(() => {
+    let charIndex = 0;
+    setTypedTitle('');
+    setIsTyping(true);
+
+    const typeTimer = window.setInterval(() => {
+      charIndex += 1;
+      setTypedTitle(activeHero.title.slice(0, charIndex));
+      if (charIndex >= activeHero.title.length) {
+        setIsTyping(false);
+        window.clearInterval(typeTimer);
+      }
+    }, 45);
+
+    return () => window.clearInterval(typeTimer);
+  }, [activeHero.title]);
+
+  const firstTwoWordsEnd = (() => {
+    let spaces = 0;
+    for (let i = 0; i < typedTitle.length; i += 1) {
+      if (typedTitle[i] === ' ') {
+        spaces += 1;
+        if (spaces === 2) {
+          return i + 1;
+        }
+      }
+    }
+    return typedTitle.length;
+  })();
+
+  const redText = typedTitle.slice(0, firstTwoWordsEnd);
+  const whiteText = typedTitle.slice(firstTwoWordsEnd);
+
   return (
     <section className="hero">
-      <div className="hero-bg" style={{ '--hero-image': `url(${heroImages.main})` }}></div>
+      <div className="hero-bg">
+        {heroSlides.map((slide, index) => (
+          <div
+            key={slide.image}
+            className={`hero-bg-slide${activeSlide === index ? ' active' : ''}`}
+            style={{ backgroundImage: `url(${slide.image})` }}
+            aria-hidden={activeSlide !== index}
+          />
+        ))}
+      </div>
       <div className="hero-overlay"></div>
       <div className="hero-inner">
         <div className="hero-copy">
-          <span className="hero-eyebrow">European and American car specialists</span>
-          <h1>We fix every beast on the road</h1>
-          <p>
-            Doctor Animal Auto delivers premium service with genuine parts, fast turnarounds, and clear communication — so your vehicle is back on the road with confidence.
-          </p>
+          <span className="hero-eyebrow">{activeHero.eyebrow}</span>
+          <h1>
+            <span className="hero-typewriter">
+              <span className="hero-char hero-char--accent">{redText}</span>
+              <span className="hero-char">{whiteText}</span>
+            </span>
+            <span className={`hero-cursor${isTyping ? ' active' : ''}`} aria-hidden="true">
+              |
+            </span>
+          </h1>
+          <p>{activeHero.description}</p>
           <div className="hero-actions">
             <Link className="btn-primary" to="/booking">
               Book Appointment
@@ -40,6 +103,26 @@ export function Hero() {
             <Link className="btn-outline" to="/services">
               View Services
             </Link>
+            <button
+              className="hero-video-link"
+              type="button"
+              onClick={() => setShowVideo(true)}
+              aria-label="Open hero video"
+            >
+              <i className="fa-solid fa-play"></i>
+              Watch Video
+            </button>
+          </div>
+          <div className="hero-dots" aria-label="Hero slide navigation">
+            {heroSlides.map((slide, index) => (
+              <button
+                key={slide.title}
+                type="button"
+                className={`hero-dot${activeSlide === index ? ' active' : ''}`}
+                onClick={() => setActiveSlide(index)}
+                aria-label={`Show ${slide.title}`}
+              />
+            ))}
           </div>
           <div className="hero-metrics">
             {heroStats.map((metric) => (
@@ -50,15 +133,23 @@ export function Hero() {
             ))}
           </div>
         </div>
-
-        <div className="hero-preview">
-          <img src={heroImages.workshop} alt="Workshop bay at Doctor Animal Auto" loading="eager" />
-          <div className="hero-preview-card">
-            <strong>Best Repairers 2023</strong>
-            <p>Trusted by owners of premium vehicles across Nairobi and Kiambu.</p>
+      </div>
+      {showVideo && (
+        <div className="hero-video-modal" onClick={() => setShowVideo(false)} role="dialog" aria-modal="true">
+          <div className="hero-video-container" onClick={(event) => event.stopPropagation()}>
+            <button className="hero-video-close" type="button" onClick={() => setShowVideo(false)} aria-label="Close video">
+              <span aria-hidden="true">×</span>
+            </button>
+            <iframe
+              src="https://www.youtube.com/embed/nrMpFVZZep4?autoplay=1&rel=0"
+              title="Dr Animal Auto Tunes video"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
           </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }

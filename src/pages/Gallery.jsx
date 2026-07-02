@@ -35,12 +35,28 @@ function Gallery() {
       </div>
 
       <div className="gallery-grid">
-        {visibleItems.map((item) => (
-          <figure className="gallery-card" key={item.caption}>
-            <img src={item.src} alt={item.caption} loading="lazy" />
-            <figcaption>{item.caption}</figcaption>
-          </figure>
-        ))}
+        {visibleItems.map((item) =>
+          item.type === 'video' ? (
+            <a
+              className="gallery-card gallery-card--video"
+              key={item.caption}
+              href={item.url}
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              <img src={item.src} alt={item.caption} loading="lazy" />
+              <div className="gallery-card__play">
+                <i className="fa-solid fa-play"></i>
+              </div>
+              <figcaption>{item.caption}</figcaption>
+            </a>
+          ) : (
+            <figure className="gallery-card" key={item.caption}>
+              <img src={item.src} alt={item.caption} loading="lazy" />
+              <figcaption>{item.caption}</figcaption>
+            </figure>
+          )
+        )}
       </div>
     </section>
   );

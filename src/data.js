@@ -16,6 +16,39 @@ export const heroImages = {
   diagnostic: img('software1.jpeg'),
 };
 
+export const heroSlides = [
+  {
+    image: img('gallery/work1.jpeg'),
+    eyebrow: 'European and American car specialists',
+    title: 'Precision repairs that get you back on the road fast',
+    description: 'Modern diagnostics, genuine parts, and expert technicians deliver safer, more reliable service tailored for premium vehicles.',
+  },
+  {
+    image: img('gallery/hero1.jpeg'),
+    eyebrow: 'Trusted workshop service in Nairobi',
+    title: 'Quality service for every vehicle type',
+    description: 'From maintenance to major repairs, we keep your car running smoothly with transparent pricing and fast turnaround.',
+  },
+  {
+    image: img('gallery/volvo1.jpeg'),
+    eyebrow: 'Advanced diagnostics and performance care',
+    title: 'Expert care for luxury and daily drivers',
+    description: 'Your vehicle is inspected thoroughly, repaired precisely, and returned to you with confidence and a clear report.',
+  },
+  {
+    image: img('engine1.jpeg'),
+    eyebrow: 'Genuine parts, trusted craftsmanship',
+    title: 'A smoother ride starts with the right service',
+    description: 'Our team uses proven techniques and quality components to restore performance and keep your car dependable on every drive.',
+  },
+  {
+    image: img('gallery/hero2.jpeg'),
+    eyebrow: 'We are mobile all over the world',
+    title: 'We fix every beast on the road',
+    description: 'From sedans to SUVs, our expert team treats every vehicle like a prized machine and restores performance with care.',
+  },
+];
+
 export const testimonials = [
   {
     name: 'James Mwangi',
@@ -194,6 +227,15 @@ export const galleryItems = [
   { src: img('engine3.jpeg'), caption: 'Routine engine service and maintenance', category: 'Engine' },
   { src: img('img1.jpeg'), caption: 'Doctor Animal Auto workshop interior', category: 'Workshop' },
   { src: img('team2.jpeg'), caption: 'Our expert mechanic team at work', category: 'Workshop' },
+  { src: img('gallery/hero1.jpeg'), caption: 'Service bay ready for European and American cars', category: 'Workshop' },
+  { src: img('gallery/hero2.jpeg'), caption: 'Precision diagnostics and calibration in our shop', category: 'Diagnostics' },
+  { src: img('gallery/work.jpeg'), caption: 'Technician inspecting the suspension system', category: 'Suspension' },
+  { src: img('gallery/work1.jpeg'), caption: 'Modern workshop lane with multiple service bays', category: 'Workshop' },
+  { src: img('gallery/work2.jpeg'), caption: 'In-depth engine maintenance and repair', category: 'Engine' },
+  { src: img('gallery/work3.jpeg'), caption: 'Team performing quality checks before handover', category: 'Workshop' },
+  { src: img('gallery/team1.jpeg'), caption: 'Certified mechanics working on a European sedan', category: 'Workshop' },
+  { src: img('gallery/team3.jpeg'), caption: 'Hands-on service and expert vehicle inspection', category: 'Diagnostics' },
+  { src: img('gallery/hero2.jpeg'), caption: 'Mobile mechanic demo and service overview video', category: 'Video', type: 'video', url: 'https://www.youtube.com/shorts/nrMpFVZZep4' },
 ];
 
 export const products = [
